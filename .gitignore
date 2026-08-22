@@ -2,6 +2,8 @@ out/*
 build/*
 bazel-*
 
+.DS_Store
+
 # Prerequisites
 *.d
 

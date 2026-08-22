@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "dependencies": [
+    "fmt",
+    "arpack-ng",
+    "gtest",
+    "sdl3",
+    "sdl3-ttf",
+    "eigen3",
+    {
+      "name": "imgui",
+      "features": [
+        "docking-experimental",
+        "sdl3-binding"
+      ]
+    }
+  ]
+}
