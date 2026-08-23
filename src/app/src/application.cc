@@ -17,9 +17,11 @@ backward::SignalHandling sh;
 
 Application::~Application() noexcept {
   // vkDeviceWaitIdle(renderer_->get_context().device);
-  ImGui_ImplSDLRenderer3_Shutdown();
-  ImGui_ImplSDL3_Shutdown();
-  ImGui::DestroyContext();
+  if (ImGui::GetCurrentContext() != nullptr) {
+    ImGui_ImplSDLRenderer3_Shutdown();
+    ImGui_ImplSDL3_Shutdown();
+    ImGui::DestroyContext();
+  }
 
   SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
@@ -37,8 +39,7 @@ Application::Application() {
       SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
   const auto width = static_cast<int>(1280 * main_scale);
   const auto height = static_cast<int>(800 * main_scale);
-  SDL_Window* window_ =
-      SDL_CreateWindow("CalculiX", width, height, window_flags);
+  window_ = SDL_CreateWindow("CalculiX", width, height, window_flags);
   if (window_ == nullptr) {
     const auto msg_err =
         fmt::format("Failed to create SDL window: {}", SDL_GetError());
@@ -46,26 +47,27 @@ Application::Application() {
   }
 
   renderer_ = SDL_CreateRenderer(window_, nullptr);
-  SDL_SetRenderVSync(renderer_, 1);
   if (renderer_ == nullptr) {
     const auto msg_err =
         fmt::format("Failed to create SDL renderer: {}", SDL_GetError());
     throw std::runtime_error(msg_err);
   }
+  SDL_SetRenderVSync(renderer_, 1);
   // ui_renderer = UIRenderer(window_);
 }
 
 auto Application::run() -> void {
-  SDL_SetWindowPosition(window_, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+  SDL_SetWindowPosition(window_, SDL_WINDOWPOS_CENTERED,
+                        SDL_WINDOWPOS_CENTERED);
   SDL_ShowWindow(window_);
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO& io = ImGui::GetIO();
+  ImGuiIO &io = ImGui::GetIO();
   (void)io;
   io.ConfigFlags |=
-      ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+      ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
 
   // Setup Dear ImGui style
   ImGui::StyleColorsDark();
@@ -73,16 +75,15 @@ auto Application::run() -> void {
 
   // Setup scaling
   float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
-  ImGui::SetWindowFontScale(1.0f);
-  ImGuiStyle& style = ImGui::GetStyle();
+  ImGuiStyle &style = ImGui::GetStyle();
   style.ScaleAllSizes(
-      main_scale);  // Bake a fixed style scale. (until we have a solution for
-                    // dynamic style scaling, changing this requires resetting
-                    // Style + calling this again)
+      main_scale); // Bake a fixed style scale. (until we have a solution for
+                   // dynamic style scaling, changing this requires resetting
+                   // Style + calling this again)
   style.FontScaleDpi =
-      main_scale;  // Set initial font scale. (in docking branch: using
-                   // io.ConfigDpiScaleFonts=true automatically overrides this
-                   // for every window depending on the current monitor)
+      main_scale; // Set initial font scale. (in docking branch: using
+                  // io.ConfigDpiScaleFonts=true automatically overrides this
+                  // for every window depending on the current monitor)
 
   // Setup Platform/Renderer backends
   ImGui_ImplSDL3_InitForSDLRenderer(window_, renderer_);
@@ -120,187 +121,215 @@ auto Application::run() -> void {
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
   while (running_) {
-        {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        // [If using SDL_MAIN_USE_CALLBACKS: call ImGui_ImplSDL3_ProcessEvent() from your SDL_AppEvent() function]
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            ImGui_ImplSDL3_ProcessEvent(&event);
-            if (event.type == SDL_EVENT_QUIT)
-                running_ = false;
-            if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED && event.window.windowID == SDL_GetWindowID(window_))
-                running_ = false;
+    {
+      // Poll and handle events (inputs, window resize, etc.)
+      // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to
+      // tell if dear imgui wants to use your inputs.
+      // - When io.WantCaptureMouse is true, do not dispatch mouse input data to
+      // your main application, or clear/overwrite your copy of the mouse data.
+      // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input
+      // data to your main application, or clear/overwrite your copy of the
+      // keyboard data. Generally you may always pass all inputs to dear imgui,
+      // and hide them from your application based on those two flags. [If using
+      // SDL_MAIN_USE_CALLBACKS: call ImGui_ImplSDL3_ProcessEvent() from your
+      // SDL_AppEvent() function]
+      SDL_Event event;
+      while (SDL_PollEvent(&event)) {
+        ImGui_ImplSDL3_ProcessEvent(&event);
+        if (event.type == SDL_EVENT_QUIT)
+          running_ = false;
+        if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED &&
+            event.window.windowID == SDL_GetWindowID(window_))
+          running_ = false;
+      }
+
+      // [If using SDL_MAIN_USE_CALLBACKS: all code below would likely be your
+      // SDL_AppIterate() function]
+      if (SDL_GetWindowFlags(window_) & SDL_WINDOW_MINIMIZED) {
+        SDL_Delay(16);
+        continue;
+      }
+
+      // 3. Start the Dear ImGui frame
+      ImGui_ImplSDLRenderer3_NewFrame();
+      ImGui_ImplSDL3_NewFrame();
+      ImGuiIO &io = ImGui::GetIO();
+      if (io.DisplaySize.x <= 0.0f || io.DisplaySize.y <= 0.0f) {
+        int w, h;
+        SDL_GetWindowSize(window_, &w, &h);
+        // If SDL reports 0, force it to 1280x720 (or your starting size) so
+        // ImGui won't assert
+        io.DisplaySize =
+            ImVec2(w > 0 ? (float)w : 1280.0f, h > 0 ? (float)h : 720.0f);
+      }
+      ImGui::NewFrame(); // 3rd: Core ImGui frame initialization (Now safe!)
+
+      // --- 4. Your UI Code (Demo and Simple Windows) ---
+      // 1. Show the big demo window (Most of the sample code is in
+      // ImGui::ShowDemoWindow()! You can browse its code to learn more about
+      // Dear ImGui!).
+      if (show_demo_window)
+        ImGui::ShowDemoWindow(&show_demo_window);
+
+      // 2. Show a simple window that we create ourselves. We use a Begin/End
+      // pair to create a named window.
+      {
+        static float f = 0.0f;
+        static int counter = 0;
+
+        if (ImGui::Begin("Hello, world!")) {
+          ImGui::Text("This is some useful text.");
+          ImGui::Checkbox("Demo Window", &show_demo_window);
+          ImGui::Checkbox("Another Window", &show_another_window);
+
+          ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+          ImGui::ColorEdit3("clear color", (float *)&clear_color);
+
+          if (ImGui::Button("Button")) {
+            counter++;
+          }
+          ImGui::SameLine();
+          ImGui::Text("counter = %d", counter);
+
+          ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+                      1000.0f / io.Framerate, io.Framerate);
         }
+        ImGui::End();
+      }
 
-        // [If using SDL_MAIN_USE_CALLBACKS: all code below would likely be your SDL_AppIterate() function]
-        if (SDL_GetWindowFlags(window_) & SDL_WINDOW_MINIMIZED)
-        {
-            SDL_Delay(16);
-            continue;
-        }
+      // 3. Show another simple window.
+      if (show_another_window) {
+        ImGui::Begin(
+            "Another Window",
+            &show_another_window); // Pass a pointer to our bool variable (the
+                                   // window will have a closing button that
+                                   // will clear the bool when clicked)
+        ImGui::Text("Hello from another window!");
+        if (ImGui::Button("Close Me"))
+          show_another_window = false;
+        ImGui::End();
+      }
 
-    // 3. Start the Dear ImGui frame (FIX #2: Swapped order)
-    ImGui_ImplSDL3_NewFrame();         // 1st: Fetches display sizes from the window
-    ImGui_ImplSDLRenderer3_NewFrame(); // 2nd: Prepares the renderer pipeline
-    ImGuiIO& io = ImGui::GetIO();
-if (io.DisplaySize.x <= 0.0f || io.DisplaySize.y <= 0.0f) {
-    int w, h;
-    SDL_GetWindowSize(window_, &w, &h);
-    // If SDL reports 0, force it to 1280x720 (or your starting size) so ImGui won't assert
-    io.DisplaySize = ImVec2(w > 0 ? (float)w : 1280.0f, h > 0 ? (float)h : 720.0f);
-}
-    ImGui::NewFrame();                 // 3rd: Core ImGui frame initialization (Now safe!)
+      // --- 5. Rendering Pipeline ---
+      ImGui::Render();
 
-    // --- 4. Your UI Code (Demo and Simple Windows) ---
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+      // Note: SDL3's SDL_Renderer handles high-DPI scaling automatically in
+      // most setups. If your text looks blurry, keep this line; otherwise, it
+      // can sometimes be omitted in SDL3.
 
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
+      if (io.DisplayFramebufferScale.x <= 0.0f ||
+          io.DisplayFramebufferScale.y <= 0.0f) {
+        io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+      }
+      SDL_SetRenderScale(renderer_, io.DisplayFramebufferScale.x,
+                         io.DisplayFramebufferScale.y);
 
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+      SDL_SetRenderDrawColorFloat(renderer_, clear_color.x, clear_color.y,
+                                  clear_color.z, clear_color.w);
+      SDL_RenderClear(renderer_);
 
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
-
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-            ImGui::End();
-        }
-
-        // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
-            ImGui::End();
-        }
-
-        // --- 5. Rendering Pipeline ---
-    ImGui::Render();
-
-    // Note: SDL3's SDL_Renderer handles high-DPI scaling automatically in most setups.
-    // If your text looks blurry, keep this line; otherwise, it can sometimes be omitted in SDL3.
-
-if (io.DisplayFramebufferScale.x <= 0.0f || io.DisplayFramebufferScale.y <= 0.0f) {
-    io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
-}
-    SDL_SetRenderScale(renderer_, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
-
-    SDL_SetRenderDrawColorFloat(renderer_, clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-    SDL_RenderClear(renderer_);
-
-    ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer_);
-    SDL_RenderPresent(renderer_);
+      ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer_);
+      SDL_RenderPresent(renderer_);
     }
     delta_time();
   }
 }
 
 auto Application::handle_events() -> void {
-//   bool show_demo_window = true;
-//   bool show_another_window = false;
-//   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-//   ImGuiIO& io = ImGui::GetIO();
-//  // (void)io;
-//   SDL_Event event;
-//   while (SDL_PollEvent(&event)) {
-//     ImGui_ImplSDL3_ProcessEvent(&event);
-//     if (event.type == SDL_EVENT_QUIT) running_ = true;
-//     if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED &&
-//         event.window.windowID == SDL_GetWindowID(window_))
-//       running_ = true;
-//   }
+  //   bool show_demo_window = true;
+  //   bool show_another_window = false;
+  //   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+  //   ImGuiIO& io = ImGui::GetIO();
+  //  // (void)io;
+  //   SDL_Event event;
+  //   while (SDL_PollEvent(&event)) {
+  //     ImGui_ImplSDL3_ProcessEvent(&event);
+  //     if (event.type == SDL_EVENT_QUIT) running_ = true;
+  //     if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED &&
+  //         event.window.windowID == SDL_GetWindowID(window_))
+  //       running_ = true;
+  //   }
 
-//   // [If using SDL_MAIN_USE_CALLBACKS: all code below would likely be your
-//   // SDL_AppIterate() function] if (SDL_GetWindowFlags(window_) &
-//   // SDL_WINDOW_MINIMIZED)
-//   // {
-//   //     SDL_Delay(10);
-//   //     continue;
-//   // }
+  //   // [If using SDL_MAIN_USE_CALLBACKS: all code below would likely be your
+  //   // SDL_AppIterate() function] if (SDL_GetWindowFlags(window_) &
+  //   // SDL_WINDOW_MINIMIZED)
+  //   // {
+  //   //     SDL_Delay(10);
+  //   //     continue;
+  //   // }
 
-//   // Start the Dear ImGui frame
-//   ImGui_ImplSDLRenderer3_NewFrame();
-//   ImGui_ImplSDL3_NewFrame();
-//   ImGui::NewFrame();
+  //   // Start the Dear ImGui frame
+  //   ImGui_ImplSDLRenderer3_NewFrame();
+  //   ImGui_ImplSDL3_NewFrame();
+  //   ImGui::NewFrame();
 
-//   // 1. Show the big demo window (Most of the sample code is in
-//   // ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear
-//   // ImGui!). if (show_demo_window)
-//   //     ImGui::ShowDemoWindow(&show_demo_window);
+  //   // 1. Show the big demo window (Most of the sample code is in
+  //   // ImGui::ShowDemoWindow()! You can browse its code to learn more about
+  //   Dear
+  //   // ImGui!). if (show_demo_window)
+  //   //     ImGui::ShowDemoWindow(&show_demo_window);
 
-//   // 2. Show a simple window that we create ourselves. We use a Begin/End pair
-//   // to create a named window.
-//   {
-//     static float f = 0.0f;
-//     static int counter = 0;
+  //   // 2. Show a simple window that we create ourselves. We use a Begin/End
+  //   pair
+  //   // to create a named window.
+  //   {
+  //     static float f = 0.0f;
+  //     static int counter = 0;
 
-//     ImGui::Begin("Hello, world!");  // Create a window called "Hello, world!"
-//                                     // and append into it.
+  //     ImGui::Begin("Hello, world!");  // Create a window called "Hello,
+  //     world!"
+  //                                     // and append into it.
 
-//     ImGui::Text("This is some useful text.");  // Display some text (you can use
-//                                                // a format strings too)
-//     ImGui::Checkbox(
-//         "Demo Window",
-//         &show_demo_window);  // Edit bools storing our window open/close state
-//     ImGui::Checkbox("Another Window", &show_another_window);
+  //     ImGui::Text("This is some useful text.");  // Display some text (you
+  //     can use
+  //                                                // a format strings too)
+  //     ImGui::Checkbox(
+  //         "Demo Window",
+  //         &show_demo_window);  // Edit bools storing our window open/close
+  //         state
+  //     ImGui::Checkbox("Another Window", &show_another_window);
 
-//     ImGui::SliderFloat("float", &f, 0.0f,
-//                        1.0f);  // Edit 1 float using a slider from 0.0f to 1.0f
-//     ImGui::ColorEdit3(
-//         "clear color",
-//         (float*)&clear_color);  // Edit 3 floats representing a color
+  //     ImGui::SliderFloat("float", &f, 0.0f,
+  //                        1.0f);  // Edit 1 float using a slider from 0.0f
+  //                        to 1.0f
+  //     ImGui::ColorEdit3(
+  //         "clear color",
+  //         (float*)&clear_color);  // Edit 3 floats representing a color
 
-//     if (ImGui::Button("Button"))  // Buttons return true when clicked (most
-//                                   // widgets return true when edited/activated)
-//       counter++;
-//     ImGui::SameLine();
-//     ImGui::Text("counter = %d", counter);
+  //     if (ImGui::Button("Button"))  // Buttons return true when clicked (most
+  //                                   // widgets return true when
+  //                                   edited/activated)
+  //       counter++;
+  //     ImGui::SameLine();
+  //     ImGui::Text("counter = %d", counter);
 
-//     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
-//                 1000.0f / io.Framerate, io.Framerate);
-//     ImGui::End();
-//   }
+  //     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+  //                 1000.0f / io.Framerate, io.Framerate);
+  //     ImGui::End();
+  //   }
 
-//   // 3. Show another simple window.
-//   // if (show_another_window)
-//   // {
-//   //     ImGui::Begin("Another Window", &show_another_window);   // Pass a
-//   //     pointer to our bool variable (the window will have a closing button
-//   //     that will clear the bool when clicked) ImGui::Text("Hello from another
-//   //     window!"); if (ImGui::Button("Close Me"))
-//   //         show_another_window = false;
-//   //     ImGui::End();
-//   // }
+  //   // 3. Show another simple window.
+  //   // if (show_another_window)
+  //   // {
+  //   //     ImGui::Begin("Another Window", &show_another_window);   // Pass a
+  //   //     pointer to our bool variable (the window will have a closing
+  //   button
+  //   //     that will clear the bool when clicked) ImGui::Text("Hello from
+  //   another
+  //   //     window!"); if (ImGui::Button("Close Me"))
+  //   //         show_another_window = false;
+  //   //     ImGui::End();
+  //   // }
 
-//   // Rendering
-//   ImGui::Render();
-//   SDL_SetRenderScale(renderer_, io.DisplayFramebufferScale.x,
-//                      io.DisplayFramebufferScale.y);
-//   SDL_SetRenderDrawColorFloat(renderer_, clear_color.x, clear_color.y,
-//                               clear_color.z, clear_color.w);
-//   SDL_RenderClear(renderer_);
-//   ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer_);
-//   SDL_RenderPresent(renderer_);
+  //   // Rendering
+  //   ImGui::Render();
+  //   SDL_SetRenderScale(renderer_, io.DisplayFramebufferScale.x,
+  //                      io.DisplayFramebufferScale.y);
+  //   SDL_SetRenderDrawColorFloat(renderer_, clear_color.x, clear_color.y,
+  //                               clear_color.z, clear_color.w);
+  //   SDL_RenderClear(renderer_);
+  //   ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer_);
+  //   SDL_RenderPresent(renderer_);
 }
 
 auto Application::delta_time() -> void {
