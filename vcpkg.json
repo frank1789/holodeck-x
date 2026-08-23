@@ -7,11 +7,14 @@
     "sdl3",
     "sdl3-ttf",
     "eigen3",
+    "backward-cpp",
+    "vulkan-memory-allocator",
     {
       "name": "imgui",
       "features": [
         "docking-experimental",
         "sdl3-binding",
+        "sdl3-renderer-binding",
         "vulkan-binding"
       ]
     }

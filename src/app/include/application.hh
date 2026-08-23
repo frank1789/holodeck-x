@@ -2,7 +2,7 @@
 #define _APPLICATION_H_
 
 #include <SDL3/SDL.h>
-#include "renderer.hh"
+//#include "renderer.hh"
 
 class Application {
     public:
@@ -26,11 +26,12 @@ class Application {
 
 
     SDL_Window* window_{nullptr};
+    SDL_Renderer* renderer_{nullptr};
 
     float delta_time_{};
     bool running_{true};
     bool is_minimized_{false};
 
-}
+};
 
 #endif // _APPLICATION_H_

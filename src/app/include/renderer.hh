@@ -2,9 +2,16 @@
 #define _RENDERER_HH_
 
 #include <cstdint>
+#include <memory>
 
-#include <vulkan/vulkan.h>
+#include <vulkan/vulkan_core.h>
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_vulkan.h>
+
+#define VMA_IMPLEMENTATION
+#include <vk_mem_alloc.h>
+
+
 
 struct RenderContext {
     VkDevice device;
@@ -15,7 +22,7 @@ VkQueue present_queue;
 std::uint32_t graphics_queue_index;
 std::uint32_t present_queue_index;
 
-VmAllocator allocator;
+VmaAllocator allocator;
 VkCommandPool command_pool;
 VkDescriptorPool descriptor_pool;
 
@@ -25,6 +32,10 @@ VkRenderPass render_pass;
 
 PFN_vkCmdBeginRenderingKHR vk_cmd_begin_rendering_khr;
 PFN_vkCmdEndRenderingKHR vk_cmd_end_rendering_khr;
+
+std::uint32_t max_frames;
+
+bool is_debug;
 };
 
 
@@ -33,6 +44,19 @@ PFN_vkCmdEndRenderingKHR vk_cmd_end_rendering_khr;
 
 class Renderer {
     public:
+
+
+    //Renderer() = default;
+    explicit Renderer(SDL_Window* window);
+
+    ~Renderer() noexcept;
+
+    Renderer(const Renderer&) = delete;
+    Renderer& operator=(const Renderer&) = delete;
+
+    Renderer(Renderer&&) noexcept = default;
+    Renderer& operator=(Renderer&&) noexcept = default;
+
 
     auto cleanup() -> void;
 
@@ -55,7 +79,17 @@ class Renderer {
 
 
     private:
-    auto on_window_resize() -> void;
+auto on_window_resize() -> void;
+
+    class VulkanContext;
+    std::unique_ptr<VulkanContext> vulkan_context_;
+
+
+
+
+
+    RenderContext context_;
+    SDL_Window *window_{nullptr};
 
 
 
