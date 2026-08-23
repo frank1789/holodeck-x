@@ -51,7 +51,10 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
   endif()
 endif()
 
+find_package(Vulkan REQUIRED)
+find_package(Eigen3 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 find_package(SDL3 CONFIG REQUIRED)
-find_package(Eigen3 CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+
 add_subdirectory(src)
