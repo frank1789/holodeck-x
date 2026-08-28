@@ -6,6 +6,7 @@
 #include <imgui.h>
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
+#include <imgui_internal.h>
 // #include "renderer.hh"
 
 #include <backward.hpp>
@@ -66,8 +67,9 @@ auto Application::run() -> void {
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
   (void)io;
-  io.ConfigFlags |=
-      ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
   // Setup Dear ImGui style
   ImGui::StyleColorsDark();
@@ -163,52 +165,192 @@ auto Application::run() -> void {
             ImVec2(w > 0 ? (float)w : 1280.0f, h > 0 ? (float)h : 720.0f);
       }
       ImGui::NewFrame(); // 3rd: Core ImGui frame initialization (Now safe!)
+      ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
       // --- 4. Your UI Code (Demo and Simple Windows) ---
       // 1. Show the big demo window (Most of the sample code is in
       // ImGui::ShowDemoWindow()! You can browse its code to learn more about
       // Dear ImGui!).
-      if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
+      // if (show_demo_window)
+      //   ImGui::ShowDemoWindow(&show_demo_window);
+
+
+      ImGuiID dockspace_id = ImGui::GetID("My Dockspace");
+      // ImGuiViewport* viewport = ImGui::GetMainViewport();
+      // if(ImGui::DockBuilderGetNode(dockspace_id) == nullptr)
+      // {
+      //   ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
+      //   ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
+      //   ImGuiID dock_id_left = 0;
+      //   ImGuiID dock_id_main =dockspace_id;
+      //   ImGui::DockBuilderSplitNode(dock_id_main, ImGuiDir_Left, 0.20f, &dock_id_left, &dock_id_main);
+      //   ImGuiID dock_id_left_top = 0;
+      //   ImGuiID dock_id_left_bottom = 0;
+      //   ImGui::DockBuilderSplitNode(dock_id_left, ImGuiDir_Up, 0.50f, &dock_id_left_top, &dock_id_left_bottom);
+      //   ImGui::DockBuilderDockWindow("Main", dock_id_main);
+      //   ImGui::DockBuilderDockWindow("Properties", dock_id_left_top);
+      //   ImGui::DockBuilderDockWindow("Scene", dock_id_left_bottom);
+      //   ImGui::DockBuilderDockWindow("Main", dock_id_main);
+      //   ImGui::DockBuilderFinish(dockspace_id);
+      // }
+      // ImGui::DockSpaceOverViewport(dockspace_id, viewport, ImGuiDockNodeFlags_PassthruCentralNode);
+      // ImGui::Begin("Properties");
+
+      /////
+      //ImGui::DockBuilderDockWindow("Main", dock_id_main);
+//       #include "imgui.h"
+// #include "imgui_internal.h" // Required for the advanced DockBuilder API
+
+// void RenderUI()
+// {
+    // 1. Setup a Fullscreen Dockspace
+    // This allows the docking system to fill the entire application workspace.
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->WorkPos);
+    ImGui::SetNextWindowSize(viewport->WorkSize);
+    ImGui::SetNextWindowViewport(viewport->ID);
+
+    // Window style overrides to make it seamless
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+    // Hidden window flags that turn this window into an invisible background hub
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
+    window_flags |= ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+    // Submit the parent window
+    bool open = true;
+    ImGui::Begin("MainDockSpaceWindow", &open, window_flags);
+    ImGui::PopStyleVar(3);
+
+    // Submit the actual DockSpace
+    //ImGuiID dockspace_id = ImGui::GetID("MyApplicationDockspace");
+    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+
+    // 2. Programmatically Define the Default Layout
+    // The conditional check ensures we only enforce this layout the VERY first time the app runs.
+    // Afterwards, ImGui loads the user's custom changes from the imgui.ini file.
+    if (ImGui::DockBuilderGetNode(dockspace_id) == nullptr)
+    {
+        // Clear any existing layout structures
+        ImGui::DockBuilderRemoveNode(dockspace_id);
+        ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
+        ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->WorkSize);
+
+        // Split the central space into compartments
+        ImGuiID dock_id_main = dockspace_id;
+        ImGuiID dock_id_left;
+        ImGuiID dock_id_bottom;
+
+        // Split Left: takes 25% of the width from the total main node
+        ImGui::DockBuilderSplitNode(dock_id_main, ImGuiDir_Left, 0.25f, &dock_id_left, &dock_id_main);
+
+        // Split Bottom: takes 30% of the height from the REMAINING main node
+        ImGui::DockBuilderSplitNode(dock_id_main, ImGuiDir_Down, 0.30f, &dock_id_bottom, &dock_id_main);
+
+        // Map your window titles onto the generated Dock IDs
+        // NOTE: These strings MUST match the window names declared in ImGui::Begin() below.
+        ImGui::DockBuilderDockWindow("Inspector", dock_id_left);
+        ImGui::DockBuilderDockWindow("Console Output", dock_id_bottom);
+        ImGui::DockBuilderDockWindow("Viewport Canvas", dock_id_main);
+
+        ImGui::DockBuilderFinish(dockspace_id);
+        ImGui::DockSpaceOverViewport(dockspace_id, viewport, ImGuiDockNodeFlags_PassthruCentralNode);
+        ImGui::End();
+    }
+
+    // Optional: Add a Global Menu Bar over your dockspace
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Exit")) { /* Handle exit logic */ }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMenuBar();
+    }
+
+    ImGui::End(); // End of MainDockSpaceWindow
+
+    // 3. Render the Component Windows
+    // ImGui will catch these by name and automatically snap them into position.
+
+    ImGui::Begin("Inspector");
+    ImGui::Text("Entity Properties");
+    ImGui::End();
+
+    ImGui::Begin("Console Output");
+    //ImGui::Text("System Log: All systems nominal.");
+        // 1. Create the Tab Bar container
+    if (ImGui::BeginTabBar("MyViewportTabBar"))
+    {
+        // 2. Define the first tab
+        if (ImGui::BeginTabItem("Viewport 1"))
+        {
+            ImGui::Text("Render target or scene view goes here.");
+
+            ImGui::EndTabItem(); // Must pair with BeginTabItem
+        }
+
+        // 3. Define the second tab
+        if (ImGui::BeginTabItem("Viewport 2"))
+        {
+            ImGui::Text("Alternative camera view or settings.");
+
+            ImGui::EndTabItem(); // Must pair with BeginTabItem
+        }
+
+        ImGui::EndTabBar(); // Must pair with BeginTabBar
+    }
+    ImGui::End();
+
+    ImGui::Begin("Viewport Canvas");
+    ImGui::Text("Your 3D/2D Engine Scene Renders Here");
+    ImGui::End();
+
+
 
       // 2. Show a simple window that we create ourselves. We use a Begin/End
       // pair to create a named window.
-      {
-        static float f = 0.0f;
-        static int counter = 0;
+      // {
+      //   static float f = 0.0f;
+      //   static int counter = 0;
 
-        if (ImGui::Begin("Hello, world!")) {
-          ImGui::Text("This is some useful text.");
-          ImGui::Checkbox("Demo Window", &show_demo_window);
-          ImGui::Checkbox("Another Window", &show_another_window);
+      //   if (ImGui::Begin("Hello, world!")) {
+      //     ImGui::Text("This is some useful text.");
+      //     ImGui::Checkbox("Demo Window", &show_demo_window);
+      //     ImGui::Checkbox("Another Window", &show_another_window);
 
-          ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-          ImGui::ColorEdit3("clear color", (float *)&clear_color);
+      //     ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+      //     ImGui::ColorEdit3("clear color", (float *)&clear_color);
 
-          if (ImGui::Button("Button")) {
-            counter++;
-          }
-          ImGui::SameLine();
-          ImGui::Text("counter = %d", counter);
+      //     if (ImGui::Button("Button")) {
+      //       counter++;
+      //     }
+      //     ImGui::SameLine();
+      //     ImGui::Text("counter = %d", counter);
 
-          ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
-                      1000.0f / io.Framerate, io.Framerate);
-        }
-        ImGui::End();
-      }
+      //     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+      //                 1000.0f / io.Framerate, io.Framerate);
+      //   }
+      //   ImGui::End();
+      // }
 
-      // 3. Show another simple window.
-      if (show_another_window) {
-        ImGui::Begin(
-            "Another Window",
-            &show_another_window); // Pass a pointer to our bool variable (the
-                                   // window will have a closing button that
-                                   // will clear the bool when clicked)
-        ImGui::Text("Hello from another window!");
-        if (ImGui::Button("Close Me"))
-          show_another_window = false;
-        ImGui::End();
-      }
+      // // 3. Show another simple window.
+      // if (show_another_window) {
+      //   ImGui::Begin(
+      //       "Another Window",
+      //       &show_another_window); // Pass a pointer to our bool variable (the
+      //                              // window will have a closing button that
+      //                              // will clear the bool when clicked)
+      //   ImGui::Text("Hello from another window!");
+      //   if (ImGui::Button("Close Me"))
+      //     show_another_window = false;
+      //   ImGui::End();
+      // }
 
       // --- 5. Rendering Pipeline ---
       ImGui::Render();

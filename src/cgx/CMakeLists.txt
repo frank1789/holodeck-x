@@ -141,3 +141,13 @@ target_sources(${LIBRARY_TARGET_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/include/uselibSNL.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/xwd.h
 )
+
+
+set(EXE_TARGET_NAME "cgx")
+add_executable(${EXE_TARGET_NAME})
+target_sources(${EXE_TARGET_NAME}
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/cgx.c
+)
+target_libraries(${EXE_TARGET_NAME} PRIVATE GraphiXLegacy)
+add_dependency(${EXE_TARGET_NAME} GraphiXLegacy)
