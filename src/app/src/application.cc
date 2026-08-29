@@ -1,5 +1,6 @@
 #include "application.hh"
 
+#include <ImViewGuizmo.h>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
 #include <fmt/format.h>
@@ -7,7 +8,6 @@
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
 #include <imgui_internal.h>
-// #include "renderer.hh"
 
 #include <backward.hpp>
 #include <chrono>
@@ -16,7 +16,15 @@
 
 #include "Eigen/Core"
 #include "ui/dockspace_host.hh"
-#include "ui_layout.hh"
+#include "ui/panels/analysis_tree.hh"
+#include "ui/panels/group_and_selection.hh"
+#include "ui/panels/main_panel.hh"
+#include "ui/panels/mesh_warning.hh"
+#include "ui/panels/output_log.hh"
+#include "ui/panels/properties_editor.hh"
+#include "ui/panels/solver_control.hh"
+
+namespace holodeckx {
 
 namespace {
 
@@ -105,6 +113,16 @@ auto Application::run() -> void {
                    // io.ConfigDpiScaleFonts=true automatically overrides this
                    // for every window depending on the current monitor)
 
+  // ImViewGuizmo appearance -- tweak freely, this is a one-time call.
+  auto& gizmoStyle = ImViewGuizmo::GetStyle();
+  gizmoStyle.scale = 1.0f;
+  gizmoStyle.axisColors[0] = IM_COL32(231, 76, 60, 255);   // X
+  gizmoStyle.axisColors[1] = IM_COL32(46, 204, 113, 255);  // Y
+  gizmoStyle.axisColors[2] = IM_COL32(52, 152, 219, 255);  // Z
+  gizmoStyle.labelColor = IM_COL32(240, 240, 240, 255);
+  gizmoStyle.animateSnap = true;
+  gizmoStyle.snapAnimationDuration = 0.25f;
+
   // Setup Platform/Renderer backends
   ImGui_ImplSDL3_InitForSDLRenderer(window_, renderer_);
   ImGui_ImplSDLRenderer3_Init(renderer_);
@@ -151,6 +169,13 @@ auto Application::run() -> void {
   bool show_demo_window = true;
   bool show_another_window = false;
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+  panels_.add_panel<ui::AnalysisTreePanel>();
+  panels_.add_panel<ui::GroupAndSelectionPanel>();
+  panels_.add_panel<ui::PropertiesEditorPanel>();
+  panels_.add_panel<ui::SolverControlPanel>();
+  panels_.add_panel<ui::MeshWarningPanel>();
+  auto& main = panels_.add_panel<ui::MainPanel>();
+  main.set_camera(&camera_);
 
   while (running_) {
     {
@@ -200,7 +225,7 @@ auto Application::run() -> void {
         io.DisplaySize = ImVec2(width_f, height_f);
       }
       ImGui::NewFrame();  // 3rd: Core ImGui frame initialization (Now safe!)
-      holodeckx::ui::DockSpaceHost::begin();
+      ui::DockSpaceHost::begin();
       if (ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("Window")) {
           for (const auto& panel : panels_.panels()) {
@@ -345,3 +370,5 @@ auto Application::delta_time() -> void {
       std::chrono::duration<float>(current_time - previous_time).count();
   previous_time = current_time;
 }
+
+}  // namespace holodeckx

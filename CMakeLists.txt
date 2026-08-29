@@ -13,6 +13,7 @@ project(HolodeckX
 
 include(GNUInstallDirs)
 include(CheckIPOSupported)
+include(FetchContent)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}")
@@ -51,11 +52,20 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
   endif()
 endif()
 
+FetchContent_Declare(
+  imviewguizmo
+  GIT_REPOSITORY https://github.com/Ka1serM/ImViewGuizmo
+  GIT_TAG v1.0.2
+)
+FetchContent_MakeAvailable(imviewguizmo)
+
+
 find_package(Vulkan REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 find_package(Backward CONFIG REQUIRED)
 find_package(SDL3 CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 
 add_subdirectory(src)
