@@ -9,10 +9,23 @@
 #include <imgui_internal.h>
 // #include "renderer.hh"
 
+#include "Eigen/Core"
+
 #include <backward.hpp>
 #include <chrono>
 #include <memory>
 #include <stdexcept>
+
+namespace
+{
+
+
+
+
+constexpr char const * AppName{"HolodeckX"};
+constexpr char const * AppIdentifier{"com.holodeck"};
+
+} // namespace
 
 backward::SignalHandling sh;
 
@@ -30,9 +43,12 @@ Application::~Application() noexcept {
 
 Application::Application() {
   if (!SDL_Init(SDL_INIT_VIDEO)) {
-    const auto msg_err =
-        fmt::format("Failed to initiliase SDL {}", SDL_GetError());
+    const auto msg_err = fmt::format("Failed to initiliase SDL {}", SDL_GetError());
     throw std::runtime_error(msg_err);
+  }
+
+  if(!SDL_SetAppMetadata(AppName, "0.1.0", AppIdentifier)){
+    const auto msg_err = fmt::format("Failed to set SDL metadata {}", SDL_GetError());
   }
 
   const float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
@@ -40,7 +56,7 @@ Application::Application() {
       SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
   const auto width = static_cast<int>(1280 * main_scale);
   const auto height = static_cast<int>(800 * main_scale);
-  window_ = SDL_CreateWindow("CalculiX", width, height, window_flags);
+  window_ = SDL_CreateWindow("HolodeckX", width, height, window_flags);
   if (window_ == nullptr) {
     const auto msg_err =
         fmt::format("Failed to create SDL window: {}", SDL_GetError());
@@ -90,7 +106,8 @@ auto Application::run() -> void {
   // Setup Platform/Renderer backends
   ImGui_ImplSDL3_InitForSDLRenderer(window_, renderer_);
   ImGui_ImplSDLRenderer3_Init(renderer_);
-
+    const char* home_dir = std::getenv("HOME");
+    const std::string font_path = std::string(home_dir) + "/Library/Fonts/Roboto-Regular.ttf";
   // Load Fonts
   // - If fonts are not explicitly loaded, Dear ImGui will select an embedded
   // font: either AddFontDefaultVector() or AddFontDefaultBitmap().
@@ -111,11 +128,20 @@ auto Application::run() -> void {
   // io.Fonts->AddFontDefaultBitmap();
   // io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf");
   // io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf");
-  // io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf");
-  // io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf");
-  // ImFont* font =
-  // io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf");
-  // IM_ASSERT(font != nullptr);
+  //io.Fonts->AddFontFromFileTTF("~/Library/Fonts/Roboto-Regular.ttf");
+// 1. ALWAYS load the default font first as a valid index 0 fallback
+ImFont* default_font = io.Fonts->AddFontDefault();
+
+// 2. Try loading your custom downloaded font
+const char* path = "/Users/francesco/Library/Fonts/Roboto-Medium.ttf";
+ImFont* roboto_font = io.Fonts->AddFontFromFileTTF(path, 16.0f);
+
+if (roboto_font == nullptr)
+{
+    // The load failed, so assign our fallback pointer to protect against crashes
+    printf("[imgui-warning] Could not load %s. Falling back to default font.\n", path);
+    roboto_font = default_font;
+}
 
   // Our state
   bool show_demo_window = true;
@@ -139,10 +165,9 @@ auto Application::run() -> void {
       while (SDL_PollEvent(&event)) {
         ImGui_ImplSDL3_ProcessEvent(&event);
         if (event.type == SDL_EVENT_QUIT)
-          running_ = false;
-        if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED &&
-            event.window.windowID == SDL_GetWindowID(window_))
-          running_ = false;
+          {running_ = false;}
+        if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED &&event.window.windowID == SDL_GetWindowID(window_))
+          {running_ = false;}
       }
 
       // [If using SDL_MAIN_USE_CALLBACKS: all code below would likely be your
@@ -244,18 +269,27 @@ auto Application::run() -> void {
         ImGuiID dock_id_main = dockspace_id;
         ImGuiID dock_id_left;
         ImGuiID dock_id_bottom;
+                ImGuiID dock_id_log;
+                        ImGuiID dock_id_cmd;
 
-        // Split Left: takes 25% of the width from the total main node
-        ImGui::DockBuilderSplitNode(dock_id_main, ImGuiDir_Left, 0.25f, &dock_id_left, &dock_id_main);
+// Split Left: takes 25% of the width from the total main node
+ImGui::DockBuilderSplitNode(dock_id_main, ImGuiDir_Left, 0.25f, &dock_id_left, &dock_id_main);
 
-        // Split Bottom: takes 30% of the height from the REMAINING main node
-        ImGui::DockBuilderSplitNode(dock_id_main, ImGuiDir_Down, 0.30f, &dock_id_bottom, &dock_id_main);
+// Split Bottom: takes 30% of the height from the REMAINING main node
+ImGui::DockBuilderSplitNode(dock_id_main, ImGuiDir_Down, 0.30f, &dock_id_bottom, &dock_id_main);
 
-        // Map your window titles onto the generated Dock IDs
-        // NOTE: These strings MUST match the window names declared in ImGui::Begin() below.
-        ImGui::DockBuilderDockWindow("Inspector", dock_id_left);
-        ImGui::DockBuilderDockWindow("Console Output", dock_id_bottom);
-        ImGui::DockBuilderDockWindow("Viewport Canvas", dock_id_main);
+// FIX: Split the bottom node 50/50 (0.5f) so BOTH tabs get equal width space side-by-side
+ImGui::DockBuilderSplitNode(dock_id_bottom, ImGuiDir_Left, 0.50f, &dock_id_log, &dock_id_cmd);
+
+// Map your window titles onto the generated Dock IDs
+ImGui::DockBuilderDockWindow("Inspector", dock_id_left);
+
+// If you want "Console Output" stacked as a tab with "Ouput", send it to dock_id_log:
+ImGui::DockBuilderDockWindow("Console Output", dock_id_log);
+ImGui::DockBuilderDockWindow("Ouput", dock_id_log); // Note: Check if you meant "Output"
+
+ImGui::DockBuilderDockWindow("Command", dock_id_cmd);
+ImGui::DockBuilderDockWindow("Viewport Canvas", dock_id_main);
 
         ImGui::DockBuilderFinish(dockspace_id);
         ImGui::DockSpaceOverViewport(dockspace_id, viewport, ImGuiDockNodeFlags_PassthruCentralNode);
@@ -282,7 +316,12 @@ auto Application::run() -> void {
     ImGui::Text("Entity Properties");
     ImGui::End();
 
-    ImGui::Begin("Console Output");
+        ImGui::Begin("Command");
+        ImGui::Text("Entity Properties");
+            ImGui::End();
+
+
+    ImGui::Begin("Output");
     //ImGui::Text("System Log: All systems nominal.");
         // 1. Create the Tab Bar container
     if (ImGui::BeginTabBar("MyViewportTabBar"))
@@ -307,8 +346,93 @@ auto Application::run() -> void {
     }
     ImGui::End();
 
-    ImGui::Begin("Viewport Canvas");
+    ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+   // 1. Check if the mouse is hovering specifically over this active window frame
+    // and if the user right-clicks (ImGuiMouseButton_Right)
+    if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+    {
+        // 2. Trigger a uniquely named context popup bound to this scope
+        ImGui::OpenPopup("CanvasContextMenu");
+    }
+
+    // 3. Define and render the context menu structure
+    if (ImGui::BeginPopup("CanvasContextMenu"))
+    {
+        ImGui::TextDisabled("Canvas Options");
+        ImGui::Separator();
+
+        if (ImGui::MenuItem("Reset View")) {
+            // Your logic to reset canvas camera, zoom, or positions
+        }
+        if (ImGui::MenuItem("Clear Canvas")) {
+            // Your logic to flush canvas elements
+        }
+
+        ImGui::EndPopup();
+    }
     ImGui::Text("Your 3D/2D Engine Scene Renders Here");
+    // 1. Get window geometry in screen coordinates
+    ImVec2 win_pos = ImGui::GetWindowPos();
+    ImVec2 win_size = ImGui::GetWindowSize();
+    ImVec2 padding = ImGui::GetStyle().WindowPadding;
+
+    // 2. Format the FPS string and calculate its dimensions
+    char fps_text[32];
+    snprintf(fps_text, sizeof(fps_text), "FPS: %.1f", ImGui::GetIO().Framerate);
+    ImVec2 text_size = ImGui::CalcTextSize(fps_text);
+
+    // 3. Calculate exact screen position (Top-Right corner with padding)
+    // Adjust win_pos.y offset if your canvas has a title bar/menu bar
+    ImVec2 text_pos;
+    text_pos.x = win_pos.x + win_size.x - text_size.x - padding.x;
+    text_pos.y = win_pos.y + ImGui::GetFrameHeight() + padding.y;
+
+    // 4. Draw directly to the window's draw list (Bypasses cursor/boundaries)
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+    // Optional: Draw a subtle dark background rectangle for readability
+    ImVec2 bg_min = ImVec2(text_pos.x - 4.0f, text_pos.y - 2.0f);
+    ImVec2 bg_max = ImVec2(text_pos.x + text_size.x + 4.0f, text_pos.y + text_size.y + 2.0f);
+    draw_list->AddRectFilled(bg_min, bg_max, IM_COL32(0, 0, 0, 150), 4.0f);
+
+    // Draw the text
+    ImU32 text_color = ImGui::GetColorU32(ImGuiCol_TextDisabled); // Muted grey
+    draw_list->AddText(text_pos, text_color, fps_text);
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+  // ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+  const ImVec2 avail = ImGui::GetContentRegionAvail();
+  const int w = std::max(1, static_cast<int>(avail.x));
+  const int h = std::max(1, static_cast<int>(avail.y));
+  //renderer_->resize(w, h);                       // recreates the FBO only if the size changed
+  //renderer_->render(vs);                         // draws the scene into the FBO
+
+  // ImGui's UV origin is top-left, GL's is bottom-left → flip V.
+  // ImGui::Image(static_cast<ImTextureID>(renderer.colorTexture()),
+  //              avail, /*uv0*/ ImVec2(0, 1), /*uv1*/ ImVec2(1, 0));
+
+  // Input handling is scoped to this widget — no more global mouse state.
+  const bool hovered = ImGui::IsItemHovered();
+  // if (hovered) {
+  //   const ImVec2 origin = ImGui::GetItemRectMin();
+  //   const ImVec2 m      = ImGui::GetMousePos();
+  //   const Eigen::Vector2f local{m.x - origin.x, m.y - origin.y};
+
+  //   if (ImGui::IsMouseDragging(ImGuiMouseButton_Middle))
+  //     camera.rotate_trackball(local, prev_local, Eigen::Vector2f(w, h));
+  //   if (ImGui::IsMouseDragging(ImGuiMouseButton_Right))
+  //     camera.pan(local - prev_local, Eigen::Vector2f(w, h));
+  //   if (const float wheel = ImGui::GetIO().MouseWheel; wheel != 0.0f)
+  //     camera.zoom(std::pow(1.1f, wheel));
+  //   if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+  //     pick_at(renderer, local);                // GPU ID-buffer readback, see doc 05 §7
+  //   prev_local = local;
+  // }
+
+  // draw_axis_triad_overlay();                   // old w2, as an ImDrawList overlay
+  // draw_colorbar_overlay(vs);                   // old scala_rgb/scala_tex
+      ImGui::PopStyleVar();
     ImGui::End();
 
 

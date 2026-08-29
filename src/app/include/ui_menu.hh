@@ -16,8 +16,8 @@ struct MenuItem {
 
 struct MenuNode {
     std::string_view label;
-    std::span<const MenuItem> items;
-    std::span<const MenuNode> children;
-}
+    // std::span<const MenuItem> items;
+    // std::span<const MenuNode> children;
+};
 
 #endif // UI_MENU_HH_

@@ -5,7 +5,7 @@ if (POLICY CMP0141)
 endif (POLICY CMP0141)
 
 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-project(GraphiX
+project(HolodeckX
   LANGUAGES C CXX
   VERSION 0.1.0
   DESCRIPTION "A simple program with gui"

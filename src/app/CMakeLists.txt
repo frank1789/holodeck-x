@@ -1,4 +1,4 @@
-set(EXECUTABLE_TARGET_NAME "app")
+set(EXECUTABLE_TARGET_NAME "HolodeckX")
 
 add_executable(${EXECUTABLE_TARGET_NAME})
 target_sources(${EXECUTABLE_TARGET_NAME}
@@ -7,6 +7,8 @@ target_sources(${EXECUTABLE_TARGET_NAME}
   ${CMAKE_CURRENT_SOURCE_DIR}/src/application.cc
   #${CMAKE_CURRENT_SOURCE_DIR}/src/ui_renderer.cc
   #${CMAKE_CURRENT_SOURCE_DIR}/src/renderer.cc
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/ui_layout.cc
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/ui_menu.cc
   PUBLIC
   FILE_SET HEADERS
   BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -14,6 +16,8 @@ target_sources(${EXECUTABLE_TARGET_NAME}
   ${CMAKE_CURRENT_SOURCE_DIR}/include/application.hh
  # ${CMAKE_CURRENT_SOURCE_DIR}/include/ui_renderer.hh
  # ${CMAKE_CURRENT_SOURCE_DIR}/include/renderer.hh
+   ${CMAKE_CURRENT_SOURCE_DIR}/include/ui_layout.hh
+   ${CMAKE_CURRENT_SOURCE_DIR}/include/ui_menu.hh
 )
 
 target_link_libraries(${EXECUTABLE_TARGET_NAME}
@@ -22,6 +26,7 @@ target_link_libraries(${EXECUTABLE_TARGET_NAME}
     SDL3::SDL3
     imgui::imgui
     Backward::Backward
+    Eigen3::Eigen
     #Vulkan::Vulkan
 )
 
