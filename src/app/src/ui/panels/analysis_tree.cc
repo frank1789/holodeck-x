@@ -35,8 +35,7 @@ auto AnalysisTreePanel::draw_node(Node& node) -> void {
   ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanFullWidth |
                              ImGuiTreeNodeFlags_OpenOnArrow |
                              ImGuiTreeNodeFlags_OpenOnDoubleClick;
-  // TODO(francesco): replace with node.children.empty()
-  const bool is_leaf = false;
+  const bool is_leaf = node.children.empty();
   if (is_leaf) {
     flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet;
     flags |= ImGuiTreeNodeFlags_NoTreePushOnOpen;

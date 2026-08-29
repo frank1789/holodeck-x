@@ -26,7 +26,11 @@ class MainPanel : public BasePanel<MainPanel> {
   auto draw_content() -> void;
   auto set_camera(Camera* camera) -> void { camera_ = camera; }
 
-  auto get_window_flags() const -> ImGuiWindowFlags;
+  [[nodiscard]] auto get_window_flags() const -> ImGuiWindowFlags;
+
+  [[nodiscard]] constexpr auto is_gizmo_capturing_input() const -> bool {
+    return is_gizmo_active_;
+  }
 
  private:
   auto draw_scene_render_target() -> void;
