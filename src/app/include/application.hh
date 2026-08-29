@@ -3,6 +3,7 @@
 
 #include <SDL3/SDL.h>
 //#include "renderer.hh"
+#include "ui/panel_manager.hh"
 
 class Application {
     public:
@@ -27,6 +28,7 @@ class Application {
 
     SDL_Window* window_{nullptr};
     SDL_Renderer* renderer_{nullptr};
+    holodeckx::ui::PanelManager panels_;
 
     float delta_time_{};
     bool running_{true};

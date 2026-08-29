@@ -9,6 +9,7 @@ target_sources(${EXECUTABLE_TARGET_NAME}
   #${CMAKE_CURRENT_SOURCE_DIR}/src/renderer.cc
    ${CMAKE_CURRENT_SOURCE_DIR}/src/ui_layout.cc
    ${CMAKE_CURRENT_SOURCE_DIR}/src/ui_menu.cc
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/ui/dockspace_host.cc
   PUBLIC
   FILE_SET HEADERS
   BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -18,6 +19,9 @@ target_sources(${EXECUTABLE_TARGET_NAME}
  # ${CMAKE_CURRENT_SOURCE_DIR}/include/renderer.hh
    ${CMAKE_CURRENT_SOURCE_DIR}/include/ui_layout.hh
    ${CMAKE_CURRENT_SOURCE_DIR}/include/ui_menu.hh
+   ${CMAKE_CURRENT_SOURCE_DIR}/include/ui/abstract_panel.hh
+   ${CMAKE_CURRENT_SOURCE_DIR}/include/ui/dockspace_host.hh
+   ${CMAKE_CURRENT_SOURCE_DIR}/include/ui/panel_manager.hh
 )
 
 target_link_libraries(${EXECUTABLE_TARGET_NAME}
