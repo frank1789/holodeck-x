@@ -54,8 +54,8 @@ endif()
 
 FetchContent_Declare(
   imviewguizmo
-  GIT_REPOSITORY https://github.com/Ka1serM/ImViewGuizmo
-  GIT_TAG v1.0.2
+  GIT_REPOSITORY https://github.com/frank1789/ImViewGuizmo.git
+  GIT_TAG e18fb77d8376b54a2f0d309aad813bb63153fda7
 )
 FetchContent_MakeAvailable(imviewguizmo)
 
