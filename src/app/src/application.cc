@@ -115,7 +115,7 @@ auto Application::run() -> void {
 
   // ImViewGuizmo appearance -- tweak freely, this is a one-time call.
   auto& gizmoStyle = ImViewGuizmo::GetStyle();
-  gizmoStyle.scale = 1.0f;
+  gizmoStyle.scale = 0.75f;
   gizmoStyle.axisColors[0] = IM_COL32(231, 76, 60, 255);   // X
   gizmoStyle.axisColors[1] = IM_COL32(46, 204, 113, 255);  // Y
   gizmoStyle.axisColors[2] = IM_COL32(52, 152, 219, 255);  // Z
@@ -174,6 +174,7 @@ auto Application::run() -> void {
   panels_.add_panel<ui::PropertiesEditorPanel>();
   panels_.add_panel<ui::SolverControlPanel>();
   panels_.add_panel<ui::MeshWarningPanel>();
+  panels_.add_panel<ui::OutputLogPanel>();
   auto& main = panels_.add_panel<ui::MainPanel>();
   main.set_camera(&camera_);
 

@@ -41,14 +41,11 @@ target_link_libraries(${EXECUTABLE_TARGET_NAME}
     imgui::imgui
     Backward::Backward
     Eigen3::Eigen
-    glm::glm-header-only
-ImViewGuizmo
+    glm::glm
+    ImViewGuizmo
     #Vulkan::Vulkan
 )
 
-add_dependencies(${EXECUTABLE_TARGET_NAME} ImViewGuizmo)
-
-
-target_compile_options(${EXECUTABLE_TARGET_NAME} PRIVATE -g3)
+target_compile_options(${EXECUTABLE_TARGET_NAME} PRIVATE -ggdb3)
 
 install(TARGETS ${EXECUTABLE_TARGET_NAME} DESTINATION bin)
