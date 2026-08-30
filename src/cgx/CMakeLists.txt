@@ -144,6 +144,6 @@ target_sources(${LIBRARY_TARGET_NAME}
 
 set(EXE_TARGET_NAME "cgx")
 add_executable(${EXE_TARGET_NAME})
-target_sources(${EXE_TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/cgx.c)
-target_libraries(${EXE_TARGET_NAME} PRIVATE ${LIBRARY_TARGET_NAME})
-add_dependency(${EXE_TARGET_NAME} ${LIBRARY_TARGET_NAME})
+target_sources(${EXE_TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/cgx.c)
+target_link_libraries(${EXE_TARGET_NAME} PRIVATE ${LIBRARY_TARGET_NAME})
+add_dependencies(${EXE_TARGET_NAME} ${LIBRARY_TARGET_NAME})
