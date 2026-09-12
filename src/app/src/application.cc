@@ -230,9 +230,12 @@ auto Application::run() -> void {
       if (ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("Window")) {
           for (const auto& panel : panels_.panels()) {
-            bool open = panel->is_open();
-            if (ImGui::MenuItem(panel->get_name(), nullptr, open))
-              panel->set_open(!open);
+            {
+              bool open = panel->is_open();
+              if (ImGui::MenuItem(panel->get_name(), nullptr, open)) {
+                panel->set_open(!open);
+              }
+            }
           }
           ImGui::EndMenu();
         }

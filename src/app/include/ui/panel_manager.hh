@@ -13,7 +13,7 @@ class PanelManager {
  public:
   using panel_ptr = std::unique_ptr<AbstractPanel>;
 
-  template<typename T, typename... Args>
+  template <typename T, typename... Args>
   auto add_panel(Args&&... args) -> T& {
     auto owned = std::make_unique<T>(std::forward<Args>(args)...);
     T& ref = *owned;
@@ -22,17 +22,17 @@ class PanelManager {
   }
 
   auto draw_all() -> void {
-        {
-        for (auto& panel : panels_)
-            panel->draw();
-
-        // Sweep out panels that were closed this frame, if desired.
-        // (Comment out if you want closed panels to persist for later reopening.)
-        panels_.erase(
-            std::remove_if(panels_.begin(), panels_.end(),
-                            [](const std::unique_ptr<AbstractPanel>& p) { return !p->is_open(); }),
-            panels_.end());
+    for (auto& panel : panels_) {
+      panel->draw();
     }
+
+    // Sweep out panels that were closed this frame, if desired.
+    // (Comment out if you want closed panels to persist for later reopening.)
+    panels_.erase(std::remove_if(panels_.begin(), panels_.end(),
+                                 [](const std::unique_ptr<AbstractPanel>& p) {
+                                   return !p->is_open();
+                                 }),
+                  panels_.end());
   }
 
   [[nodiscard]] auto panels() const -> std::span<const panel_ptr> {
@@ -40,7 +40,7 @@ class PanelManager {
   }
 
  private:
-  std::vector<panel_ptr> panels_{};
+  std::vector<panel_ptr> panels_;
 };
 
 }  // namespace holodeckx::ui

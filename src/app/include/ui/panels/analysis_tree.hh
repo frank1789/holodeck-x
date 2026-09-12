@@ -26,6 +26,6 @@ private:
   Node *selected_{nullptr};
 };
 
-} // namespace holodeck::ui
+} // namespace holodeckx::ui
 
 #endif // HOLODECK_X_APP_UI_PANELS_ANALYSIS_TREE_HH_
