@@ -11,7 +11,7 @@
 /*     the License.                                                      */
 /*                                                                       */
 /*     This program is distributed in the hope that it will be useful,   */
-/*     but WITHOUT ANY WARRANTY; without even the implied warranty of    */ 
+/*     but WITHOUT ANY WARRANTY; without even the implied warranty of    */
 /*     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the      */
 /*     GNU General Public License for more details.                      */
 /*                                                                       */
@@ -81,7 +81,7 @@ void vl_result( double *A, double *B, double *C )
 /*    Vektorbetrag: C =  Vektor(B)-Vektor(A) == Vector(AB)*/
 /**********************************************************/
 {
-register int i;
+ int i;
 
 for (i=0; i<3; i++)
          C[i]=B[i]-A[i];
@@ -115,7 +115,7 @@ double vl_norm( double *A, double *C )
        B=B+A[i]*A[i];
 
       B = sqrt(B);
-      if(B==0.) {C[0]=C[1]=C[2]=0.; return(B);} 
+      if(B==0.) {C[0]=C[1]=C[2]=0.; return(B);}
       for ( i=0; i<3; i++)
        C[i]=A[i]/B;
       return(B);
@@ -125,7 +125,7 @@ double vl_betrag(double *a)
 /*      laenge von Vektor a                                  */
 /* ********************************************************* */
 {
-  register int i;
+   int i;
   double b;
   b=0.;
 
@@ -141,7 +141,7 @@ void vl_scal( double *A, double *B, double *C )
 /* Vektormultiplikation: vektor(C) =  scalar(A)*Vektor(B) */
 /**********************************************************/
 {
-  register int i;
+   int i;
 
   for (i=0; i<3; i++){
          C[i]= *A * B[i];
@@ -152,7 +152,7 @@ void vl_add( double *A, double *B, double *C )
 /*    Vektoraddition: C =  Vektor(B)+Vektor(A)            */
 /**********************************************************/
 {
-  register int i;
+   int i;
 
   for (i=0; i<3; i++){
          C[i]=B[i]+A[i];
@@ -169,7 +169,7 @@ void vl_trans(double M [][3],double * t, double * P, double * A)
     A[i]=0;
     for(j=0;j<3;j++){
       A[i]=A[i]+M[i][j]*P[j];
-    }  
+    }
   }
   vl_add(A,t,A);
 }
@@ -186,33 +186,33 @@ void makeTorus(double *p1, double *p2, double r1, double r2, BSplineSurface * my
   double *resKnot = NULL;
   double *resWeight = NULL;
   double *rescX=NULL, *rescY = NULL, *rescZ = NULL;
-  
+
   BSplineCurve myCurve;
   myCurve.nPol = 9;
   myCurve.nKnt = 12;
   myCurve.deg = 2;
- 
+
   if((rescX = (double *)realloc((double *)rescX, (myCurve.nPol)*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure rescX\n\n"); }
-  
+
   if((rescY = (double *)realloc((double *)rescY, (myCurve.nPol)*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure rescY\n\n"); }
-  
+
   if((rescZ = (double *)realloc((double *)rescZ, (myCurve.nPol)*sizeof(double))) == NULL )
-  { printf(" ERROR: realloc failure rescZ\n\n"); } 
-    
+  { printf(" ERROR: realloc failure rescZ\n\n"); }
+
   double circlePoint[9][3]= {{1,0,0},{1,0,-1},{0,0,-1},
 			    {-1,0,-1},{-1,0,0},{-1,0,1},
 			    {0,0,1},{1,0,1},{1,0,0}};
-			    
+
   double wCircle[9]={1,0.707107,1,0.707107,1,0.707107,1,0.707107,1};
-				  
-  double kCircle[12]={0,0,0,0.25,0.25,0.5,0.5,0.75,0.75,1,1,1};		
-			    
+
+  double kCircle[12]={0,0,0,0.25,0.25,0.5,0.5,0.75,0.75,1,1,1};
+
   double circlePointScaled[9][3];
   double resPol[9][3];
-			    
-  double xAxis[3] ,zAxis[3];//local coordinate system		    
+
+  double xAxis[3] ,zAxis[3];//local coordinate system
   double p1p2[3];
   double vIndep[3] = {1,0,0}, scalProd;
 
@@ -220,37 +220,37 @@ void makeTorus(double *p1, double *p2, double r1, double r2, BSplineSurface * my
   vl_result(p1,p2,p1p2);
   vl_norm(p1p2,zAxis);//scale to length 1
   vl_sprod(zAxis,vIndep,&scalProd);
-  if(abs(scalProd)>0.99){// not linear independent 
+  if(abs(scalProd)>0.99){// not linear independent
     vIndep[0] = 0;
     vIndep[1] = 1;
     vIndep[2] = 0;
-  }  
+  }
   vl_prod(zAxis,vIndep,xAxis);
   vl_norm(xAxis,xAxis);
-  
+
   //Matrix M: 	(x1,  y1,  z1)
   //		(x2,  y2,  z2)
   //		(x3,  y3,  z3)
   // [column,row] bzw. [zeile,spalte]
   double M [3][3];//matrix for new coordinate system
   double t[3];//translation for new coordinate system
-  
+
   //calculate the transformation Matrix M and translation vector t
   for(i=0;i<3;i++)
-  {  
+  {
     M[i][0]=xAxis[i];//wirte x-Axis to fisrt column
     M[i][1]=0;//wirte y-Axis to second column
     M[i][2]=zAxis[i];//wirte z-Axis to third column
     t[i] = p1[i]+r1*xAxis[i];//set translation to origin
   }
-  
+
   //scale the circular curve to the minor radius r2
   for(l=0;l<9;l++){
     for(m=0;m<3;m++){
       circlePointScaled[l][m] = r2 * circlePoint[l][m];
     }
-  } 
-  
+  }
+
   //calcutale position of control points
   for(j=0;j<9;j++){//calculate control points of circle
     vl_trans(M,t,circlePointScaled[j], resPol[j]);//calculate controll points of the rotated surface
@@ -258,14 +258,14 @@ void makeTorus(double *p1, double *p2, double r1, double r2, BSplineSurface * my
     rescY[j]=resPol[j][1];
     rescZ[j]=resPol[j][2];
   }
-  
+
   //write result to BSplineCurve struct
   myCurve.k = kCircle;
-  myCurve.w = wCircle; 
+  myCurve.w = wCircle;
   myCurve.cX =rescX;
   myCurve.cY =rescY;
-  myCurve.cZ =rescZ; 
-  
+  myCurve.cZ =rescZ;
+
   //rotate circular profile curve to get a Torodial NURBS surface
   rotateBSpline(p1, p2, &myCurve, mySurf);
 }
@@ -277,32 +277,32 @@ void makeTorus(double *p1, double *p2, double r1, double r2, BSplineSurface * my
 //==============================================================//
 void translateBSpline(double *p1, double *p2, BSplineCurve * myCurve ,BSplineSurface * mySurf)
 {
-  double p1p2[3]; 
+  double p1p2[3];
   int i,j;
- 
+
   double *resVKnot = NULL;
   double *resUKnot = NULL;
   double *resWeight = NULL;
   double *rescX=NULL, *rescY = NULL, *rescZ = NULL;
-  
+
   if((resVKnot = (double *)realloc((double *)resVKnot, 4*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure resVKnot\n\n"); }
-  
+
   if((resUKnot = (double *)realloc((double *)resUKnot, (myCurve->nKnt)*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure resUKnot\n\n"); }
-  
+
   if((resWeight = (double *)realloc((double *)resWeight, (myCurve->nPol)*2*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure resWeights\n\n"); }
-  
+
   if((rescX = (double *)realloc((double *)rescX, (myCurve->nPol)*2*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure rescX\n\n"); }
-  
+
   if((rescY = (double *)realloc((double *)rescY, (myCurve->nPol)*2*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure rescY\n\n"); }
-  
+
   if((rescZ = (double *)realloc((double *)rescZ, (myCurve->nPol)*2*sizeof(double))) == NULL )
-  { printf(" ERROR: realloc failure rescZ\n\n"); }  
-  
+  { printf(" ERROR: realloc failure rescZ\n\n"); }
+
   //calcutale control points
   vl_result(p1,p2,p1p2);
   i=0;
@@ -311,39 +311,39 @@ void translateBSpline(double *p1, double *p2, BSplineCurve * myCurve ,BSplineSur
     rescX[i]=(myCurve->cX[j]);
     rescY[i]=(myCurve->cY[j]);
     rescZ[i]=(myCurve->cZ[j]);
-    resWeight[i] = myCurve->w[j];//calculate weights     
+    resWeight[i] = myCurve->w[j];//calculate weights
     i++;
     rescX[i]=(myCurve->cX[j])+p1p2[0];
     rescY[i]=(myCurve->cY[j])+p1p2[1];
     rescZ[i]=(myCurve->cZ[j])+p1p2[2];
-    resWeight[i] = myCurve->w[j];//calculate weights     
+    resWeight[i] = myCurve->w[j];//calculate weights
     i++;
   }
-    
-    //calculate u-Knots 
-    for(j = 0;j<(myCurve->nKnt);j++){    
+
+    //calculate u-Knots
+    for(j = 0;j<(myCurve->nKnt);j++){
       resUKnot[j] = myCurve->k[j];
     }
-    //calculate v-Knots 
+    //calculate v-Knots
     resVKnot[0] = 0;
     resVKnot[1] = 0;
     resVKnot[2] = 1;
     resVKnot[3] = 1;
-       
+
     //write result to struct
     mySurf->uDeg = myCurve->deg;
     mySurf->vDeg = 1;
     mySurf->nUPol = myCurve->nPol;
-    mySurf->nVPol = 2;  
+    mySurf->nVPol = 2;
     mySurf->nUKnt = myCurve->nKnt;
-    mySurf->nVKnt = 4;  
+    mySurf->nVKnt = 4;
     mySurf->uKnt = resUKnot;
-    mySurf->vKnt = resVKnot;  
-    
+    mySurf->vKnt = resVKnot;
+
     mySurf->weights = resWeight;
     mySurf->cX =rescX;
     mySurf->cY =rescY;
-    mySurf->cZ =rescZ;    
+    mySurf->cZ =rescZ;
 }
 
 
@@ -356,52 +356,52 @@ void rotateBSpline(double *p1, double *p2, BSplineCurve * myCurve ,BSplineSurfac
   double tmpVec[3],p1p2[3];
   double scalProd, length;
   double radius;
-  
+
   int i,j,l,m;
-  
+
  //Matrix M: 	(x1,  y1,  z1)
  //		(x2,  y2,  z2)
  //		(x3,  y3,  z3)
  // [column,row] bzw. [zeile,spalte]
   double M [3][3];//matrix for new coordinate system
   double t[3];//translation for new coordinate system
-  
+
   //Define BSpline-circle
   double circlePoint[9][3]= {{1,0,0},{1,1,0},{0,1,0},
 			    {-1,1,0},{-1,0,0},{-1,-1,0},
 			    {0,-1,0},{1,-1,0},{1,0,0}};
   double circlePointScaled[9][3];
-				  
+
   double wCircle[9]={1,0.707107,1,0.707107,1,0.707107,1,0.707107,1};
-				  
-  double kCircle[12]={0,0,0,0.25,0.25,0.5,0.5,0.75,0.75,1,1,1};		  
- 
+
+  double kCircle[12]={0,0,0,0.25,0.25,0.5,0.5,0.75,0.75,1,1,1};
+
   double *resVKnot = NULL;
   double *resUKnot = NULL;
   double *resWeight = NULL;
   double *rescX=NULL, *rescY = NULL, *rescZ = NULL;
-  
+
   if((resVKnot = (double *)realloc((double *)resVKnot, 12*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure resVKnot\n\n"); }
-  
+
   if((resUKnot = (double *)realloc((double *)resUKnot, (myCurve->nKnt)*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure resUKnot\n\n"); }
-  
+
   if((resWeight = (double *)realloc((double *)resWeight, (myCurve->nPol)*9*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure resWeights\n\n"); }
-  
+
   if((rescX = (double *)realloc((double *)rescX, (myCurve->nPol)*9*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure rescX\n\n"); }
-  
+
   if((rescY = (double *)realloc((double *)rescY, (myCurve->nPol)*9*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure rescY\n\n"); }
-  
+
   if((rescZ = (double *)realloc((double *)rescZ, (myCurve->nPol)*9*sizeof(double))) == NULL )
   { printf(" ERROR: realloc failure rescZ\n\n"); }
 
   double resPol[(myCurve->nPol)*9][3];
   //calculate coordinate axis
-  
+
   vl_result(p1,p2,zAxis);//z-Axis of local coordinate system
   int count=0;
   do{
@@ -433,7 +433,7 @@ void rotateBSpline(double *p1, double *p2, BSplineCurve * myCurve ,BSplineSurfac
     M[i][2]=zAxis[i];//wirte z-Axis to third column
     //cout<<"( "<<xAxis[i]<<" "<<yAxis[i]<<" "<<zAxis[i]<<" )"<<endl;
   }
-  
+
   for(i=0;i<(myCurve->nPol);i++)
   {
       vl_result(p1,p2,p1p2);
@@ -448,14 +448,14 @@ void rotateBSpline(double *p1, double *p2, BSplineCurve * myCurve ,BSplineSurfac
       vl_add(p1,tmpVec,t);
       vl_result(t,cPointTmp,tmpVec);
       radius = vl_betrag(tmpVec);
-      
+
       //"scale circle points
       for(l=0;l<9;l++){
 	for(m=0;m<3;m++){
 	  circlePointScaled[l][m] = radius * circlePoint[l][m];
 	}
       }
-      
+
       //calcutale control points
       for(j=0;j<9;j++){//calculate control points of circle
 	vl_trans(M,t,circlePointScaled[j], resPol[i*9+j]);//calculate controll points of the rotated surface
@@ -465,28 +465,28 @@ void rotateBSpline(double *p1, double *p2, BSplineCurve * myCurve ,BSplineSurfac
 	resWeight[i*9+j] = wCircle[j]*(myCurve->w[i]);//calculate weights
       }
     }
-    //calculate u-Knots 
-    for(j=0;j<(myCurve->nKnt);j++){    
+    //calculate u-Knots
+    for(j=0;j<(myCurve->nKnt);j++){
       resUKnot[j] = myCurve->k[j];
     }
-    //calculate v-Knots 
-    for(j=0;j<12;j++){    
+    //calculate v-Knots
+    for(j=0;j<12;j++){
       resVKnot[j] = kCircle[j];
     }
     //write result to struct
     mySurf->uDeg = myCurve->deg;
     mySurf->vDeg = 2;
     mySurf->nUPol = myCurve->nPol;
-    mySurf->nVPol = 9;  
+    mySurf->nVPol = 9;
     mySurf->nUKnt = myCurve->nKnt;
-    mySurf->nVKnt = 12;  
+    mySurf->nVKnt = 12;
     mySurf->uKnt = resUKnot;
-    mySurf->vKnt = resVKnot;  
-    
+    mySurf->vKnt = resVKnot;
+
     mySurf->weights = resWeight;
     mySurf->cX =rescX;
     mySurf->cY =rescY;
-    mySurf->cZ =rescZ;    
+    mySurf->cZ =rescZ;
 }
 
 inline double wik(int k,int i,double *u,double x)
@@ -499,7 +499,7 @@ inline double wik(int k,int i,double *u,double x)
 }
 
 inline double deBoor(int k, int i, double * u ,double x)
-{     
+{
   if(x>1)x=1;
   if(k==1){
     if(x >= u[i] && x <= u[i+1]) return 1;
@@ -520,7 +520,7 @@ inline void calculateBSpline(double * pnt, BSplineCurve * myCurve,double u)
   if(tmp!=0){
     for(i=0;i<(myCurve->nPol);i++)
     {
-      N=(myCurve->w[i])*deBoor(myCurve->deg+1,i,(myCurve->k),u)/tmp;   
+      N=(myCurve->w[i])*deBoor(myCurve->deg+1,i,(myCurve->k),u)/tmp;
       sumX+= myCurve->cX[i]*(N);
       sumY+= myCurve->cY[i]*(N);
       sumZ+= myCurve->cZ[i]*(N);
@@ -542,24 +542,24 @@ void piaFitting(double pCloud [][3],int nPnt,BSplineCurve * fitCurve, int deg, d
 {
   if(nPnt<2) cout<<"WARNING: too few Points"<<endl;
   fitCurve->k = NULL;fitCurve->cX = NULL;fitCurve->cY = NULL;fitCurve->cZ = NULL;fitCurve->w = NULL;
-  int nCPnt = nPnt + 2, i;  
+  int nCPnt = nPnt + 2, i;
   if((fitCurve->k = (double *)realloc((double *)fitCurve->k,(nPnt+2*deg)*sizeof(double))) == NULL )
-  { printf(" ERROR: realloc failure\n\n"); }  
+  { printf(" ERROR: realloc failure\n\n"); }
   if((fitCurve->cX = (double *)realloc((double *)fitCurve->cX,nCPnt*sizeof(double))) == NULL )
-  { printf(" ERROR: realloc failure\n\n"); }    
+  { printf(" ERROR: realloc failure\n\n"); }
   if((fitCurve->cY = (double *)realloc((double *)fitCurve->cY,nCPnt*sizeof(double))) == NULL )
-  { printf(" ERROR: realloc failure\n\n"); }    
+  { printf(" ERROR: realloc failure\n\n"); }
   if((fitCurve->cZ = (double *)realloc((double *)fitCurve->cZ,nCPnt*sizeof(double))) == NULL )
-  { printf(" ERROR: realloc failure\n\n"); }    
+  { printf(" ERROR: realloc failure\n\n"); }
   if((fitCurve->w = (double *)realloc((double *)fitCurve->w,nCPnt*sizeof(double))) == NULL )
-  { printf(" ERROR: realloc failure\n\n"); }   
-  
-  
+  { printf(" ERROR: realloc failure\n\n"); }
+
+
   fitCurve->deg = deg;//cubic Bspline
   fitCurve->nPol = nCPnt;
   fitCurve->nKnt = nPnt+2*deg;
   fitCurve->deg = deg;
-  //Define curve as clamped: 
+  //Define curve as clamped:
   //Start knodes have multiplicity  deg + 1
     //End knodes have multiplicity  deg + 1
   for(i=0;i<=deg;i++)
@@ -567,17 +567,17 @@ void piaFitting(double pCloud [][3],int nPnt,BSplineCurve * fitCurve, int deg, d
     fitCurve->k[i]=0;
     fitCurve->k[fitCurve->nKnt-(i+1)]=1;
   }
-  
+
   double dist=0, p1p2[3], p1[3],p2[3];
   double du,dControll[3];
-  
+
   //sum up distances between points
   for(i=1;i<nPnt;i++){
     vl_result(pCloud[i],pCloud[i-1],p1p2);
     dist+=vl_betrag(p1p2);
   }
-  
-   //set pCloud points as control points 
+
+   //set pCloud points as control points
    fitCurve->cX[0]=pCloud[0][0];
    fitCurve->cY[0]=pCloud[0][1];
    fitCurve->cZ[0]=pCloud[0][2];
@@ -586,14 +586,14 @@ void piaFitting(double pCloud [][3],int nPnt,BSplineCurve * fitCurve, int deg, d
    fitCurve->cY[nCPnt-1]=pCloud[nPnt-1][1];
    fitCurve->cZ[nCPnt-1]=pCloud[nPnt-1][2];
    fitCurve->w[nCPnt-1]=1;
-  
+
   for(i=1;i<=nPnt;i++){
     fitCurve->cX[i]=pCloud[i-1][0];
     fitCurve->cY[i]=pCloud[i-1][1];
     fitCurve->cZ[i]=pCloud[i-1][2];
     fitCurve->w[i]=1;
   }
-  
+
   //calculate initial knot vector via chord-length parametrization
   for(i=1;i<nPnt;i++){
     p1[0]=pCloud[i-1][0];
@@ -606,7 +606,7 @@ void piaFitting(double pCloud [][3],int nPnt,BSplineCurve * fitCurve, int deg, d
     du=(vl_betrag(p1p2))/dist;
     fitCurve->k[i+deg]=fitCurve->k[i+deg-1]+du;
   }
-  
+
   double error=10, errorOld=0;
   int c, iter = 1;
   //interation loop for PIA fitting
@@ -616,7 +616,7 @@ void piaFitting(double pCloud [][3],int nPnt,BSplineCurve * fitCurve, int deg, d
     errorOld = error;
     error=0;
     for(i=(deg);i<((fitCurve->nKnt)-(deg));i++)
-    {     
+    {
       calculateBSpline(dControll,fitCurve,fitCurve->k[i]);//calculate point for parameter with current control points
       p1[0]=pCloud[c][0];
       p1[1]=pCloud[c][1];
@@ -626,7 +626,7 @@ void piaFitting(double pCloud [][3],int nPnt,BSplineCurve * fitCurve, int deg, d
       p1[0]=fitCurve->cX[c+1];
       p1[1]=fitCurve->cY[c+1];
       p1[2]=fitCurve->cZ[c+1];
-      vl_add(p1,p2,dControll); 
+      vl_add(p1,p2,dControll);
       fitCurve->cX[c+1]=dControll[0];
       fitCurve->cY[c+1]=dControll[1];
       fitCurve->cZ[c+1]=dControll[2];
@@ -678,7 +678,7 @@ int createBlendedNurbs(int nr)
   for(j=0; j<surf[nr].nl; j++)
   {
     p=0;
-    nip=0; 
+    nip=0;
     if(surf[nr].typ[j]=='l')
     {
       // printf("line:%s\n", line[surf[nr].l[j]].name);
@@ -697,7 +697,7 @@ int createBlendedNurbs(int nr)
 
       if(surf[nr].o[j]=='+')
       {
-        n=0; flag=line[l].nip; 
+        n=0; flag=line[l].nip;
         do
         {
           px[j][p]=line[l].ip[n++];
@@ -707,7 +707,7 @@ int createBlendedNurbs(int nr)
         }while(n<flag);
       }
       else
-      {             
+      {
         n=line[l].nip; flag=0;
         while(n>flag)
         {
@@ -743,11 +743,11 @@ int createBlendedNurbs(int nr)
 
         if(flag==1)
         {
-                       
+
           if(cl==0)                     { n=0; flag=line[l].nip-3; }
           else if(cl==lcmb[surf[nr].l[j]].nl-1)    { n=0; flag=line[l].nip; }
           else                         { n=0; flag=line[l].nip-3; }
-          
+
           do
           {
             px[j][p]=line[l].ip[n++];
@@ -758,7 +758,7 @@ int createBlendedNurbs(int nr)
         }
         else
         {
-                      
+
           if(cl==0)                     { n=line[l].nip; flag=3; }
           else if(cl==lcmb[surf[nr].l[j]].nl-1)    { n=line[l].nip; flag=0; }
           else                         { n=line[l].nip; flag=3; }
@@ -795,11 +795,11 @@ int createBlendedNurbs(int nr)
 
         if(flag==1)
         {
-                       
+
           if(cl==0)                     { n=0; flag=line[l].nip; }
           else if(cl==lcmb[surf[nr].l[j]].nl-1)    { n=0; flag=line[l].nip-3; }
           else                         { n=0; flag=line[l].nip-3; }
-          
+
           do
           {
             px[j][p]=line[l].ip[n++];
@@ -810,7 +810,7 @@ int createBlendedNurbs(int nr)
         }
         else
         {
-                      
+
           if(cl==0)                     { n=line[l].nip; flag=0; }
           else if(cl==lcmb[surf[nr].l[j]].nl-1)    { n=line[l].nip; flag=3; }
           else                         { n=line[l].nip; flag=3; }
@@ -848,7 +848,7 @@ int createBlendedNurbs(int nr)
     p1[1]=py[e][np[e]-1];
     p1[2]=pz[e][np[e]-1];
     vl_result(p0,p1,p0p1);
-    vl_norm(p0p1,ep0p1); 
+    vl_norm(p0p1,ep0p1);
     vl=vl_betrag(p0p1);
     nip=4-np[e];
     dvl=vl/(nip+1);
@@ -869,22 +869,22 @@ int createBlendedNurbs(int nr)
   for(j=0; j<4; j++)
   {
     printf("# pnts:%d\n", np[j]);
-    for ( i= 0; i < np[j] ; i ++ ) printf(" PNT ! %f %f %f\n",  px[j][i],  py[j][i],  pz[j][i]); 
+    for ( i= 0; i < np[j] ; i ++ ) printf(" PNT ! %f %f %f\n",  px[j][i],  py[j][i],  pz[j][i]);
   }
   */
 
   // Create array of points to be passed to snlCurve constructor.
-  // printf("  Create array of points\n"); 
+  // printf("  Create array of points\n");
   snlPoint* curvePointsEdge1 = new snlPoint [ np[0] ];
   snlPoint* curvePointsEdge2 = new snlPoint [ np[1] ];
   snlPoint* curvePointsEdge3 = new snlPoint [ np[2] ];
   snlPoint* curvePointsEdge4 = new snlPoint [ np[3] ];
-  
+
   j=0; for ( i= 0; i < np[j] ; i ++ ) curvePointsEdge1 [ i ].components ( px[j][i], py[j][i], pz[j][i] );
   j=1; for ( i= 0; i < np[j] ; i ++ ) curvePointsEdge2 [ i ].components ( px[j][i], py[j][i], pz[j][i] );
   j=2; for ( i= np[j]-1; i >= 0 ; i -- ) curvePointsEdge3 [ np[j]-1-i ].components ( px[j][i], py[j][i], pz[j][i] );
   j=3; for ( i= np[j]-1; i >= 0 ; i -- ) curvePointsEdge4 [ np[j]-1-i ].components ( px[j][i], py[j][i], pz[j][i] );
-  
+
   // Create curves. All curves must have the same degree. "degree" is an integer.
   int degree=3;
   snlCurve* curveEdgeU1 = new snlCurve ( 	curvePointsEdge1,
@@ -903,7 +903,7 @@ int createBlendedNurbs(int nr)
   								np[3],
   								snlCurve::SNL_GLOBAL_INTERP_CENTRIFUGAL,
   								degree 	);
-  
+
   // Create bilinear Coons patch. The orientation of the curves given to this
   // function is very important. There are two curves in the U direction
   // and two in the V direction. They should be oriented as follows:
@@ -919,22 +919,22 @@ int createBlendedNurbs(int nr)
   //
   // The arrow heads are the end of the curve. If you want to reverse
   // the direction of the curve call it's reverseEvalDirection() function.
-  
+
   // You will have to correspond curveEdge1 etc to one of the directions in
   // the following constructor.
-  
-  // printf(" Create bilinear Coons patch\n"); 
+
+  // printf(" Create bilinear Coons patch\n");
   snlSurface * surface = new snlSurface ( curveEdgeU1,curveEdgeU2,curveEdgeV1,curveEdgeV2 );
-  
+
   // You now have a new NURBS Coons Patch.
-  
+
   // Clean up allocated memory.
-  
+
   delete[] curvePointsEdge1;
   delete[] curvePointsEdge2;
   delete[] curvePointsEdge3;
   delete[] curvePointsEdge4;
-  
+
   delete curveEdgeU1;
   delete curveEdgeU2;
   delete curveEdgeV1;
@@ -942,7 +942,7 @@ int createBlendedNurbs(int nr)
 
 
   // (5)   create the cgx nurbs
-  // printf(" create blended nurbs\n"); 
+  // printf(" create blended nurbs\n");
   buffer[0]='S';
   buffer[1]='\0';
 
@@ -987,11 +987,11 @@ int createBlendedNurbs(int nr)
   nurbs[nr].sum_ambiguousPnts=NULL;
   nurbs[nr].uvflipped=NULL;
 
-  nurbs[nr].ctlarray=NULL; 
+  nurbs[nr].ctlarray=NULL;
 
   nurbs[nr].patches=0;
-  nurbs[nr].endFlag=1;       
-  nurbs[nr].type=GL_MAP2_VERTEX_4;       
+  nurbs[nr].endFlag=1;
+  nurbs[nr].type=GL_MAP2_VERTEX_4;
   nurbs[nr].Nurb = (GLUnurbsObj *)gluNewNurbsRenderer();
 
   // knots
@@ -1056,7 +1056,7 @@ int createBlendedNurbs(int nr)
 
 
 
-// uses double reduceDegree( int dir, unsigned numDeg, double tolerance ) 
+// uses double reduceDegree( int dir, unsigned numDeg, double tolerance )
 // returns the error during reduction. "dir" is the direction you wish to degree
 // reduce, it is one of the constants:
 //
@@ -1074,7 +1074,7 @@ int createBlendedNurbs(int nr)
 // WARNING: The size will change in certain situations (180deg sector of a cylinder)
 // in this case cgx is not able to render the new nurbs because the master surf
 // might be bigger than the remaining nurbs. The program will crash.
-//  
+//
 double repairNurbs( int nr, int deg, int dir )
 {
   int i,j,index=0;
@@ -1112,7 +1112,7 @@ double repairNurbs( int nr, int deg, int dir )
   snlSurface* surface = new snlSurface ( nurbs[nr].u_exp, nurbs[nr].v_exp, nurbs[nr].u_npnt, nurbs[nr].v_npnt, controlPoints, knotsU, knotsV );
 
 #if TEST
-  // print the nurbs-parameter before reduction 
+  // print the nurbs-parameter before reduction
   printf("in: degUV %d %d sizeUV %u %u\n", surface->degreeU(), surface->degreeV(), surface->sizeU(), surface->sizeV());
   for(i=0; i<nurbs[nr].u_nknt; i++) {  printf("knu:%f\n", nurbs[nr].uknt[i]); }
   for(i=0; i<nurbs[nr].v_nknt; i++) {  printf("knv:%f\n", nurbs[nr].vknt[i]); }
@@ -1166,7 +1166,7 @@ double repairNurbs( int nr, int deg, int dir )
   }
 
 #if TEST
-  // print 
+  // print
   printf("out: degUV %d %d sizeUV %u %u\n", surface->degreeU(), surface->degreeV(), surface->sizeU(), surface->sizeV());
   printf("knotu:%d\n", nurbs[nr].u_nknt);
   printf("knotv:%d\n", nurbs[nr].v_nknt);
@@ -1193,7 +1193,7 @@ double repairNurbs( int nr, int deg, int dir )
 
 
 int evalNurbs( int nr, int sum_p, double *pnt_u, double *pnt_v, Points *pnt)
-{ 
+{
   int i,j,index=0;
   snlPoint snlPnt;
 
@@ -1248,7 +1248,7 @@ int evalNurbs( int nr, int sum_p, double *pnt_u, double *pnt_v, Points *pnt)
 
 
 int evalNurbsWithNormalVector( int nr, int sum_p, double *pnt_u, double *pnt_v, Points *pnt, Points *nv)
-{ 
+{
   int i,j,index=0;
   snlPoint snlPnt;
 
@@ -1314,7 +1314,7 @@ void projSurfToNurbs( int nr, Gsur *surf, int snr, Nodes **node )
   int sum_p=0, sum_inverted=0, returnedPntsPerPnt;
 
   double convergTol,  normTol, maxval;
-  int maxPass; 
+  int maxPass;
   snlSurfLocn* inverted;
   int *isort=NULL;
 
@@ -1410,7 +1410,7 @@ void projSurfToNurbs( int nr, Gsur *surf, int snr, Nodes **node )
   //for(i=0; i<sum_inverted; i++) printf("%d node:%d dist:%f\n", inverted[i].origPtIndex, surf[snr].nod[inverted[i].origPtIndex],  inverted[i].dist);
 
   // store the nodes on the pole locations and do a second projection on a sphere where the poles are 90 deg rotated TBD!
-  // 
+  //
   // in the moment all nurbs are individually positioned for each surface (rotated) in sphToNurs() etc.
   // if this concept is realized do not forget to rework sphToNurs() etc.
   if(nurbs[nr].nurbsType==3) // sphere
@@ -1489,7 +1489,7 @@ void projSurfToNurbs( int nr, Gsur *surf, int snr, Nodes **node )
     if(sem_post(&sem_n)) printf("Error in:sem_post\n");
     }
   }
-  delete[] isort; 
+  delete[] isort;
   delete surface;  // Release surface object.
   delete[] inverted;  // Release snlVertex array returned from projection function.
   delete[] toProject;  // Release points that were projected onto surface.
@@ -1503,7 +1503,7 @@ void projSetToNurbs( int nr, Sets *set, int setNr, Points *pnt, Nodes **node )
   int i,j,n,index=0;
 
   double convergTol,  normTol;
-  int maxPass,sum_p, sum_inverted=0, returnedPntsPerPnt; 
+  int maxPass,sum_p, sum_inverted=0, returnedPntsPerPnt;
   snlSurfLocn* inverted;
 
   sem_wait(&sem_g);
@@ -1514,7 +1514,7 @@ void projSetToNurbs( int nr, Sets *set, int setNr, Points *pnt, Nodes **node )
   normTol=COS_TOL;
   convergTol=ITER_TOL;
   maxPass=MAX_PASS;
- 
+
   // (1)      Create an array of control points from your cgx control points:
   for (i=0; i<nurbs[nr].u_npnt; i++)
   {
@@ -1612,7 +1612,7 @@ void projSetToNurbs( int nr, Sets *set, int setNr, Points *pnt, Nodes **node )
     if(sem_post(&sem_n)) printf("Error in:sem_post\n");
     }
 
-  delete[]  isort; 
+  delete[]  isort;
   delete surface;  // Release surface object.
   delete[] inverted;  // Release snlVertex array returned from projection function.
   delete[] toProject;  // Release points that were projected onto surface.
@@ -1627,7 +1627,7 @@ double *projPntsToNurbs( int nr, int anz_p, Points *pnt)
   int i,j,n,index=0;
 
   double convergTol,  normTol;
-  int maxPass,sum_p, sum_inverted=0, returnedPntsPerPnt; 
+  int maxPass,sum_p, sum_inverted=0, returnedPntsPerPnt;
   snlSurfLocn* inverted;
 
   sem_wait(&sem_g);
@@ -1639,7 +1639,7 @@ double *projPntsToNurbs( int nr, int anz_p, Points *pnt)
   convergTol=ITER_TOL;
   maxPass=MAX_PASS;
 
- 
+
   // (1)      Create an array of control points from your cgx control points:
   for (i=0; i<nurbs[nr].u_npnt; i++)
   {
@@ -1721,7 +1721,7 @@ double *projPntsToNurbs( int nr, int anz_p, Points *pnt)
 #endif
   }
 
-  delete[]  isort; 
+  delete[]  isort;
   delete surface;  // Release surface object.
   delete[] inverted;  // Release snlVertex array returned from projection function.
   delete[] toProject;  // Release points that were projected onto surface.
@@ -1737,7 +1737,7 @@ double proj1PntToNurbs( int nr, double *pnt)
   int i,j,n,index=0;
 
   double convergTol,  normTol, result=0.;
-  int maxPass,sum_p, sum_inverted=0, returnedPntsPerPnt; 
+  int maxPass,sum_p, sum_inverted=0, returnedPntsPerPnt;
   snlSurfLocn* inverted;
 
   sem_wait(&sem_g);
@@ -1748,7 +1748,7 @@ double proj1PntToNurbs( int nr, double *pnt)
   normTol=COS_TOL;
   convergTol=ITER_TOL;
   maxPass=MAX_PASS;
- 
+
   // (1)      Create an array of control points from your cgx control points:
   for (i=0; i<nurbs[nr].u_npnt; i++)
   {
@@ -1821,7 +1821,7 @@ double proj1PntToNurbs( int nr, double *pnt)
   }
 
   result=inverted[isort[i]].dist;
-  delete[]  isort; 
+  delete[]  isort;
   delete surface;  // Release surface object.
   delete[] inverted;  // Release snlVertex array returned from projection function.
   delete[] toProject;  // Release points that were projected onto surface.
@@ -1903,7 +1903,7 @@ int rotateBall( int nr, int axis, int patch, double utol_ambig, double vtol_ambi
   v_prod( vcgp, vax1, vax2);
   v_add(cg_sphere, vax2, pax2);
 
-  // determine the nurbs-u,v range  by looking into the knots (to detect ambiguous points) 
+  // determine the nurbs-u,v range  by looking into the knots (to detect ambiguous points)
   sem_wait(&sem_g);
   umin=nurbs[nr].uknt[0];
   umax=nurbs[nr].uknt[nurbs[nr].u_nknt-1];
@@ -1911,7 +1911,7 @@ int rotateBall( int nr, int axis, int patch, double utol_ambig, double vtol_ambi
   vmax=nurbs[nr].vknt[nurbs[nr].v_nknt-1];
   sem_post(&sem_g);
 
-  // determine the rotations. "0" around axis through the poles (1.axis) 
+  // determine the rotations. "0" around axis through the poles (1.axis)
   i=0;
   pumax=pvmax=-MAXVALUE;
   pumin=pvmin=MAXVALUE;
@@ -1982,9 +1982,9 @@ int rotateBall( int nr, int axis, int patch, double utol_ambig, double vtol_ambi
     // check if it is likely that u=0 is in the surf (the surf extends nearly around the aequator)
     if( ((pumax-pumin)/(umax-umin)) > 0.9) angle[0]+=180.;
   }
-  
+
 #if TEST
-  printf(" axis:%d uvtol_ambig:%f %f pu: %f %f pv: %f %f ball rotated by angle: %f %f duv:%f %f\n", axis, utol_ambig, vtol_ambig, pumin,pumax, pvmin,pvmax, angle[0],angle[1], du,dv); 
+  printf(" axis:%d uvtol_ambig:%f %f pu: %f %f pv: %f %f ball rotated by angle: %f %f duv:%f %f\n", axis, utol_ambig, vtol_ambig, pumin,pumax, pvmin,pvmax, angle[0],angle[1], du,dv);
 #endif
 
   if((abs(angle[0])<1.)&&(abs(angle[1])<1.)) return(0);
@@ -2106,7 +2106,7 @@ int getNurbsType( int nr, int *axis, int *sector)
 #endif
 
     /* check the first and last only */
-    /* if they are equal its an ambiguous edge */ 
+    /* if they are equal its an ambiguous edge */
     /* difference to the first point */
     ambig[k]=1;
     j=nurbs[nr].v_npnt-1;
@@ -2171,7 +2171,7 @@ int getNurbsType( int nr, int *axis, int *sector)
 #endif
 
     /* check the first and last only */
-    /* if they are equal its an ambiguous edge */ 
+    /* if they are equal its an ambiguous edge */
     /* difference to the first point */
     ambig[k]=1;
     j=nurbs[nr].v_npnt-1;
@@ -2210,7 +2210,7 @@ int getNurbsType( int nr, int *axis, int *sector)
       printf(" i:%d j:%d %s\n", i, j, point[nurbs[nr].ctlpnt[i][j]].name);
 #endif
     /* check the first and last only */
-    /* if they are equal its an ambiguous edge */ 
+    /* if they are equal its an ambiguous edge */
     /* difference to the first point */
     ambig[k]=1;
     i=nurbs[nr].u_npnt-1;
@@ -2223,7 +2223,7 @@ int getNurbsType( int nr, int *axis, int *sector)
 #endif
     for(n=0; n<3; n++)
     {
-      //diff1=( nurbs[nr].ctlarray[j*(nurbs[nr].v_stride)+n] - 
+      //diff1=( nurbs[nr].ctlarray[j*(nurbs[nr].v_stride)+n] -
       //        nurbs[nr].ctlarray[i*(nurbs[nr].v_stride*nurbs[nr].v_npnt)+j*(nurbs[nr].v_stride)+n]);
       diff1=( nurbs[nr].ctlarray[j*(nurbs[nr].v_stride)+n] / nurbs[nr].ctlarray[j*(nurbs[nr].v_stride)+3] -
               nurbs[nr].ctlarray[i*(nurbs[nr].v_stride*nurbs[nr].v_npnt)+j*(nurbs[nr].v_stride)+n] / nurbs[nr].ctlarray[i*(nurbs[nr].v_stride*nurbs[nr].v_npnt)+j*(nurbs[nr].v_stride)+3]);
@@ -2274,7 +2274,7 @@ int getNurbsType( int nr, int *axis, int *sector)
       printf(" i:%d j:%d %s\n", i, j, point[nurbs[nr].ctlpnt[i][j]].name);
 #endif
     /* check the first and last only */
-    /* if they are equal its an ambiguous edge */ 
+    /* if they are equal its an ambiguous edge */
     /* difference to the first point */
     ambig[k]=1;
     i=nurbs[nr].u_npnt-1;
@@ -2325,11 +2325,11 @@ int getNurbsType( int nr, int *axis, int *sector)
   }
   else
   {
-    if((collapsed[0]==1)&&(collapsed[1]==1)) { *axis=2; if(ambig[5]==0) *sector=1; return(3); } 
-    else if((collapsed[2]==1)&&(collapsed[3]==1)) { *axis=1; if(ambig[4]==0) *sector=1; return(3); } 
-    else if((collapsed[0]==1)&&(collapsed[1]==0)) { *axis=2; if(ambig[1]==0) *sector=1; return(4); } 
-    else if((collapsed[2]==1)&&(collapsed[3]==0)) { *axis=1; if(ambig[3]==0) *sector=1; return(4); } 
-    else if((collapsed[0]==0)&&(collapsed[1]==1)) { *axis=2; if(ambig[0]==0) *sector=1; return(5); } 
+    if((collapsed[0]==1)&&(collapsed[1]==1)) { *axis=2; if(ambig[5]==0) *sector=1; return(3); }
+    else if((collapsed[2]==1)&&(collapsed[3]==1)) { *axis=1; if(ambig[4]==0) *sector=1; return(3); }
+    else if((collapsed[0]==1)&&(collapsed[1]==0)) { *axis=2; if(ambig[1]==0) *sector=1; return(4); }
+    else if((collapsed[2]==1)&&(collapsed[3]==0)) { *axis=1; if(ambig[3]==0) *sector=1; return(4); }
+    else if((collapsed[0]==0)&&(collapsed[1]==1)) { *axis=2; if(ambig[0]==0) *sector=1; return(5); }
     else if((collapsed[2]==0)&&(collapsed[3]==1)) { *axis=1; if(ambig[2]==0) *sector=1; return(5); }
     else return(-1);
   }
@@ -2345,7 +2345,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
   int pcollapsed, collapsedFlag=0, moveFlag=1 ;
 
   double convergTol, normTol;
-  int maxPass; 
+  int maxPass;
 
   sem_wait(&sem_g);
   int numberOfControlPoints =nurbs[nr].u_npnt*nurbs[nr].v_npnt;
@@ -2391,7 +2391,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
   // (4) Create an array of snlPoints to project onto the surface.
   snlPoint* toProject = new snlPoint [ sum_p ]; // You supply numPointsToProject.
 
-  // determine the nurbs-u,v range  by looking into the knots (to detect ambiguous points) 
+  // determine the nurbs-u,v range  by looking into the knots (to detect ambiguous points)
   sem_wait(&sem_g);
   umin=nurbs[nr].uknt[0];
   umax=nurbs[nr].uknt[nurbs[nr].u_nknt-1];
@@ -2401,8 +2401,8 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
   du=umax-umin;
   dv=vmax-vmin;
 #if TEST
-  printf(" u_nknt:%d v_nknt:%d\n",nurbs[nr].u_nknt,nurbs[nr].v_nknt ); 
-  printf(" umax:%f umin:%f vmax:%f vmin:%f\n", umax,umin,vmax,vmin); 
+  printf(" u_nknt:%d v_nknt:%d\n",nurbs[nr].u_nknt,nurbs[nr].v_nknt );
+  printf(" umax:%f umin:%f vmax:%f vmin:%f\n", umax,umin,vmax,vmin);
 #endif
 
   // Fill the snlPoint array with data from cgx
@@ -2492,22 +2492,22 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
   nppc= new int [nurbs[nr].nc[patch]+1];
   sem_post(&sem_g);
   for(n=0; n<=nurbs[nr].nc[patch]; n++) nppc[n]=0;
-  
+
 
   // (5) Project points to surface.
   if(printFlag) printf("inversion of %d points to nurbs:%s\n", sum_p, nurbs[nr].name);
   returnedPntsPerPnt =MAX_RETURNED_PNTS_PER_PNT/5;
 
 
-  // determine the type of the nurbs 
-  // (0plate, 1cyl, 2torus, 3ball, 4half-ball-bot, 5half-ball-top) 
-  // ( half-ball-top: closed at top)  
+  // determine the type of the nurbs
+  // (0plate, 1cyl, 2torus, 3ball, 4half-ball-bot, 5half-ball-top)
+  // ( half-ball-top: closed at top)
   // axis=1 v is ambiguous (point has either vmax or vmin)
   // axis=2 u is ambiguous (point has either umax or umin)
   // axis=3 u and v are ambiguous (torus)
   if((nurbsType=getNurbsType( nr, &axis, &sectorFlag ))<0)
   { printf("ERROR: type of nurbs:%d not known\n",nurbsType); exit(-1); }
-  
+
 #if TEST
   printf("nurbsType:%d (0plate, 1cyl, 2torus, 3ball, 4half-ball-bot, 5half-ball-top) axis:%d (1:u v:2 uv:3) tol_ambig:%f\n",nurbsType,axis,tol_ambig);
 #endif
@@ -2559,7 +2559,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
   for(i=0; i<sum_p; i++) pntproj[i].n=0;
   inverted =  surface -> fastProject( toProject, sum_p, &sum_inverted, convergTol, normTol, maxPass, PROJ_SENSITIVITY, returnedPntsPerPnt );
 
-  // sort all projections according to the point indexes in "toProject" 
+  // sort all projections according to the point indexes in "toProject"
   for(j=0; j<sum_inverted; j++)
   {
     if(pntproj[inverted[j].origPtIndex].n>=MAX_RETURNED_PNTS_PER_PNT) break;
@@ -2610,7 +2610,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
 #endif
         n++;
       }
-  
+
       /* last point == 1st point */
   sem_wait(&sem_g);
       nurbs[nr].uv[patch][curve][j++]=nurbs[nr].uv[patch][curve][0];
@@ -2621,7 +2621,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
   }
   else
   {
-   // go to the first not ambiguous point and store the skipped ones 
+   // go to the first not ambiguous point and store the skipped ones
    // go over all points and chose the closest one if ambiguous
    // finally care about the skipped leading points
 
@@ -2657,9 +2657,9 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
    {
      nppc[curve]=0;
      startFlag=1;
-     pskip=0; 
+     pskip=0;
      j=0;
- 
+
      // over all points of that curve
      // scip the last point to avoid differences between 1st and last
      sem_wait(&sem_g);
@@ -2673,7 +2673,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
        {
          distp=pntproj[n].dist[i]; disti=i;
        }
- 
+
        // check if the distance is "close"
        if((distp>MIN_DIST)&&(returnedPntsPerPnt<MAX_RETURNED_PNTS_PER_PNT))
        { returnedPntsPerPnt=MAX_RETURNED_PNTS_PER_PNT; delete[] inverted; goto finerProjection; }
@@ -2681,24 +2681,24 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
        printf("xx pnt:%d dist:%f disti:%d uv:%f %f  orig-xyz: %f %f %f \n",n, distp,disti, pntproj[n].paramU[disti],pntproj[n].paramV[disti], toProject[n].x(), toProject[n].y(), toProject[n].z() );
 #endif
 
-       // look if one edge is collapsed and set coords of close points to ideal values 
+       // look if one edge is collapsed and set coords of close points to ideal values
        if((nurbsType>2)&&(collapsedFlag))
        {
         if(axis==1)
 	{
-          if(((collapsedFlag==1)||(collapsedFlag==3))&&((pntproj[n].paramU[disti]- utol_ambig )<umin)) { pntproj[n].paramV[disti]=vmin; } 
+          if(((collapsedFlag==1)||(collapsedFlag==3))&&((pntproj[n].paramU[disti]- utol_ambig )<umin)) { pntproj[n].paramV[disti]=vmin; }
           if((collapsedFlag>1)&&((pntproj[n].paramU[disti]+ utol_ambig )>umax)) {  pntproj[n].paramV[disti]=vmin; }
 	}
         else if(axis==2)
 	{
-          if(((collapsedFlag==1)||(collapsedFlag==3))&&((pntproj[n].paramV[disti]- vtol_ambig )<vmin)) { pntproj[n].paramU[disti]=umin; } 
+          if(((collapsedFlag==1)||(collapsedFlag==3))&&((pntproj[n].paramV[disti]- vtol_ambig )<vmin)) { pntproj[n].paramU[disti]=umin; }
           if((collapsedFlag>1)&&((pntproj[n].paramV[disti]+ vtol_ambig )>vmax)) { pntproj[n].paramU[disti]=umin; }
 	}
         else if(axis==3)
 	{
-          if((pntproj[n].paramV[disti]- vtol_ambig )<vmin) { pntproj[n].paramU[disti]=umin; } 
+          if((pntproj[n].paramV[disti]- vtol_ambig )<vmin) { pntproj[n].paramU[disti]=umin; }
           if((pntproj[n].paramV[disti]+ vtol_ambig )>vmax) { pntproj[n].paramU[disti]=umin; }
-          if((pntproj[n].paramU[disti]- utol_ambig )<umin) { pntproj[n].paramV[disti]=vmin; } 
+          if((pntproj[n].paramU[disti]- utol_ambig )<umin) { pntproj[n].paramV[disti]=vmin; }
           if((pntproj[n].paramU[disti]+ utol_ambig )>umax) { pntproj[n].paramV[disti]=vmin; }
 	}
        }
@@ -2712,18 +2712,18 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
             {
               pskip++;
 #if TEST
-	      printf("pnt:%d scipped\n",n); 
+	      printf("pnt:%d scipped\n",n);
 #endif
               goto skip;
             }
 	}
-        if((axis==1)||(axis==3))     // in vdir 
+        if((axis==1)||(axis==3))     // in vdir
 	{
             if(((pntproj[n].paramV[disti]- vtol_ambig )<vmin)||((pntproj[n].paramV[disti]+ vtol_ambig )>vmax))
             {
               pskip++;
 #if TEST
-	      printf("pnt:%d scipped\n",n); 
+	      printf("pnt:%d scipped\n",n);
 #endif
               goto skip;
             }
@@ -2757,7 +2757,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
 #endif
           }
         }
-        if((axis==1)||(axis==3))     // in vdir 
+        if((axis==1)||(axis==3))     // in vdir
         {
           if(((pntproj[n].paramV[disti]-vtol_ambig)<vmin)||((pntproj[n].paramV[disti]+vtol_ambig)>vmax))
           {
@@ -2789,7 +2789,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
 #endif
   sem_wait(&sem_g);
        if(nextUflag>0)
-       { nurbs[nr].uv[patch][curve][nextUflag]=pntproj[n].paramU[disti]; nextUflag=0; } 
+       { nurbs[nr].uv[patch][curve][nextUflag]=pntproj[n].paramU[disti]; nextUflag=0; }
        if(nextVflag>0)
        { nurbs[nr].uv[patch][curve][nextVflag]=pntproj[n].paramV[disti]; nextVflag=0; }
   sem_post(&sem_g);
@@ -2807,7 +2807,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
           { if((pntproj[n].paramU[disti]+utol_ambig)>umax) buf=1; else buf=0; }
           if(buf)  // on the collapsed edge
           {
-            // additional point required       
+            // additional point required
             // use the v value from the previous point
   sem_wait(&sem_g);
 #if TEST
@@ -2862,7 +2862,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
           { if((pntproj[n].paramV[disti]+vtol_ambig)>vmax) buf=1; else buf=0; }
           if(buf)  // on the collapsed edge
           {
-            // additional point required       
+            // additional point required
             // use the u value from the previous point
   sem_wait(&sem_g);
 #if TEST
@@ -2900,7 +2900,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
           {
   sem_wait(&sem_g);
             nurbs[nr].uv[patch][curve][j++]=pntproj[n].paramU[disti];
-            nurbs[nr].uv[patch][curve][j++]=pntproj[n].paramV[disti]; 
+            nurbs[nr].uv[patch][curve][j++]=pntproj[n].paramV[disti];
 #if TEST
             printf(" ori:%d uv:%f %f\n", n, nurbs[nr].uv[patch][curve][j-2], nurbs[nr].uv[patch][curve][j-1] );
 #endif
@@ -2916,7 +2916,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
         nurbs[nr].uv[patch][curve][j++]=pntproj[n].paramV[disti];
   sem_post(&sem_g);
        }
-      
+
     skip:;
        n++;
        if(n>=sum_p) { printf("ERROR in trimNurbs, nr of points do not match. Talk to the programmer\n"); break; }
@@ -2927,7 +2927,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
      printf("\nLEADING ambiguous points:%d, not ambiguous:%d\n\n",pskip, j/2);
 #endif
 
-    // store leading ambiguous points 
+    // store leading ambiguous points
   sem_wait(&sem_g);
      nbuf[1]=n-nurbs[nr].np[patch][curve]+1;
      nbuf[2]=n-nurbs[nr].np[patch][curve]+1+pskip;
@@ -2971,7 +2971,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
 #endif
        }
       }
-      if((axis==1)||(axis==3))     // in vdir 
+      if((axis==1)||(axis==3))     // in vdir
       {
        if(((pntproj[k].paramV[disti]-vtol_ambig)<vmin)||((pntproj[k].paramV[disti]+vtol_ambig)>vmax))
        {
@@ -2999,7 +2999,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
       // if the coordinates of this point have to be used for the previously duplicated one
   sem_wait(&sem_g);
       if(nextUflag>0)
-      { nurbs[nr].uv[patch][curve][nextUflag]=pntproj[k].paramU[disti]; nextUflag=0; } 
+      { nurbs[nr].uv[patch][curve][nextUflag]=pntproj[k].paramU[disti]; nextUflag=0; }
       if(nextVflag>0)
       { nurbs[nr].uv[patch][curve][nextVflag]=pntproj[k].paramV[disti]; nextVflag=0; }
   sem_post(&sem_g);
@@ -3017,7 +3017,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
           { if((pntproj[k].paramU[disti]+utol_ambig)>umax) buf=1; else buf=0; }
           if(buf)  // on the collapsed edge
           {
-            // additional point required       
+            // additional point required
             // use the v value from the previous point
   sem_wait(&sem_g);
 #if TEST
@@ -3076,7 +3076,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
           { if((pntproj[k].paramV[disti]+vtol_ambig)>vmax) buf=1; else buf=0; }
           if(buf)  // on the collapsed edge
           {
-            // additional point required       
+            // additional point required
             // use the u value from the previous point
   sem_wait(&sem_g);
 #if TEST
@@ -3114,7 +3114,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
           {
   sem_wait(&sem_g);
             nurbs[nr].uv[patch][curve][j++]=pntproj[k].paramU[disti];
-            nurbs[nr].uv[patch][curve][j++]=pntproj[k].paramV[disti]; 
+            nurbs[nr].uv[patch][curve][j++]=pntproj[k].paramV[disti];
 #if TEST
             printf(" ori:%d uv:%f %f\n", k, nurbs[nr].uv[patch][curve][j-2], nurbs[nr].uv[patch][curve][j-1] );
 #endif
@@ -3137,7 +3137,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
     // if the coordinates of this point have to be used
   sem_wait(&sem_g);
      if(lastUflag>-1)
-     { nurbs[nr].uv[patch][curve][lastUflag]=nurbs[nr].uv[patch][curve][j-2]; lastUflag=-1; } 
+     { nurbs[nr].uv[patch][curve][lastUflag]=nurbs[nr].uv[patch][curve][j-2]; lastUflag=-1; }
      if(lastVflag>-1)
      { nurbs[nr].uv[patch][curve][lastVflag]=nurbs[nr].uv[patch][curve][j-1]; lastVflag=-1; }
   sem_post(&sem_g);
@@ -3200,7 +3200,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
         uvbuf[i]=nurbs[nr].uv[patch][curve][i]; i++;
         uvbuf[i]=nurbs[nr].uv[patch][curve][i]; i++;
       }
-      
+
       i=0;
       nn=(nurbs[nr].np[patch][curve]-1-pskip)*2;
       for(k=0; k<pskip; k++)
@@ -3219,7 +3219,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
         nurbs[nr].uv[patch][curve][i++]=uvbuf[nn++];
       }
   sem_post(&sem_g);
-      
+
       delete[] uvbuf;
      }
 
@@ -3230,7 +3230,7 @@ int trimNurbs( int nr, int patch, double ini_tol_ambig)
 
      // if the coordinates of this point have to be used for the previously duplicated one
      if(nextUflag>0)
-     { nurbs[nr].uv[patch][curve][nextUflag]=nurbs[nr].uv[patch][curve][j-2]; } 
+     { nurbs[nr].uv[patch][curve][nextUflag]=nurbs[nr].uv[patch][curve][j-2]; }
      if(nextVflag>0)
      { nurbs[nr].uv[patch][curve][nextVflag]=nurbs[nr].uv[patch][curve][j-1]; }
 
