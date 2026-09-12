@@ -142,6 +142,8 @@ target_sources(${LIBRARY_TARGET_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/include/xwd.h
 )
 
+target_link_libraries(${LIBRARY_TARGET_NAME} PRIVATE SNL)
+
 set(EXE_TARGET_NAME "cgx")
 add_executable(${EXE_TARGET_NAME})
 target_sources(${EXE_TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/cgx.c)
