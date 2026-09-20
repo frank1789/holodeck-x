@@ -11,7 +11,7 @@
 /*     the License.                                                      */
 /*                                                                       */
 /*     This program is distributed in the hope that it will be useful,   */
-/*     but WITHOUT ANY WARRANTY; without even the implied warranty of    */ 
+/*     but WITHOUT ANY WARRANTY; without even the implied warranty of    */
 /*     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the      */
 /*     GNU General Public License for more details.                      */
 /*                                                                       */
@@ -28,16 +28,16 @@
 #define     TEST            0   /* debugging */
 #define     TEST1           0   /* debugging, substitute nurbs is kept */
 
-extern Display       *dpy;
-extern int           dpycells;
-extern Colormap      cmap;
-extern XColor        *xcolor;
+// extern Display       *dpy;
+// extern int           dpycells;
+// extern Colormap      cmap;
+// extern XColor        *xcolor;
 extern unsigned long *pixels_return;
 extern unsigned int  npixels;
 
 extern int   w0, w1;                                      /* Fenster identifier  */
 extern int   activWindow;                                 /* das aktuelle Fenster */
-extern char  inpformat;  
+extern char  inpformat;
 extern int   width_w1, height_w1;
 extern double   aspectRatio_w1;                            /* width_w1/height_w1 */
 extern double trackbsize;                                  /* TRACKBALLSIZE */
@@ -51,7 +51,7 @@ extern int   steps;                                  /* Schrittweite der Farbsca
 extern int   offset, maxIndex;                       /* offset+steps-1 = maxIndex */
 extern double dtx, dty, drx, dry, drz, ds;            /* Verschiebungen */
 extern double centerPnt[3];                           /* Rotationszentrum */
-extern double centerNode;               
+extern double centerNode;
 extern double dx ,dy;                                 /* Mauskoordinaten im bereich +-1*/
 extern int   xpixels ,ypixels;                       /* Mauskoordinaten in pixel, links unten 0,0 */
 extern GLint   gl_max_eval_order;                         /* max order of NURBS */
@@ -175,7 +175,7 @@ void help( void )
   printf ("   'csysa' <sysNr> <set>\n");
   printf ("   'cut' [<set>|<nod>] | [<pnt|nod> <pnt|nod> <pnt|nod>]\n");
   printf ("   'del'  ['p'|'l'|'l0'|'s'|'b'|'t'|'S'|'L'|'se'|'sh' <entity>]|['se0']|['mesh']|['pic']\n");
-  printf ("   'dist' <set>|[<set> <set>|<shpe> []]|['tra' <x> <y> <z> <offset> [<tol>]]|['rad' [<p1> <p2> <offset>]|['x'|'y'|'z' <offset>] [<tol>]]|['rot' [<p1> <p2> <offset>]|['x'|'y'|'z' <offset> [<tol>]]]|['nor' <offset> [<tol>]]\n"); 
+  printf ("   'dist' <set>|[<set> <set>|<shpe> []]|['tra' <x> <y> <z> <offset> [<tol>]]|['rad' [<p1> <p2> <offset>]|['x'|'y'|'z' <offset>] [<tol>]]|['rot' [<p1> <p2> <offset>]|['x'|'y'|'z' <offset> [<tol>]]]|['nor' <offset> [<tol>]]\n");
   printf ("   'div'  []|[<default>]|[<line> <div>]|[<set> ['auto' <node-dist> <angle> <elem-ratio>]|['mult'|'div' <factor-div> [<factor-bias>]]]\n");
   printf ("   'ds' [[<1.Dataset-Nr>|'l'|<negative-ds> [<2.Dataset-Nr>|'l'|<negative-ds> [<3.Dataset-Nr>|'l'|<negative-ds>]]] ['a[h]' [<entity-nr>]]|['e[h]' <entity-nr> (up to 4 for vector-plots)]|['o' <offset> [<entity-nr>]]|['p' <power>] [<entity-nr>]]|['s' <factor> [<entity-nr>]]]|[['+'|'-'|'*'|'/'] <Dataset-Nr> ['c']]|['g' <name> [[<ncomps>|<0>] <value> <text> <type> <step> <analysisName>]]|['e' <name> <comp> <type> <row> <column>]|['f']|['r' <key> [<parm1>] [..<parm5>]\n");
   printf ("   'elem' <nr|!|'fix'> [set]|[<firstNode>-<lastNode> 'be2'|'be3'|'tr3'|'tr6'|'qu4'|'qu8'|'he8'|'he20']\n");
@@ -185,7 +185,7 @@ void help( void )
   printf ("   'endif'\n");
   printf ("   'endwhile'\n");
   printf ("   'enq' <set> <set> ['set' name]|'rec' <value>|'_' <value>|'_' <value>|'_']|['cx'|'cy'|'cz' <value>|'_'  <value>|'_' <value>|'_'] <tolvalue> 'i'|'a'|'h'|'l' [value]\n");
-  printf ("   'eprop' <set>\n"); 
+  printf ("   'eprop' <set>\n");
   printf ("   'eqal' 'jbir'|'aspr'|'mca' <value>\n");
   printf ("   'exit' \n");
   printf ("   'fil' <line> <line> <radius>\n");
@@ -198,7 +198,7 @@ void help( void )
   printf ("   'graph' [<amplitude|*chars*> 'amp' [<l>]]|[<material|*chars*> 'mat' [<l>]]|[<set>|'-p' ['length' ['+'|'-'|'+c'|'-c']]|['step'|'nr'|'freq'|'time'|'descr'|<parameter> [<dataset> <entity|parameter> [<first-Dataset-Nr> [<last-Dataset-Nr>]] ] ] ] \n");
   printf ("   'grpa' <grpNr> <set> ['dyn']\n");
   printf ("   'grps' \n");
-  printf ("   'gsur' <name|!> ['+|-' 'BLEND|<nurbs>']|['ADD'] ['+|-' <line|lcmb>] .. \n");  
+  printf ("   'gsur' <name|!> ['+|-' 'BLEND|<nurbs>']|['ADD'] ['+|-' <line|lcmb>] .. \n");
   printf ("   'gtol' []|<auto>|<geometric-tol> \n");
   printf ("   'help' \n");
   printf ("   'hcpy' [['ps'|'xwd'|'gif'|'png'] ['name']]|[make [ls]]|[clean] (def:xwd)\n");
@@ -238,7 +238,7 @@ void help( void )
   printf ("   'plus' ['n'|'e'|'f'|'p'|'l'|'s'|'b'|'S'|'L'|'sh']&['a'|'b'|'c'|'d'|'n'|'p'|'q'|'t'|'v'] [<set>|<*chars*>]] ['w'|'k'|'n'|'r'|'g'|'b'|'y'|'m'|'t'|'c'|'o'] [<width>]\n");
   printf ("   'pnt' <name|!> [<x> <y> <z>]|[<L1> <ratio> <times>]|[<P1> <P2> <ratio> <times>]|[<setname(containing nodes)>]\n");
   printf ("   'prnt' ['capt']|['ulin']|['ve']|['info']|['st' ['size']]|['usr']|['par' [<parameter>]|['amp' [<amplitude>|<*chars*>]|['mat' [<material>|<*chars*>]|['se'|'sq'|'eq' [<set>|<*chars*>]|['n'|'e' [<set>|<*chars*> ['range']]|['n'|'e'|'f'|'p'|'l'|'s'|'b'|'v'|'S'|'L' <entity>]\n");
-  printf ("   'proj' <set> <set>|<shpe> ['tra' <x> <y> <z> <offset> [<tol>]]|['rad' [<p1> <p2> <offset>]|['x'|'y'|'z' <offset>] [<tol>]]|['rot' [<p1> <p2> <offset>]|['x'|'y'|'z' <offset> [<tol>]]]|['nor' <offset> [<tol>]]\n"); 
+  printf ("   'proj' <set> <set>|<shpe> ['tra' <x> <y> <z> <offset> [<tol>]]|['rad' [<p1> <p2> <offset>]|['x'|'y'|'z' <offset>] [<tol>]]|['rot' [<p1> <p2> <offset>]|['x'|'y'|'z' <offset> [<tol>]]]|['nor' <offset> [<tol>]]\n");
   printf ("   'qadd' <set> ['t'<value>] RETURN 'w'|'a'|'i'|'r'|'n'|'e'|'f'|'p'|'l'|'s'|'b'|'L'|'S'|'h'|'m'|'t'|'q'|'u'\n");
   printf ("   'qali' RETURN 'w'|'p'|'n'|'q' \n");
   printf ("   'qbia' RETURN 'w'|'a'|'i'|'1'-'9'|'c'|' '\n");
@@ -273,8 +273,8 @@ void help( void )
   printf ("   'scal' ['s'|'v'|'d'] [<value>]\n");
   printf ("   'send' 'init'|[<set> ['abq'|'adh'|'ans'|'ast'|'bp'|'dar'|'dyn'|'fbd'|'frd'|'gmp'|'lst'|'nas'|'ng'|'pat'|'seq'|'skv'|'stl'|'tcg'] []|['c'|'f'|'e']|['bin']|['dbin']|['comp']|['quadlin']|['names']|['raw']|['nor']|[ ['spc'|'spcf'] [<1-6|t|p> [<value>|['f' <value>]]|['ds'<nr>['+'] e<nr>]]]|['nor' <fac1> [<fac2> <fac3>]]|['slide'|'slidef' 'c'|'s'|'rx'|'ry'|'rz'|'tx'|'ty'|'tz']|['sur' [+|-]]|['pres' [<value>]|['ds'<nr> 'e'<nr>] [+|-]]|['trac' [<v1> <v2> <v3>]|['ds'<nr> 'e'<nr>(1.comp of a vec)] [+|-]]|['ds'<nr> 'e'<nr>] [+|-]]|['force' <f1> <f2> <f3> ]|['film' [[<nodenr>]|[<temp>]|[['ds'<nr>]|[sq<dsnr>-<dsnr>]] 'e'<nr>] [[<coeff>]|[['ds'<nr>|[sq<dsnr>-<dsnr>]] 'e'<nr>]] [+|-]]|['rad' [[<temp>]|[cr<temp>]|['ds'<nr> 'e'<nr>]] [[<emis>|['ds'<nr> 'e'<nr>]]] [+|-]]|['dflux'|'mflow' [[<load>]|['ds'<nr> 'e'<nr>]] [+|-]]|['cflux' <load>]|['mpc' [[<rotation>|'v'<node> <v1> <v2> <v3> ]|['n'<node>]]]|['ds' <nr> 'e'<nr>[','|'-'<nr>..]]|['tmf']|['sta' <refspeed>]|['crp' <timefact> <refspeed> <writefreq>]]\n");
   printf ("  OR 'send' <dep-set> <indep-set> 'nas'|'abq'|'ans'|'ids' ['cycmpc'|'cycmpcf' 'px'|'py'|'pz'|'tx'|'ty'|'tz'|'rx'|'ry'|'rz'|'cx'|'cy'|'cz'<segments> 'c'|'u'<NR>]|['areampc' [<1-6|t|p>|<1|2|3,px,py,pz,vx,vy,vz> 'c'|'u'<Nr>|'f'<value>|['slide']|['presfit' ['s'<value>]]]|['gap' <vx> <vy> <vz> <tol> ]\n");
-  printf ("  OR 'send' <set> 'foam' [<base-type> <set>]|['cyclic' <set> <set> 'rx'|'ry'|'rz'|'cx'|'cy'|'cz'|<vx,vy,vz>]\n");  
-  printf ("  OR 'send' <set> 'isaac'|'duns' [<base-type> <set>]|['periodic' <set>]\n");  
+  printf ("  OR 'send' <set> 'foam' [<base-type> <set>]|['cyclic' <set> <set> 'rx'|'ry'|'rz'|'cx'|'cy'|'cz'|<vx,vy,vz>]\n");
+  printf ("  OR 'send' <set> 'isaac'|'duns' [<base-type> <set>]|['periodic' <set>]\n");
   printf ("   'seqa' <set> [['afte'|'befo' <name>]|['end']] 'n'|'p' <name> <name>..] \n");
   printf ("   'seqc' <set>\n");
   printf ("   'seql' <set> <nr>\n");
@@ -302,7 +302,7 @@ void help( void )
   printf ("   'typs' \n");
   printf ("   'ucut' \n");
   printf ("   'ulin' <string>\n");
-  printf ("   'val' (same as 'valu' but all un-masked <name> are substituted by its value)\n");   
+  printf ("   'val' (same as 'valu' but all un-masked <name> are substituted by its value)\n");
   printf ("   'valu' <[!]name> [['push' [<splitkey>]]|['pop' [nr]]] | [<value> ['?' [<\"string\">]] |  ['&'|'*'|'/'|'+'|'-'|'abs'|'len'|'max'|'min'|'pow'|'sqr'|'log'|'log10'|'sin'|'cos'|'tan'|'asin'|'acos'|'atan'|'int'|'float'|'exp' [name|<const> name|<const>]] ]\n");
   printf ("   'view' ['cl' ['off']]|'fill'|'line'|['point' <value>]|['edge' ['off'|<value>]]|['elem' ['off']]|'surf'|'volu'|'front'|'back'|['vec' ['off']]|['disp' ['off'|'keep']]|['bg' ['w'|'k']]|['sh' ['off']]|['ill' ['off']]|['rul' ['off'|<string>]]\n");
   printf ("   'volu' <set>\n");
@@ -361,7 +361,7 @@ int pre_readfrdblock( CopiedNodeSets *copiedNodeSets, int lc, Summen *anz,   Nod
 {
   if( readfrdblock(lc, anz, node, lcase )==-1)
   {
-    //printf("ERROR in pre_readfrdblock: Could not read data for Dataset:%d\n", lc+1); 
+    //printf("ERROR in pre_readfrdblock: Could not read data for Dataset:%d\n", lc+1);
     return(-1);
   }
   descalNodes ( anz->n, node, scale );
@@ -470,7 +470,7 @@ void defineColTextur_load(float alpha)
       if(scale->sminr==2) buf--;
       define_rgb( (steps-1-(float)buf)/(steps-1.), &r,&g,&b);
     }
-    
+
     if(i>=steps-1 && scale->smaxr==2)
     {
     contur_tex[n]  =entitycol[col_maxc].r;
@@ -483,7 +483,7 @@ void defineColTextur_load(float alpha)
     contur_tex[n]  =entitycol[col_minc].r;
     contur_tex[n+1]=entitycol[col_minc].g;
     contur_tex[n+2]=entitycol[col_minc].b;
-    contur_tex[n+3]=alpha;	    
+    contur_tex[n+3]=alpha;
     }
     else
     {
@@ -510,7 +510,7 @@ void defineColTextur_load(float alpha)
     contur_tex[n]  =entitycol[col_minc].r;
     contur_tex[n+1]=entitycol[col_minc].g;
     contur_tex[n+2]=entitycol[col_minc].b;
-    contur_tex[n+3]=alpha;	    
+    contur_tex[n+3]=alpha;
     }
     else
     {
@@ -547,13 +547,13 @@ void rot_u(double a)
     b=a/90.; i=b;
     a=a*PI/180.;
     if(i<0) for(n=0; n<-i; n++)
-    {  
+    {
       trackball( 1, trackbsize, curquat, 0.0, 0.0, 0.0, trackbsize );
       add_quats(curquat, lastquat, lastquat);
       build_rotmatrix( R, lastquat );
     }
     if(i>0) for(n=0; n<i; n++)
-    {    
+    {
       trackball( 1, trackbsize, curquat, 0.0, 0.0, 0.0, -trackbsize );
       add_quats(curquat, lastquat, lastquat);
       build_rotmatrix( R, lastquat );
@@ -571,13 +571,13 @@ void rot_r(double a)
     b=-a/90.; i=b;
     a=-a*PI/180.;
     if(i<0) for(n=0; n<-i; n++)
-    {    
+    {
       trackball( 1, trackbsize, curquat, 0.0, 0.0, -trackbsize, 0.0 );
       add_quats(curquat, lastquat, lastquat);
       build_rotmatrix( R, lastquat );
     }
     if(i>0) for(n=0; n<i; n++)
-    {    
+    {
       trackball( 1, trackbsize, curquat, 0.0, 0.0, trackbsize, 0.0 );
       add_quats(curquat, lastquat, lastquat);
       build_rotmatrix( R, lastquat );
@@ -595,13 +595,13 @@ void rot_c(double a)
     b=a/90.; i=b;
     a=a*PI/180.;
     if(i<0) for(n=0; n<-i; n++)
-    {    
+    {
       trackball( 1, trackbsize, curquat, trackbsize, 0.0, 0.0, -trackbsize );
       add_quats(curquat, lastquat, lastquat);
       build_rotmatrix( R, lastquat );
     }
     if(i>0) for(n=0; n<i; n++)
-    {    
+    {
       trackball( 1, trackbsize, curquat, trackbsize, 0.0, 0.0, trackbsize );
       add_quats(curquat, lastquat, lastquat);
       build_rotmatrix( R, lastquat );
@@ -674,9 +674,9 @@ int rot_norm(int nr)
   p03[0]=norm[nr].nx;
   p03[1]=norm[nr].ny;
   p03[2]=norm[nr].nz;
-  if(v_betrag(p03)<0.5) return(2); 
+  if(v_betrag(p03)<0.5) return(2);
 
-  center( node[nr].nx, node[nr].ny, node[nr].nz ); 
+  center( node[nr].nx, node[nr].ny, node[nr].nz );
 
   /* drehe den Ort des Betrachters  */
   ay=atan(p03[0]/p03[2]);
@@ -730,7 +730,7 @@ void transformResults( char *record )
     //if( compare( lcase[lc].name, dataset, strlen(lcase[lcmin].name)) == strlen(lcase[lcmin].name) )
     if(compareStrings(lcase[lc].name, lcase[lcmin].name)>0)
     {
-      anz_lc++; 
+      anz_lc++;
       if((dsNr=(int *)realloc((int *)dsNr, (anz_lc+2) *sizeof(int)))==NULL )
         printf("\n\n ERROR: malloc failed \n\n") ;
       dsNr[anz_lc]=lc;
@@ -750,9 +750,9 @@ void transformResults( char *record )
     lc=dsNr[i];
     if (!lcase[lc].loaded)
     {
-      if( pre_readfrdblock(copiedNodeSets , lc, anz, node, lcase )==-1) 
+      if( pre_readfrdblock(copiedNodeSets , lc, anz, node, lcase )==-1)
       {
-        printf("ERROR in transformResults: Could not read data for Dataset:%d\n", lc+1); 
+        printf("ERROR in transformResults: Could not read data for Dataset:%d\n", lc+1);
         return;
       }
       calcDatasets( lc, anz, node, lcase );
@@ -906,7 +906,7 @@ int transform( char *record, int anz_n, Nodes *nslave )
       }
     }
     else length--;
-    
+
     if (length==0) s[1]=s[2]=s[0]=1.;
     if (length==1) s[1]=s[2]=s[0];
     if (length==2) s[2]=1.;
@@ -916,7 +916,7 @@ int transform( char *record, int anz_n, Nodes *nslave )
       ph[1]=(point[pnr1].py*scale->w+scale->y);
       ph[2]=(point[pnr1].pz*scale->w+scale->z);
     }
-    else ph[0]=ph[1]=ph[2]=0.;                                                    
+    else ph[0]=ph[1]=ph[2]=0.;
 
     for (i=0; i<anz_n; i++)
     {
@@ -946,7 +946,7 @@ int transform( char *record, int anz_n, Nodes *nslave )
         ph[1]=(point[pnr1].py*scale->w+scale->y);
         ph[2]=(point[pnr1].pz*scale->w+scale->z);
       }
-  
+
       for (i=0; i<anz_n; i++)
       {
         x=nslave[i].nx;
@@ -1057,7 +1057,7 @@ int transform( char *record, int anz_n, Nodes *nslave )
         v_scal(&sprod,ep1p2, p1n1);
 
         /* projection point n1 */
-        v_add(p1,p1n1,n1); 
+        v_add(p1,p1n1,n1);
 
         /* unit vector to radial moved point n2 */
         v_result(n1,n0,n1n0);
@@ -1074,8 +1074,8 @@ int transform( char *record, int anz_n, Nodes *nslave )
         v_scal(&l,en1n0, n1n2);
 
         /* point n2 */
-        v_add(n1,n1n2,n2); 
-        
+        v_add(n1,n1n2,n2);
+
         nslave[i].nx= n2[0];
         nslave[i].ny= n2[1];
         nslave[i].nz= n2[2];
@@ -1159,51 +1159,51 @@ int transform( char *record, int anz_n, Nodes *nslave )
         p2[1] = point[pnr2].py;
         p2[2] = point[pnr2].pz;
       }
-    
+
       /* berechnung der Einheitsvektoren des Verdreh-Koordinatensystems */
       /* Exneu = p1p2/|p1p2| ist der Einheitsvektor in xneu richtung    */
       /* Eyneu = p1p2 X p1ph / |p1p2 X p1ph|     in yneu                */
       /* Ezneu = Exneu X Eyneu                   in zneu                */
-    
+
       v_result( p1, p2, p1p2 );
       v_norm  ( p1p2, el );
-    
+
       /* erzeuge einen Hilfspunkt der nicht auf der el-achse liegt  */
       ph[1] = p1p2[0];
       ph[2] = p1p2[1];
       ph[0] = p1p2[2];
-    
+
       /* konstuiere damit den 2. einheitsvektor eh  */
       v_result( p1, ph, p1ph );
       v_prod( p1p2, p1ph, ph );
       v_norm (ph, eh);
-    
+
       /* und der dritte: eq  */
       v_prod( p1p2, ph, ex );
       v_norm (ex, eq);
-    
+
       /* berechnung der lhq-koordinaten der xyz einheitsvektoren durch zykl.vertausch.  */
       ex[0]=el[0];
       ex[1]=eh[0];
       ex[2]=eq[0];
-    
+
       ey[0]=el[1];
       ey[1]=eh[1];
       ey[2]=eq[1];
-    
+
       ez[0]=el[2];
       ez[1]=eh[2];
       ez[2]=eq[2];
-    
+
       /* Berechnung der lhq-koordinaten der Drehachse (offset fuer die Drehung) */
       x=point[pnr1].px*scale->w+scale->x;
       y=point[pnr1].py*scale->w+scale->y;
       z=point[pnr1].pz*scale->w+scale->z;
-      
+
       /* l=ex[0]*x+ey[0]*y+ez[0]*z; */
       h_offs=ex[1]*x+ey[1]*y+ez[1]*z;
       q_offs=ex[2]*x+ey[2]*y+ez[2]*z;
-    
+
       /* Berechnung der lhq-koordinaten aller zu drehenden punkte */
       for (i=0; i<anz_n; i++)
       {
@@ -1213,13 +1213,13 @@ int transform( char *record, int anz_n, Nodes *nslave )
         l=ex[0]*x+ey[0]*y+ez[0]*z;
         h=( ex[1]*x+ey[1]*y+ez[1]*z ) - h_offs ;
         q=( ex[2]*x+ey[2]*y+ez[2]*z ) - q_offs ;
-    
+
         /* drehe um l  */
         dh=h*cos(fi)-q*sin(fi);
         dq=h*sin(fi)+q*cos(fi);
         dh+= h_offs;
         dq+= q_offs;
-    
+
         nslave[i].nx=el[0]*l+eh[0]*dh+eq[0]*dq;
         nslave[i].ny=el[1]*l+eh[1]*dh+eq[1]*dq;
         nslave[i].nz=el[2]*l+eh[2]*dh+eq[2]*dq;
@@ -1294,7 +1294,7 @@ int transform( char *record, int anz_n, Nodes *nslave )
     /* calculation of the first mirrored point (modification of p2) */
     v_result( p1, p2, p1p2 );
     l=2.;
-    v_scal( &l, p1p2, p1p2 ); 
+    v_scal( &l, p1p2, p1p2 );
     v_add( p1,  p1p2, p2 );
 
     ph[0] = p2[0]+p1[0];
@@ -1340,7 +1340,7 @@ int calcLineDiv(Lines *line, int nr, double gtol_cos_a, double lmax, double lmin
   /* change the div until lmax is reached */
  new_div:;
   repLine(nr);
-  v_result(&line[nr].ip[0],&line[nr].ip[3], v0); 
+  v_result(&line[nr].ip[0],&line[nr].ip[3], v0);
   l=v_betrag(v0);
   if(l>=lmax)
   {
@@ -1354,8 +1354,8 @@ int calcLineDiv(Lines *line, int nr, double gtol_cos_a, double lmax, double lmin
   if (min_cos_a<MAX_FLOAT) min_cos_a_buf=min_cos_a; else min_cos_a_buf=0.;
   for(i=0; i<line[nr].nip-6; i+=3)
   {
-    v_result(&line[nr].ip[i],&line[nr].ip[i+3], v0); 
-    v_result(&line[nr].ip[i],&line[nr].ip[i+6], v1); 
+    v_result(&line[nr].ip[i],&line[nr].ip[i+3], v0);
+    v_result(&line[nr].ip[i],&line[nr].ip[i+6], v1);
     v_norm(v0, e0);
     v_norm(v1, e1);
     cos_a= v_sprod(e0, e1);
@@ -1397,13 +1397,13 @@ int calcLineDiv(Lines *line, int nr, double gtol_cos_a, double lmax, double lmin
       }
     }
   }
-      
+
 
   /* get the length between points */
   if(!i) /* straight line, no inner points */
   {
     min_cos_a=1;
-    v_result(&line[nr].ip[i],&line[nr].ip[i+3], v0); 
+    v_result(&line[nr].ip[i],&line[nr].ip[i+3], v0);
     l=v_betrag(v0)/line[nr].div;
   }
   else
@@ -1567,7 +1567,7 @@ void repNurs(int nr )
     if( (nurbs[nr].ctlarray = (GLfloat *)realloc( (GLfloat *)nurbs[nr].ctlarray, (nurbs[nr].u_npnt*nurbs[nr].v_npnt*nurbs[nr].v_stride+5)*sizeof(GLfloat) )) == NULL )
     { printf(" ERROR: realloc failure in repNurbs(), nurbs:%s can not be shaped\n\n", nurbs[nr].name);
       return; }
-     
+
     /* calculate the position of the control-array */
     for (i=0; i<nurbs[nr].u_npnt; i++)
     {
@@ -1620,7 +1620,7 @@ void untrimNurs(int nr )
   nurbs[nr].umax=NULL;
   nurbs[nr].vstep=NULL;
   nurbs[nr].ustep=NULL;
-  
+
   nurbs[nr].patches=0;
 }
 
@@ -1676,9 +1676,9 @@ int plotNode(int nr)
   }
 
   /* get the min_z value of the node */
-  glRenderMode (GL_SELECT); 
-  glInitNames(); 
-  glPushName (-1); 
+  glRenderMode (GL_SELECT);
+  glInitNames();
+  glPushName (-1);
   glLoadIdentity();
   gluPickMatrix( (GLdouble) wx, (GLdouble) wy, 1,1, viewport);
   moveModel();
@@ -1707,9 +1707,9 @@ int plotNode(int nr)
 
   /* get the min_z value of all other displayes entities */
   //glGetIntegerv (GL_VIEWPORT, viewport);
-  glRenderMode (GL_SELECT); 
-  glInitNames(); 
-  glPushName (-1); 
+  glRenderMode (GL_SELECT);
+  glInitNames();
+  glPushName (-1);
   glLoadIdentity();
   gluPickMatrix( (GLdouble) wx, (GLdouble) wy, .1,.1, viewport);
   moveModel();
@@ -1756,7 +1756,7 @@ int adjustFeedBack( int npgn, GLfloat *pgn, double **ptr)
   /* create a new array for the polygons with its normals (guessed to be twice as large) */
   if( (pgn_new= (double *)malloc( 2*sizeof(double) )) == NULL )
   { printf(" ERROR: malloc failure in adjustFeedBack()\n\n"); exit(-1); }
-  
+
 
   while((npgn-n))
   {
@@ -1783,7 +1783,7 @@ int adjustFeedBack( int npgn, GLfloat *pgn, double **ptr)
       vbuf[1][0]=pgn[3+n-nv*3];
       vbuf[1][1]=pgn[3+n-nv*3+1];
       vbuf[1][2]=pgn[3+n-nv*3+2];
-      v_result(vbuf[0],vbuf[1], v1); 
+      v_result(vbuf[0],vbuf[1], v1);
       vbuf[1][0]=pgn[6+n-nv*3];
       vbuf[1][1]=pgn[6+n-nv*3+1];
       vbuf[1][2]=pgn[6+n-nv*3+2];
@@ -1796,18 +1796,18 @@ int adjustFeedBack( int npgn, GLfloat *pgn, double **ptr)
         pgn_new[m++]=pgn[nbuf++];  /* y */
         pgn_new[m++]=pgn[nbuf++];  /* z */
       }
-   
+
     }
     else if(token==GL_POINT_TOKEN) { printf("ERROR: unsupported token %lf\n",token ); exit(-1); }
     else if(token==GL_LINE_TOKEN) { printf("ERROR: unsupported token %lf\n",token ); exit(-1); }
     else if(token==GL_LINE_RESET_TOKEN) { printf("ERROR: unsupported token %lf\n",token ); exit(-1); }
-    else if(token==GL_PASS_THROUGH_TOKEN) { printf("ERROR: unsupported token %lf\n",token ); exit(-1); } 
+    else if(token==GL_PASS_THROUGH_TOKEN) { printf("ERROR: unsupported token %lf\n",token ); exit(-1); }
     else { printf("ERROR: unknown token %lf\n",token ); exit(-1); }
   }
 
   *ptr=pgn_new;
-  return(m);  
-} 
+  return(m);
+}
 
 
 
@@ -1838,7 +1838,7 @@ int fillBlendedSurf(int nr)
       printf(" WARNING in fillBlendedSurf(), set:%s does not exist and is initialized\n",specialset->blr);
     /* no threading environment, gen a set */
     setNr=pre_seta(specialset->blr, "i", 0);
-    newSetFlag=1;   
+    newSetFlag=1;
   }
   sem_wait(&sem_g);
   seta(setNr,"s",nr);
@@ -1861,7 +1861,7 @@ int fillBlendedSurf(int nr)
     }
     ptmp[i].nn=point[set[setNr].pnt[i]].nn;
     free(point[set[setNr].pnt[i]].nod);
-    point[set[setNr].pnt[i]].nod=NULL; 
+    point[set[setNr].pnt[i]].nod=NULL;
     point[set[setNr].pnt[i]].nn=0;
   }
   if ((ltmp = (Lines  *)malloc((set[setNr].anz_l+1)*sizeof(Lines )) ) == NULL )
@@ -1874,18 +1874,18 @@ int fillBlendedSurf(int nr)
     for(j=0; j<line[set[setNr].line[i]].nn; j++)
     {
       ltmp[i].nod[j]=line[set[setNr].line[i]].nod[j];
-    } 
+    }
     if ((ltmp[i].elem = (int *)malloc((int)(line[set[setNr].line[i]].ne+1)*sizeof(int)) ) == NULL )
     { printf(" ERROR: malloc failure\n\n"); return(-1); }
     for(j=0; j<line[set[setNr].line[i]].ne; j++)
     {
       ltmp[i].elem[j]=line[set[setNr].line[i]].elem[j];
-    } 
+    }
     ltmp[i].nn=line[set[setNr].line[i]].nn;
     ltmp[i].ne=line[set[setNr].line[i]].ne;
     ltmp[i].eattr=line[set[setNr].line[i]].eattr;
     free(line[set[setNr].line[i]].nod); free(line[set[setNr].line[i]].elem);
-    line[set[setNr].line[i]].nod=NULL; line[set[setNr].line[i]].elem=NULL; 
+    line[set[setNr].line[i]].nod=NULL; line[set[setNr].line[i]].elem=NULL;
     line[set[setNr].line[i]].nn=0; line[set[setNr].line[i]].ne=0;
   }
   if ((stmp = (Gsur   *)malloc((set[setNr].anz_s+1)*sizeof(Gsur  )) ) == NULL )
@@ -1898,19 +1898,19 @@ int fillBlendedSurf(int nr)
     for(j=0; j<surf[set[setNr].surf[i]].nn; j++)
     {
       stmp[i].nod[j]=surf[set[setNr].surf[i]].nod[j];
-    } 
+    }
     if ((stmp[i].elem = (int *)malloc((int)(surf[set[setNr].surf[i]].ne+1)*sizeof(int)) ) == NULL )
     { printf(" ERROR: malloc failure\n\n");  return(-1);}
     for(j=0; j<surf[set[setNr].surf[i]].ne; j++)
     {
       stmp[i].elem[j]=surf[set[setNr].surf[i]].elem[j];
-    } 
+    }
     stmp[i].nn=surf[set[setNr].surf[i]].nn;
     stmp[i].ne=surf[set[setNr].surf[i]].ne;
     stmp[i].eattr=surf[set[setNr].surf[i]].eattr;
     //surf[set[setNr].surf[i]].eattr=0;
     free(surf[set[setNr].surf[i]].nod); free(surf[set[setNr].surf[i]].elem);
-    surf[set[setNr].surf[i]].nod=NULL; surf[set[setNr].surf[i]].elem=NULL; 
+    surf[set[setNr].surf[i]].nod=NULL; surf[set[setNr].surf[i]].elem=NULL;
     surf[set[setNr].surf[i]].nn=0; surf[set[setNr].surf[i]].ne=0;
   }
 
@@ -1918,8 +1918,8 @@ int fillBlendedSurf(int nr)
   /* mesh points and lines with the standard routines */
   meshPoints(setNr, 1) ;
   meshLines( setNr, 1);
-  
-  /* create the rendering poligons with a modified routine without mesh-improver */     
+
+  /* create the rendering poligons with a modified routine without mesh-improver */
   // generate a substitute surf if necessary and no one is already asigned
   if(surf[nr].sref==-1)
   {
@@ -1943,7 +1943,7 @@ int fillBlendedSurf(int nr)
     if(surf[nr].eattr==-1)
     {
       //printf("unstructured mesh \n");
-      // if shape=BLEND try to generate a shape as a basis for the mesh 
+      // if shape=BLEND try to generate a shape as a basis for the mesh
       if(surf[nr].sh<0)
       {
         sh_buf=surf[nr].sh;
@@ -1979,7 +1979,7 @@ int fillBlendedSurf(int nr)
       {
         Stmp=-1;
 	Stmp= surfToNurs(nr);
-    
+
         if(Stmp>-1)
         {
           sprintf(buffer,"-Stmp");
@@ -1991,7 +1991,7 @@ int fillBlendedSurf(int nr)
             return(-2);
           }
           completeSet( buffer, "do" );
-    
+
           surf[nr].sh=shape_i( nurbs[Stmp].name, 4, Stmp, 0, 0, 0, 0, 0, 0);
           meshSurf( 0, nr, 1, 1) ;
           surf[nr].sh=sh_buf;
@@ -1999,7 +1999,7 @@ int fillBlendedSurf(int nr)
           goto surfrendered;
 	}
       }
-    } 
+    }
   }
  rendersurf:;
   meshSurf( 0, nr, 1, 1) ;
@@ -2009,8 +2009,8 @@ int fillBlendedSurf(int nr)
   /* warning, s is now redefined */
   if( newSurfFlag==1)
   {
-    s=getSetNr(specialset->zap); 
-    if(s>-1) 
+    s=getSetNr(specialset->zap);
+    if(s>-1)
     {
       for(i=0; i<set[s].anz_b; i++)
       {
@@ -2029,7 +2029,7 @@ int fillBlendedSurf(int nr)
 	body[set[s].body[i]].nod= NULL;
 	body[set[s].body[i]].ne=0;
 	free(body[set[s].body[i]].elem);
-	body[set[s].body[i]].elem= NULL;      
+	body[set[s].body[i]].elem= NULL;
 	body[set[s].body[i]].etyp= 0;
       }
       for(i=0; i<set[s].anz_s; i++)
@@ -2105,10 +2105,10 @@ int fillBlendedSurf(int nr)
   sem_wait(&sem_g);
 	setr( 0, "p",set[s].pnt[i] );
   sem_post(&sem_g);
-	point[set[s].pnt[i]].name = (char *)NULL ; 
+	point[set[s].pnt[i]].name = (char *)NULL ;
 	free(point[set[s].pnt[i]].nod);
-	point[set[s].pnt[i]].nod=NULL; 
-	point[set[s].pnt[i]].nn=0; 
+	point[set[s].pnt[i]].nod=NULL;
+	point[set[s].pnt[i]].nn=0;
       }
       // delete the set itself
   sem_wait(&sem_g);
@@ -2129,7 +2129,7 @@ int fillBlendedSurf(int nr)
       point[set[setNr].pnt[i]].nod[j]=ptmp[i].nod[j];
     }
     free(ptmp[i].nod);
-    ptmp[i].nod=NULL; 
+    ptmp[i].nod=NULL;
     ptmp[i].nn=0;
   }
   for(i=0; i<anz_l; i++)
@@ -2149,10 +2149,10 @@ int fillBlendedSurf(int nr)
       line[set[setNr].line[i]].elem[j]=ltmp[i].elem[j];
     }
     free(ltmp[i].nod);
-    ltmp[i].nod=NULL; 
+    ltmp[i].nod=NULL;
     ltmp[i].nn=0;
     free(ltmp[i].elem);
-    ltmp[i].elem=NULL; 
+    ltmp[i].elem=NULL;
     ltmp[i].ne=0;
   }
   for(i=0; i<anz_s; i++)
@@ -2173,20 +2173,20 @@ int fillBlendedSurf(int nr)
       surf[set[setNr].surf[i]].elem[j]=stmp[i].elem[j];
     }
     free(stmp[i].nod);
-    stmp[i].nod=NULL; 
+    stmp[i].nod=NULL;
     stmp[i].nn=0;
     free(stmp[i].elem);
-    stmp[i].elem=NULL; 
+    stmp[i].elem=NULL;
     stmp[i].ne=0;
   }
-  
+
   sem_wait(&sem_g);
-  if( newSetFlag==1) { if(printFlag) printf("del %s\n",specialset->blr); delSet(specialset->blr); }  
+  if( newSetFlag==1) { if(printFlag) printf("del %s\n",specialset->blr); delSet(specialset->blr); }
   else
   {
     if(set[setNr].anz_elf)
      for(i=0; i<set[setNr].anz_elf; i++)
-      if(set[setNr].elf[i].n) free(set[setNr].elf[i].v);  
+      if(set[setNr].elf[i].n) free(set[setNr].elf[i].v);
     free(set[setNr].valu);
     free(set[setNr].node);
     free(set[setNr].elem);
@@ -2262,10 +2262,10 @@ int _shapeToNurs(int s)
     l_offs=2.;
     v_scal(&l_offs, el, p1);
     v_add(&point[shape[s].p[0]].px, p1, pa1);
-    v_scal(&l_offs, eh, p1);  
+    v_scal(&l_offs, eh, p1);
     v_add(&point[shape[s].p[0]].px, p1, ps1);
     l_offs=-2.;
-    v_scal(&l_offs, el, p1);  
+    v_scal(&l_offs, el, p1);
     v_add(&point[shape[s].p[0]].px, p1, pa2);
     v_scal(&l_offs, eh, p1);
     v_add(&point[shape[s].p[0]].px, p1, ps2);
@@ -2386,7 +2386,7 @@ int surfToShape(int s)
       }
     }
   }
- 
+
   /* check if the surf is plane: */
   if((maxlhq[2]-minlhq[2])>1.e-12) return(-1);
 
@@ -2661,7 +2661,7 @@ int sphToNurs(int s, int flag)
   printf("in sphToNurs()\n");
 #endif
 
-  
+
   if(flag) h=surf[s].sh; else h=s;
 
   cp=shape[h].p[0];
@@ -2679,7 +2679,7 @@ int sphToNurs(int s, int flag)
     { printf(" ERROR: could not create new nurs\n"); return(-1); }
 
   // NURS ! DEFINE    8    9   17   10   26   20
-  
+
   if ((nurbs = (Nurbs *)realloc( (Nurbs *)nurbs, (anzGeo->nurs+1)*sizeof(Nurbs)) ) == NULL )
   { printf("\n\nERROR: realloc failure in Nurs, nurbs:%s not installed\n\n", name); return(-1); }
 
@@ -2761,9 +2761,9 @@ int sphToNurs(int s, int flag)
   nurbs[nr].sum_ambiguousPnts=NULL;
   nurbs[nr].uvflipped=NULL;
 
-  nurbs[nr].endFlag=1;       
-  nurbs[nr].type=GL_MAP2_VERTEX_4;       
-  
+  nurbs[nr].endFlag=1;
+  nurbs[nr].type=GL_MAP2_VERTEX_4;
+
   nurbs[nr].Nurb = (GLUnurbsObj *)gluNewNurbsRenderer();
 
   repNurs(nr);
@@ -2833,7 +2833,7 @@ int sphToNurs(int s, int flag)
     v_result( &point[shape[h].p[0]].px, &point[shape[h].p[2]].px, p2);
     sem_post(&sem_g);
   }
-  
+
 #if TEST1
   v_norm( p1, p1 );
   for(j=0; j<3; j++)  printf("p:%s v sph xyz:%f\n",point[pnr].name,p1[j]);
@@ -2844,7 +2844,7 @@ int sphToNurs(int s, int flag)
   /* generate 2 perpendicular vectors in this shape */
   v_prod( p1, p2, nv );
   v_prod( p2, nv, p1 );
-  
+
   //p2==eq must point in the direction of cg surf
   v_norm( nv, el );
   v_norm( p1, eh );
@@ -2935,34 +2935,34 @@ int torusToNurs(int s, int flag)
 -1.000000, -3.000000, -3.000000, 0.500000,
 -1.000000, -2.000000, -2.000000, 0.707107,
 -1.000000, -1.000000, -1.000000, 0.500000,
-0.000000, -1.000000, -1.000000, 0.707107, 
-1.000000, -1.000000, -1.000000, 0.500000, 
-1.000000, -2.000000, -2.000000, 0.707107, 
-1.000000, -3.000000, -3.000000, 0.500000, 
-0.000000, -3.000000, -3.000000, 0.707107, 
-0.000000, 0.000000, -3.000000, 1.000000 , 
--1.000000, 0.000000, -3.000000, 0.707107, 
--1.000000, 0.000000, -2.000000, 1.000000, 
--1.000000, 0.000000, -1.000000, 0.707107, 
-0.000000, 0.000000, -1.000000, 1.000000 , 
-1.000000, 0.000000, -1.000000, 0.707107 , 
-1.000000, 0.000000, -2.000000, 1.000000 , 
-1.000000, 0.000000, -3.000000, 0.707107 , 
-0.000000, 0.000000, -3.000000, 1.000000 , 
-0.000000, 3.000000, -3.000000, 0.707107 , 
--1.000000, 3.000000, -3.000000, 0.500000, 
--1.000000, 2.000000, -2.000000, 0.707107, 
--1.000000, 1.000000, -1.000000, 0.500000, 
-0.000000, 1.000000, -1.000000, 0.707107 , 
-1.000000, 1.000000, -1.000000, 0.500000 , 
-1.000000, 2.000000, -2.000000, 0.707107 , 
-1.000000, 3.000000, -3.000000, 0.500000 , 
-0.000000, 3.000000, -3.000000, 0.707107 , 
-0.000000, 3.000000, 0.000000, 1.000000  , 
--1.000000, 3.000000, 0.000000, 0.707107 , 
--1.000000, 2.000000, 0.000000, 1.000000 , 
--1.000000, 1.000000, 0.000000, 0.707107 , 
-0.000000, 1.000000, 0.000000, 1.000000  , 
+0.000000, -1.000000, -1.000000, 0.707107,
+1.000000, -1.000000, -1.000000, 0.500000,
+1.000000, -2.000000, -2.000000, 0.707107,
+1.000000, -3.000000, -3.000000, 0.500000,
+0.000000, -3.000000, -3.000000, 0.707107,
+0.000000, 0.000000, -3.000000, 1.000000 ,
+-1.000000, 0.000000, -3.000000, 0.707107,
+-1.000000, 0.000000, -2.000000, 1.000000,
+-1.000000, 0.000000, -1.000000, 0.707107,
+0.000000, 0.000000, -1.000000, 1.000000 ,
+1.000000, 0.000000, -1.000000, 0.707107 ,
+1.000000, 0.000000, -2.000000, 1.000000 ,
+1.000000, 0.000000, -3.000000, 0.707107 ,
+0.000000, 0.000000, -3.000000, 1.000000 ,
+0.000000, 3.000000, -3.000000, 0.707107 ,
+-1.000000, 3.000000, -3.000000, 0.500000,
+-1.000000, 2.000000, -2.000000, 0.707107,
+-1.000000, 1.000000, -1.000000, 0.500000,
+0.000000, 1.000000, -1.000000, 0.707107 ,
+1.000000, 1.000000, -1.000000, 0.500000 ,
+1.000000, 2.000000, -2.000000, 0.707107 ,
+1.000000, 3.000000, -3.000000, 0.500000 ,
+0.000000, 3.000000, -3.000000, 0.707107 ,
+0.000000, 3.000000, 0.000000, 1.000000  ,
+-1.000000, 3.000000, 0.000000, 0.707107 ,
+-1.000000, 2.000000, 0.000000, 1.000000 ,
+-1.000000, 1.000000, 0.000000, 0.707107 ,
+0.000000, 1.000000, 0.000000, 1.000000  ,
 1.000000, 1.000000, 0.000000, 0.707107	,
 1.000000, 2.000000, 0.000000, 1.000000	,
 1.000000, 3.000000, 0.000000, 0.707107	,
@@ -3013,7 +3013,7 @@ int torusToNurs(int s, int flag)
   double p1[3], p2[3], nv[3], cg[3]={0,0,0}, cgs[3];
   double **cgt, vcgtcgs[3],vcgtpv0[3],vcgtpv1[3],fi;
   int nurbsbuf[2];
-  
+
   if(flag) h=surf[s].sh; else h=s;
 
   cp=shape[h].p[0];
@@ -3175,9 +3175,9 @@ int torusToNurs(int s, int flag)
   nurbs[nr].sum_ambiguousPnts=NULL;
   nurbs[nr].uvflipped=NULL;
 
-  nurbs[nr].endFlag=1;       
-  nurbs[nr].type=GL_MAP2_VERTEX_4;       
-  
+  nurbs[nr].endFlag=1;
+  nurbs[nr].type=GL_MAP2_VERTEX_4;
+
   nurbs[nr].Nurb = (GLUnurbsObj *)gluNewNurbsRenderer();
 
   for (i=0; i<anz->sets; i++)
@@ -3241,7 +3241,7 @@ int torusToNurs(int s, int flag)
     v_result( &point[shape[h].p[0]].px, &point[shape[h].p[2]].px, p2);
     sem_post(&sem_g);
   }
-  
+
   /* generate 2 perpendicular vectors in this shape */
   /* orig
   v_prod( p1, p2, nv );
@@ -3534,12 +3534,12 @@ int coneToNurs(int s, int flag)
     }
   }
   //for(j=0; j<3; j++) printf("maxlhq[%d]:%lf minlhq[%d]:%lf\n", j, maxlhq[j],j,minlhq[j]);
-  
+
   /* generation of the nurbs */
   /* points */
   //for(i=0; i<8; i++) p_lhq[i][0]=(maxlhq[0]-minlhq[0])*-0.1;
   //for(i=8; i<16;i++) p_lhq[i][0]=(maxlhq[0]-minlhq[0])*1.1;
-  
+
   /* The nurbs has to be adapted to the dimensions of the surf to make sure that a later trimming is possible */
   /* cone: scale also r1 and r2 accordingly */
   dl=v_betrag(p1);
@@ -3699,9 +3699,9 @@ int coneToNurs(int s, int flag)
   */
 
   nurbs[S].ctlarray=(GLfloat *)NULL;
-  nurbs[S].endFlag=1;       
-  nurbs[S].type=GL_MAP2_VERTEX_4;       
-  
+  nurbs[S].endFlag=1;
+  nurbs[S].type=GL_MAP2_VERTEX_4;
+
   /* additional variables for the trimming */
   nurbs[S].trimFlag=0;
   nurbs[S].patches=0;
@@ -3809,7 +3809,7 @@ int surfToNurs(int s)
   /* The nurbs has to be extended a bit to make sure that a later trimming is possible */
   for(j=0; j<3; j++)
   {
-    dlhq=(maxlhq[j]-minlhq[j])/2.*0.5; 
+    dlhq=(maxlhq[j]-minlhq[j])/2.*0.5;
     maxlhq[j]+=dlhq;
     minlhq[j]-=dlhq;
   }
@@ -3895,8 +3895,8 @@ int repShape(int setNr )
   double el[3], eh[3];
 
   if(set[setNr].anz_sh==0) return(0);
- 
-  /* the drawing space has to be scaled to 2*2 */    
+
+  /* the drawing space has to be scaled to 2*2 */
   //descalShapes( anzGeo->sh, shape, scale); TBD
   descalAll();
   getScaleValues( 0, set, point, node, scale);
@@ -3912,30 +3912,30 @@ int repShape(int setNr )
     if(printFlag) printf("shape:%s type:%d\n", shape[nr].name, shape[nr].type);
 
     if( shape[nr].type == 0)
-    { 
+    {
       /* generate 3 points on the shape which cover the drawing space */
       v_result( &point[shape[nr].p[0]].px, &point[shape[nr].p[1]].px, p1);
       v_result( &point[shape[nr].p[0]].px, &point[shape[nr].p[2]].px, p2);
-    
+
       /* generate 2 perpendicular vectors in this shape */
       v_prod( p1, p2, pb );
       v_prod( pb, p1, p2 );
-    
+
       v_norm( p1, el );
       v_norm( p2, eh );
       l_offs=2.;
       v_scal(&l_offs, el, p1);
       v_add(&point[shape[nr].p[0]].px, p1, pa1);
-      v_scal(&l_offs, eh, p1);  
+      v_scal(&l_offs, eh, p1);
       v_add(&point[shape[nr].p[0]].px, p1, ps1);
       l_offs=-2.;
-      v_scal(&l_offs, el, p1);  
+      v_scal(&l_offs, el, p1);
       v_add(&point[shape[nr].p[0]].px, p1, pa2);
       v_scal(&l_offs, eh, p1);
       v_add(&point[shape[nr].p[0]].px, p1, ps2);
-    
+
       //printf("ps2: %f %f %f\n", ps2[0], ps2[1], ps2[2]);
-    
+
       /* alloc a new tri */
       shape[nr].npgn=36;
       if((shape[nr].pgn=(GLdouble *)realloc((GLdouble *)shape[nr].pgn, shape[nr].npgn*sizeof(GLdouble)) )==NULL)
@@ -3994,13 +3994,13 @@ int repShape(int setNr )
 int calcTrimLoops(int nurbsnr, int nr)
 {
   int i,j,l,cl,nip,flag;
-  int n;    /* running number through all inner-points ip in the line-def */  
+  int n;    /* running number through all inner-points ip in the line-def */
   int k=0;  /* running number through all corners in the surf-def */
   int p;    /* running number through all points of each closed curve (trimming-loops) of the surf */
   int cp;    /* running number through all points of each closed curve (trimming-loops) of the surf */
   double *lcurve=NULL; /* tracks the length of all closed curves, the biggest is the outer loop. */
   double *clmax=NULL;  /* tracks the loop-direction (ccw or cw */
-  double *nu=NULL, *nv=NULL;  /* sum of the u and v coordinates for all curves, averaged */  
+  double *nu=NULL, *nv=NULL;  /* sum of the u and v coordinates for all curves, averaged */
   GLdouble *knt=NULL;           /* knot-buffer to invert nurbs-curves if necessary */
   double p0[3], p0p1[3], p0p2[3], p1[3], p2[3], p1p2[3], lp1p2, lmax=0., rmax=0.;
   double vn[3];
@@ -4144,7 +4144,7 @@ int calcTrimLoops(int nurbsnr, int nr)
   sem_post(&sem_g);
 
   /* from here on a trimming attempt is made if necessary and repeated if failed */
-  tol_ambig=TOL_AMBIG; 
+  tol_ambig=TOL_AMBIG;
   k=0;
   for (i=0; i<surf[nr].nc; i++)
   {
@@ -4160,7 +4160,7 @@ int calcTrimLoops(int nurbsnr, int nr)
         nip+=line[l].nip;
 
         if(surf[nr].o[k]=='+')
-        {             
+        {
           if(j==0)                     { n=0; flag=line[l].nip-3; }
           else if(j==surf[nr].c[i]-1)    { n=0; flag=line[l].nip; }
           else                         { n=0; flag=line[l].nip-3; }
@@ -4180,7 +4180,7 @@ int calcTrimLoops(int nurbsnr, int nr)
           }while(n<flag);
         }
         else
-        {             
+        {
           if(j==0)                     { n=line[l].nip; flag=3; }
           else if(j==surf[nr].c[i]-1)    { n=line[l].nip; flag=0; }
           else                         { n=line[l].nip; flag=3; }
@@ -4247,7 +4247,7 @@ int calcTrimLoops(int nurbsnr, int nr)
         nip+=nclp;
 
         if(surf[nr].o[k]=='+')
-        {             
+        {
           if(j==0)                     { n=0; flag=nclp-3; }
           else if(j==surf[nr].c[i]-1)    { n=0; flag=nclp; }
           else                         { n=0; flag=nclp-3; }
@@ -4267,7 +4267,7 @@ int calcTrimLoops(int nurbsnr, int nr)
           }while(n<flag);
         }
         else
-        {             
+        {
           if(j==0)                     { n=nclp; flag=3; }
           else if(j==surf[nr].c[i]-1)    { n=nclp; flag=0; }
           else                         { n=nclp; flag=3; }
@@ -4349,7 +4349,7 @@ int calcTrimLoops(int nurbsnr, int nr)
     }while(cp<nurbsbuf[0]);
   }
   if(printFlag) printf("outer curve based on distance:%d\n", c_outer);
-  
+
   /* if the outer loop c_outer is not the first one (0) then re-arrange the loops */
   if(c_outer!=0)
   {
@@ -4387,7 +4387,7 @@ int calcTrimLoops(int nurbsnr, int nr)
       surf[nr].l[n]=linbuf[j];
       surf[nr].o[n]=oribuf[j++];
     }
-    
+
     /*
     printf("\n");
     j=0; for(n=0; n<surf[nr].nl-1; n++)
@@ -4396,7 +4396,7 @@ int calcTrimLoops(int nurbsnr, int nr)
     }
     printf("\n");
     */
-    
+
     free(linbuf);
     free(oribuf);
     c_outer=0;
@@ -4416,10 +4416,10 @@ int calcTrimLoops(int nurbsnr, int nr)
   {
     if(nurbs[nurbsnr].umax[patch]<nurbs[nurbsnr].uv[patch][c_outer][n])
       nurbs[nurbsnr].umax[patch]=nurbs[nurbsnr].uv[patch][c_outer][n];
-    n++;  
+    n++;
     if(nurbs[nurbsnr].vmax[patch]<nurbs[nurbsnr].uv[patch][c_outer][n])
-      nurbs[nurbsnr].vmax[patch]=nurbs[nurbsnr].uv[patch][c_outer][n];  
-    n++; 
+      nurbs[nurbsnr].vmax[patch]=nurbs[nurbsnr].uv[patch][c_outer][n];
+    n++;
   }
   if(printFlag) printf("patch:%d uvw_cp outer curve:%lf %lf %lf maxu:%lf maxv:%lf\n", patch, nu[c_outer], nv[c_outer], lmax, nurbs[nurbsnr].umax[patch], nurbs[nurbsnr].vmax[patch]);
   sem_post(&sem_g);
@@ -4557,7 +4557,7 @@ int fillNurbsSurf(int nurbsnr, int nr)
   if(!inpformat) { surf[nr].npgn=0; return(-1); }
 
   /* check if the nurbs can be handled by the libGLU. */
-  /* if not create an temporary approximation. The trias will be later corrected by the original nurbs */  
+  /* if not create an temporary approximation. The trias will be later corrected by the original nurbs */
   if(((nurbs[nurbsnr].u_exp>=gl_max_eval_order)||(nurbs[nurbsnr].v_exp>=gl_max_eval_order)))
   {
     if(printFlag) printf("WARNING: Nurbs:%s of order:%d %d will be redefined. Only %d is supported by the gl-lib.\n", nurbs[nurbsnr].name, nurbs[nurbsnr].u_exp+1, nurbs[nurbsnr].v_exp+1, gl_max_eval_order);
@@ -4604,7 +4604,7 @@ int fillNurbsSurf(int nurbsnr, int nr)
   }
   printf(" glu rendering of surf:%s (should be avoided by changing the line divisions)\n",surf[nr].name);
   // the system libGLU has a bug and might be replaced by the https://archive.mesa3d.org/glu/glu-9.0.0.tar(SGI) used in Makefile_glu
-  
+
   /* disable culling else not all surfs will be filled */
   glGetIntegerv( GL_CULL_FACE_MODE, ipuf );
   glDisable ( GL_CULL_FACE );
@@ -4615,7 +4615,7 @@ int fillNurbsSurf(int nurbsnr, int nr)
   { printf(" ERROR: realloc failure, feedbackbuffer to big\n\n");
     return(0); }
   glLoadIdentity();
-  glOrtho( -1.*aspectRatio_w1, 1.*aspectRatio_w1, -1., 1., -1, 1. ); 
+  glOrtho( -1.*aspectRatio_w1, 1.*aspectRatio_w1, -1., 1., -1, 1. );
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glFeedbackBuffer (size_fbb, GL_3D, feedbackbuffer);
   glRenderMode (GL_FEEDBACK);
@@ -4651,7 +4651,7 @@ int fillNurbsSurf(int nurbsnr, int nr)
       nurbs[nurbsnr].ctlarray[nurbs[nurbsnr].u_npnt*nurbs[nurbsnr].v_npnt]
     );
   }
-  
+
   for(i=0; i<nurbs[nurbsnr].nc[patch]; i++)
   {
     if(printFlag)
@@ -4669,7 +4669,7 @@ int fillNurbsSurf(int nurbsnr, int nr)
     gluPwlCurve(nurbs[nurbsnr].Nurb, nurbs[nurbsnr].np[patch][i], nurbs[nurbsnr].uv[patch][i], (GLint)2, GLU_MAP1_TRIM_2);
     gluEndTrim(nurbs[nurbsnr].Nurb);
   }
-  
+
   gluEndSurface(nurbs[nurbsnr].Nurb);
   surf[nr].npgn=glRenderMode (GL_RENDER);
 
@@ -4677,7 +4677,7 @@ int fillNurbsSurf(int nurbsnr, int nr)
   if ( ipuf[0] == GL_BACK ) glCullFace ( GL_BACK );
   if ( ipuf[0] == GL_FRONT ) glCullFace ( GL_FRONT );
 
-  if(size_fbb<surf[nr].npgn) 
+  if(size_fbb<surf[nr].npgn)
   {
     printf("ERROR in repSurf: feedbackbuffer:%d to small, increase at least to:%d \n", size_fbb, surf[nr].npgn);
     return(-1);
@@ -4686,7 +4686,7 @@ int fillNurbsSurf(int nurbsnr, int nr)
   /* store data from (GLfloat *)feedbackbuffer into  (double *)surf[nr].pgn */
   if (surf[nr].npgn) free(surf[nr].pgn);
 
-  /* get the address of a new array including the normals */ 
+  /* get the address of a new array including the normals */
   surf[nr].npgn=adjustFeedBack( surf[nr].npgn, feedbackbuffer, &surf[nr].pgn);
   free(feedbackbuffer);
 
@@ -4717,7 +4717,7 @@ int fillNurbsSurf(int nurbsnr, int nr)
       n-=3*j;
       for(k=0; k<j; k++)
       {
-        surf[nr].pgn[n]  =fbuf[k*3] ; 
+        surf[nr].pgn[n]  =fbuf[k*3] ;
         surf[nr].pgn[n+1]=fbuf[k*3+1];
         surf[nr].pgn[n+2]=fbuf[k*3+2];
         n+=3;
@@ -4730,7 +4730,7 @@ int fillNurbsSurf(int nurbsnr, int nr)
   if(nurbsbuf)
   {
     /* restore the original definition */
-    nurbs[nurbsnr].u_exp = nurb.u_exp; 
+    nurbs[nurbsnr].u_exp = nurb.u_exp;
     nurbs[nurbsnr].v_exp = nurb.v_exp;
     nurbs[nurbsnr].u_npnt= nurb.u_npnt;
     nurbs[nurbsnr].v_npnt= nurb.v_npnt;
@@ -4773,7 +4773,7 @@ int repSurf(int nr, int renderFlag )
 #if TEST
   printf("in repSurf\n");
 #endif
-  
+
   /* check if the surface is not meshable */
   if(surf[nr].o==NULL) return(0);
   if(surf[nr].o[0]==0) return(0);
@@ -4811,7 +4811,7 @@ int repSurf(int nr, int renderFlag )
       }
       if(printFlag) printf (" interior changed to Nurbs: %s\n", nurbs[Stmp].name );
     }
-    
+
     if(shape[surf[nr].sh].type==4)
     {
       nurbsnr=shape[surf[nr].sh].p[0];
@@ -4835,12 +4835,12 @@ int repSurf(int nr, int renderFlag )
         else j=0;
         returnVal=mesh_tr3u(nr, renderFlag);
         if(j>0) surf[nr].etyp=j;
-	
+
         /* check if the surface could be trimmed and rendered */
         if(surf[nr].npgn<1)
         {
 	  if(printFlag) printf("WARNING: mesh_tr3u failed surf:%s \n",surf[nr].name);
-	  
+
           /* try to make a mapped mesh for surfaces with less than 6 edges */
 	  if(surf[nr].nl>5)
           {
@@ -4862,7 +4862,7 @@ int repSurf(int nr, int renderFlag )
               surf[nr].npgn=0;
               if(returnVal==-2) seta(set_glur,"s",nr);
 
-            nurbsCouldNotBeTrimmed:;  
+            nurbsCouldNotBeTrimmed:;
               /* add surf to special set */
               seta(set_bsur, "s", nr );
 	    }
@@ -4876,7 +4876,7 @@ int repSurf(int nr, int renderFlag )
         surf[nr].sh=sh_buf;
     sem_wait(&sem_g);
         for (i=0; i<nurbs[Stmp].u_npnt; i++) delPnt( nurbs[Stmp].v_npnt, nurbs[Stmp].ctlpnt[i] );
-        delNurs( 1, &Stmp ); 
+        delNurs( 1, &Stmp );
     sem_post(&sem_g);
       }
 
@@ -4941,7 +4941,7 @@ int repLine(int j )
     line[j].ip[n++]=point[line[j].p2].py;
     line[j].ip[n++]=point[line[j].p2].pz;
     line[j].nip=n;
-    /*   
+    /*
   printf("line[%d].name:%s line[%d].typ:%c line[%d].div:%d line[%d].nip:%d\n"
   , j,line[j].name,j,line[j].typ,j,line[j].div,j, line[j].nip);
     */
@@ -4979,7 +4979,7 @@ void fixMidsideNodes( char *setname, char *parameter)
     int sum, *n2, *nm;
   }N1nm;
   N1nm *n1nm;
- 
+
   setNr=getSetNr(setname);
 
   if (setNr<0)
@@ -5043,7 +5043,7 @@ void fixMidsideNodes( char *setname, char *parameter)
   {
     /* create a table for all nodes which points to already created midside nodes */
     if ( (n1nm = (N1nm *)malloc( (anz->nmax+1) * sizeof(N1nm))) == NULL )
-    { printf("\n\n ERROR in mids: malloc\n\n") ; exit(-1); }    
+    { printf("\n\n ERROR in mids: malloc\n\n") ; exit(-1); }
     for (i=0; i<=anz->nmax; i++) n1nm[i].sum=0;
     for (i=0; i<=anz->nmax; i++) n1nm[i].n2=n1nm[i].nm=NULL;
     anz_nmax=anz->nmax;
@@ -5079,9 +5079,9 @@ void fixMidsideNodes( char *setname, char *parameter)
             nm=nod( anz, &node, 1, anz->nnext++, 0., 0., 0., 0 );
 
             if ( (n1nm[n1].n2 = (int *)realloc( n1nm[n1].n2, (n1nm[n1].sum+1) * sizeof(int))) == NULL )
-            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }    
+            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }
             if ( (n1nm[n1].nm = (int *)realloc( n1nm[n1].nm, (n1nm[n1].sum+1) * sizeof(int))) == NULL )
-            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }    
+            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }
             n1nm[n1].n2[n1nm[n1].sum]=n2;
             n1nm[n1].nm[n1nm[n1].sum]=nm;
             n1nm[n1].sum++;
@@ -5112,9 +5112,9 @@ void fixMidsideNodes( char *setname, char *parameter)
             /* generate new node */
             nm=nod( anz, &node, 1, anz->nnext++, 0., 0., 0., 0 );
             if ( (n1nm[n1].n2 = (int *)realloc( n1nm[n1].n2, (n1nm[n1].sum+1) * sizeof(int))) == NULL )
-            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }    
+            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }
             if ( (n1nm[n1].nm = (int *)realloc( n1nm[n1].nm, (n1nm[n1].sum+1) * sizeof(int))) == NULL )
-            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }    
+            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }
             n1nm[n1].n2[n1nm[n1].sum]=n2;
             n1nm[n1].nm[n1nm[n1].sum]=nm;
             n1nm[n1].sum++;
@@ -5147,9 +5147,9 @@ void fixMidsideNodes( char *setname, char *parameter)
             nm=nod( anz, &node, 1, anz->nnext++, 0., 0., 0., 0 );
 
             if ( (n1nm[n1].n2 = (int *)realloc( n1nm[n1].n2, (n1nm[n1].sum+1) * sizeof(int))) == NULL )
-            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }    
+            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }
             if ( (n1nm[n1].nm = (int *)realloc( n1nm[n1].nm, (n1nm[n1].sum+1) * sizeof(int))) == NULL )
-            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }    
+            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }
             n1nm[n1].n2[n1nm[n1].sum]=n2;
             n1nm[n1].nm[n1nm[n1].sum]=nm;
             n1nm[n1].sum++;
@@ -5180,9 +5180,9 @@ void fixMidsideNodes( char *setname, char *parameter)
             nm=nod( anz, &node, 1, anz->nnext++, 0., 0., 0., 0 );
 
             if ( (n1nm[n1].n2 = (int *)realloc( n1nm[n1].n2, (n1nm[n1].sum+1) * sizeof(int))) == NULL )
-            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }    
+            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }
             if ( (n1nm[n1].nm = (int *)realloc( n1nm[n1].nm, (n1nm[n1].sum+1) * sizeof(int))) == NULL )
-            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }    
+            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }
             n1nm[n1].n2[n1nm[n1].sum]=n2;
             n1nm[n1].nm[n1nm[n1].sum]=nm;
             n1nm[n1].sum++;
@@ -5214,9 +5214,9 @@ void fixMidsideNodes( char *setname, char *parameter)
             nm=nod( anz, &node, 1, anz->nnext++, 0., 0., 0., 0 );
 
             if ( (n1nm[n1].n2 = (int *)realloc( n1nm[n1].n2, (n1nm[n1].sum+1) * sizeof(int))) == NULL )
-            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }    
+            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }
             if ( (n1nm[n1].nm = (int *)realloc( n1nm[n1].nm, (n1nm[n1].sum+1) * sizeof(int))) == NULL )
-            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }    
+            { printf("\n\n ERROR in mids: realloc\n\n") ; exit(-1); }
             n1nm[n1].n2[n1nm[n1].sum]=n2;
             n1nm[n1].nm[n1nm[n1].sum]=nm;
             n1nm[n1].sum++;
@@ -5243,7 +5243,7 @@ void fixMidsideNodes( char *setname, char *parameter)
       else if (e_enqire[set[setNr].elem[k]].type == 10) nf=8; /* QUAD8 */
       else if (e_enqire[set[setNr].elem[k]].type == 11) nf=1; /* BEAM */
       else if (e_enqire[set[setNr].elem[k]].type == 12) nf=1; /* BEAM3 */
-  
+
       if((e_enqire[set[setNr].elem[k]].side=(double **)realloc(e_enqire[set[setNr].elem[k]].side, (nf)*sizeof(double *)))==NULL)
         printf("\n\n ERROR: realloc failed\n\n" );
       for(i=0; i<nf; i++)
@@ -5262,7 +5262,7 @@ void fixMidsideNodes( char *setname, char *parameter)
     if( (facenod=(int *)calloc( (anz->nmax+1),sizeof(int) ) )==NULL)
     { printf(" ERROR: realloc failure in fixMidsideNodes\n\n" ); return; }
     for (f=0; f<anz->nmax+1; f++) facenod[f]=0;
-    
+
     /* midside nodes on faces are not lineary readjusted. They stay on the orig curvature. */
     if(compare(parameter,"lin",3)==3)
     {
@@ -5308,7 +5308,7 @@ void fixMidsideNodes( char *setname, char *parameter)
             n1=e_enqire[set[setNr].elem[k]].nod[nodseq_pe15[n*3]];
             nm=e_enqire[set[setNr].elem[k]].nod[nodseq_pe15[n*3+1]];
             n2=e_enqire[set[setNr].elem[k]].nod[nodseq_pe15[n*3+2]];
-            if((mode)&&(facenod[nm]==1)) adjustMidsideNode( &node[n1].nx, &node[n2].nx, &node[nm].nx, 0); 
+            if((mode)&&(facenod[nm]==1)) adjustMidsideNode( &node[n1].nx, &node[n2].nx, &node[nm].nx, 0);
             else adjustMidsideNode( &node[n1].nx, &node[n2].nx, &node[nm].nx, mode);
           }
         }
@@ -5319,7 +5319,7 @@ void fixMidsideNodes( char *setname, char *parameter)
             n1=e_enqire[set[setNr].elem[k]].nod[nodseq_te10[n*3]];
             nm=e_enqire[set[setNr].elem[k]].nod[nodseq_te10[n*3+1]];
             n2=e_enqire[set[setNr].elem[k]].nod[nodseq_te10[n*3+2]];
-            if((mode)&&(facenod[nm]==1)) adjustMidsideNode( &node[n1].nx, &node[n2].nx, &node[nm].nx, 0); 
+            if((mode)&&(facenod[nm]==1)) adjustMidsideNode( &node[n1].nx, &node[n2].nx, &node[nm].nx, 0);
             else adjustMidsideNode( &node[n1].nx, &node[n2].nx, &node[nm].nx, mode);
           }
         }
@@ -5330,7 +5330,7 @@ void fixMidsideNodes( char *setname, char *parameter)
             n1=e_enqire[set[setNr].elem[k]].nod[nodseq_tr6[n*3]];
             nm=e_enqire[set[setNr].elem[k]].nod[nodseq_tr6[n*3+1]];
             n2=e_enqire[set[setNr].elem[k]].nod[nodseq_tr6[n*3+2]];
-            if((mode)&&(facenod[nm]==1)) adjustMidsideNode( &node[n1].nx, &node[n2].nx, &node[nm].nx, 0); 
+            if((mode)&&(facenod[nm]==1)) adjustMidsideNode( &node[n1].nx, &node[n2].nx, &node[nm].nx, 0);
             else adjustMidsideNode( &node[n1].nx, &node[n2].nx, &node[nm].nx, mode);
           }
         }
@@ -5350,7 +5350,7 @@ void posMidsideNodes(Nodes *node)
       {
         if(e_enqire[e_enqire[i].nr].type==4)
         {
-          for (n=0; n<3; n++)  
+          for (n=0; n<3; n++)
           {
           node[e_enqire[e_enqire[i].nr].nod[20+n]].nx =-0.25* (
           node[e_enqire[e_enqire[i].nr].nod[0+n]].nx+node[e_enqire[e_enqire[i].nr].nod[1+n]].nx    +
@@ -5387,7 +5387,7 @@ void posMidsideNodes(Nodes *node)
           node[e_enqire[e_enqire[i].nr].nod[4]].nz+node[e_enqire[e_enqire[i].nr].nod[7]].nz )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[11]].nz+node[e_enqire[e_enqire[i].nr].nod[12]].nz   +
           node[e_enqire[e_enqire[i].nr].nod[19]].nz+node[e_enqire[e_enqire[i].nr].nod[15]].nz) ;
-          for (n=0; n<2; n++) 
+          for (n=0; n<2; n++)
           {
           n1=n*4;
           n2=n*8;
@@ -5419,71 +5419,71 @@ void posMidsideNodes(Nodes *node)
           node[e_enqire[e_enqire[i].nr].nod[4+n]].nx+node[e_enqire[e_enqire[i].nr].nod[3+n]].nx )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[6+n]].nx+node[e_enqire[e_enqire[i].nr].nod[10+n]].nx   +
           node[e_enqire[e_enqire[i].nr].nod[12+n]].nx+node[e_enqire[e_enqire[i].nr].nod[ 9+n]].nx) ;
-  
+
           node[e_enqire[e_enqire[i].nr].nod[15+n]].ny = -0.25* (
           node[e_enqire[e_enqire[i].nr].nod[0+n]].ny+node[e_enqire[e_enqire[i].nr].nod[1+n]].ny    +
           node[e_enqire[e_enqire[i].nr].nod[4+n]].ny+node[e_enqire[e_enqire[i].nr].nod[3+n]].ny )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[6+n]].ny+node[e_enqire[e_enqire[i].nr].nod[10+n]].ny   +
           node[e_enqire[e_enqire[i].nr].nod[12+n]].ny+node[e_enqire[e_enqire[i].nr].nod[ 9+n]].ny) ;
-  
+
           node[e_enqire[e_enqire[i].nr].nod[15+n]].nz = -0.25* (
           node[e_enqire[e_enqire[i].nr].nod[0+n]].nz+node[e_enqire[e_enqire[i].nr].nod[1+n]].nz    +
           node[e_enqire[e_enqire[i].nr].nod[4+n]].nz+node[e_enqire[e_enqire[i].nr].nod[3+n]].nz )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[6+n]].nz+node[e_enqire[e_enqire[i].nr].nod[10+n]].nz   +
           node[e_enqire[e_enqire[i].nr].nod[12+n]].nz+node[e_enqire[e_enqire[i].nr].nod[ 9+n]].nz) ;
           }
-  
+
           /* create  new node in center of area3 */
           node[e_enqire[e_enqire[i].nr].nod[17  ]].nx = -0.25* (
           node[e_enqire[e_enqire[i].nr].nod[2]].nx+node[e_enqire[e_enqire[i].nr].nod[0]].nx    +
           node[e_enqire[e_enqire[i].nr].nod[3]].nx+node[e_enqire[e_enqire[i].nr].nod[5]].nx )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[ 8]].nx+node[e_enqire[e_enqire[i].nr].nod[ 9]].nx   +
           node[e_enqire[e_enqire[i].nr].nod[14]].nx+node[e_enqire[e_enqire[i].nr].nod[11]].nx) ;
-  
+
           node[e_enqire[e_enqire[i].nr].nod[17  ]].ny = -0.25* (
           node[e_enqire[e_enqire[i].nr].nod[2]].ny+node[e_enqire[e_enqire[i].nr].nod[0]].ny    +
           node[e_enqire[e_enqire[i].nr].nod[3]].ny+node[e_enqire[e_enqire[i].nr].nod[5]].ny )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[ 8]].ny+node[e_enqire[e_enqire[i].nr].nod[ 9]].ny   +
           node[e_enqire[e_enqire[i].nr].nod[14]].ny+node[e_enqire[e_enqire[i].nr].nod[11]].ny) ;
-  
+
           node[e_enqire[e_enqire[i].nr].nod[17  ]].nz = -0.25* (
           node[e_enqire[e_enqire[i].nr].nod[2]].nz+node[e_enqire[e_enqire[i].nr].nod[0]].nz    +
           node[e_enqire[e_enqire[i].nr].nod[3]].nz+node[e_enqire[e_enqire[i].nr].nod[5]].nz )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[ 8]].nz+node[e_enqire[e_enqire[i].nr].nod[ 9]].nz   +
           node[e_enqire[e_enqire[i].nr].nod[14]].nz+node[e_enqire[e_enqire[i].nr].nod[11]].nz) ;
- 
+
           /* create  new node in center of area4 */
           node[e_enqire[e_enqire[i].nr].nod[18  ]].nx = -0.25* (
           node[e_enqire[e_enqire[i].nr].nod[0]].nx+node[e_enqire[e_enqire[i].nr].nod[2]].nx    +
           node[e_enqire[e_enqire[i].nr].nod[1]].nx+node[e_enqire[e_enqire[i].nr].nod[0]].nx )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[ 8]].nx+node[e_enqire[e_enqire[i].nr].nod[ 7]].nx   +
           node[e_enqire[e_enqire[i].nr].nod[ 6]].nx+node[e_enqire[e_enqire[i].nr].nod[ 0]].nx) ;
-  
+
           node[e_enqire[e_enqire[i].nr].nod[18  ]].ny = -0.25* (
           node[e_enqire[e_enqire[i].nr].nod[0]].ny+node[e_enqire[e_enqire[i].nr].nod[2]].ny    +
           node[e_enqire[e_enqire[i].nr].nod[1]].ny+node[e_enqire[e_enqire[i].nr].nod[0]].ny )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[ 8]].ny+node[e_enqire[e_enqire[i].nr].nod[ 7]].ny   +
           node[e_enqire[e_enqire[i].nr].nod[ 6]].ny+node[e_enqire[e_enqire[i].nr].nod[ 0]].ny) ;
-  
+
           node[e_enqire[e_enqire[i].nr].nod[18  ]].nz = -0.25* (
           node[e_enqire[e_enqire[i].nr].nod[0]].nz+node[e_enqire[e_enqire[i].nr].nod[2]].nz    +
           node[e_enqire[e_enqire[i].nr].nod[1]].nz+node[e_enqire[e_enqire[i].nr].nod[0]].nz )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[ 8]].nz+node[e_enqire[e_enqire[i].nr].nod[ 7]].nz   +
           node[e_enqire[e_enqire[i].nr].nod[ 6]].nz+node[e_enqire[e_enqire[i].nr].nod[ 0]].nz) ;
-  
+
           /* create  new node in center of area5 */
           node[e_enqire[e_enqire[i].nr].nod[19  ]].nx = -0.25* (
           node[e_enqire[e_enqire[i].nr].nod[3]].nx+node[e_enqire[e_enqire[i].nr].nod[4]].nx    +
           node[e_enqire[e_enqire[i].nr].nod[5]].nx+node[e_enqire[e_enqire[i].nr].nod[3]].nx )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[12]].nx+node[e_enqire[e_enqire[i].nr].nod[13]].nx   +
           node[e_enqire[e_enqire[i].nr].nod[14]].nx+node[e_enqire[e_enqire[i].nr].nod[ 3]].nx) ;
-  
+
           node[e_enqire[e_enqire[i].nr].nod[19  ]].ny = -0.25* (
           node[e_enqire[e_enqire[i].nr].nod[3]].ny+node[e_enqire[e_enqire[i].nr].nod[4]].ny    +
           node[e_enqire[e_enqire[i].nr].nod[5]].ny+node[e_enqire[e_enqire[i].nr].nod[3]].ny )  + 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[12]].ny+node[e_enqire[e_enqire[i].nr].nod[13]].ny   +
           node[e_enqire[e_enqire[i].nr].nod[14]].ny+node[e_enqire[e_enqire[i].nr].nod[ 3]].ny) ;
-  
+
           node[e_enqire[e_enqire[i].nr].nod[19  ]].nz = -0.25* (
           node[e_enqire[e_enqire[i].nr].nod[3]].nz+node[e_enqire[e_enqire[i].nr].nod[4]].nz    +
           node[e_enqire[e_enqire[i].nr].nod[5]].nz+node[e_enqire[e_enqire[i].nr].nod[3]].nz )  + 0.5*(
@@ -5509,10 +5509,10 @@ void posMidsideNodes(Nodes *node)
           node[e_enqire[e_enqire[i].nr].nod[3]].nz+node[e_enqire[e_enqire[i].nr].nod[2]].nz )+ 0.5*(
           node[e_enqire[e_enqire[i].nr].nod[4]].nz+node[e_enqire[e_enqire[i].nr].nod[6]].nz  +
           node[e_enqire[e_enqire[i].nr].nod[7]].nz+node[e_enqire[e_enqire[i].nr].nod[5]].nz) ;
-	}  
+	}
       }
 }
-  
+
 
 
 /* generates or fixes nodes in the mid of the element face for drawing purposes only */
@@ -5585,7 +5585,7 @@ void adjustDrawNodes(int flag)
 int write2stack(int n, char **parameter)
 {
   int i;
-  if(!valuestackFlag) return(-1); 
+  if(!valuestackFlag) return(-1);
 
   if ((valuestack = (char **)realloc( (char **)valuestack, (valuestack_ptr+n)*sizeof(char *)) ) == NULL )
   { printf("\n\nERROR: realloc failure, valuestack\n\n"); return(-1); }
@@ -5596,7 +5596,7 @@ int write2stack(int n, char **parameter)
     sprintf(valuestack[valuestack_ptr++],"%s", parameter[n-1-i] );
   }
   printf(" %d values in inverse order written to stack\n", n);
-  return(n); 
+  return(n);
 }
 
 
@@ -5621,9 +5621,9 @@ int enquireEntities(char *string)
     /* check if the data of the specified lcase (Dataset) are already available */
     if (!lcase[cur_lc].loaded)
     {
-      if( pre_readfrdblock(copiedNodeSets , cur_lc, anz, node, lcase )==-1) 
+      if( pre_readfrdblock(copiedNodeSets , cur_lc, anz, node, lcase )==-1)
       {
-        printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", cur_lc+1); 
+        printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", cur_lc+1);
         return(0);
       }
       calcDatasets( cur_lc, anz, node, lcase );
@@ -5688,10 +5688,10 @@ int enquireEntities(char *string)
 
   if(set[setNr].anz_n)
   {
-    /* calculate dr of all nodes and sort the indexes according to distance**2 (rsort[i].r) */ 
+    /* calculate dr of all nodes and sort the indexes according to distance**2 (rsort[i].r) */
     if ( (rsort = (Rsort *)malloc( (set[setNr].anz_n+1) * sizeof(Rsort))) == NULL )
-      printf("ERROR: realloc failed: Rsort\n\n" ); 
-  
+      printf("ERROR: realloc failed: Rsort\n\n" );
+
     for(i=0; i<set[setNr].anz_n; i++)
     {
       n=set[setNr].node[i];
@@ -5721,7 +5721,7 @@ int enquireEntities(char *string)
       }
       else if((dat[2][0]=='c')&&(dat[2][2]=='l'))
       {
-        printf(" WARNING: The 'cyl x|y|z <r> <z>' option was replaced by 'cx|cy|cz <r> <fi> <z>' and will be deleted in future. Please consult the manual\n"); 
+        printf(" WARNING: The 'cyl x|y|z <r> <z>' option was replaced by 'cx|cy|cz <r> <fi> <z>' and will be deleted in future. Please consult the manual\n");
         switch(dat[3][0])
         {
           case 'x':
@@ -5780,13 +5780,13 @@ int enquireEntities(char *string)
       rsort[i].i=n;
     }
     qsort( rsort, set[setNr].anz_n, sizeof(Rsort), (void *)compareRsort );
-  
+
     switch(mode)
     {
       case 'i':
       {
         if(rsort[0].r<=tol*tol)
-        { 
+        {
 	  //printf("n:%d r:%f\n",  rsort[0].i, rsort[0].r);
           sprintf(parameter[0],"%d", rsort[0].i);
           sprintf(parameter[1],"%e", rsort[0].r);
@@ -5825,7 +5825,7 @@ int enquireEntities(char *string)
               sprintf(parameter[1],"%e", val);
               sprintf(parameter[2],"%e", sqrt(rval));
               write2stack(3, parameter);
-            }  
+            }
           }
 	}
         else
@@ -5835,10 +5835,10 @@ int enquireEntities(char *string)
           for (i=0; i<set[setNr].anz_n; i++)
           {
             if(rsort[i].r>tol*tol) break;
-            if(val<lcase[cur_lc].dat[cur_entity][rsort[i].i]) { val=lcase[cur_lc].dat[cur_entity][rsort[i].i]; nval=rsort[i].i; rval=rsort[i].r; }  
+            if(val<lcase[cur_lc].dat[cur_entity][rsort[i].i]) { val=lcase[cur_lc].dat[cur_entity][rsort[i].i]; nval=rsort[i].i; rval=rsort[i].r; }
           }
           if(nval)
-          { 
+          {
             seta(trgtSet, "n", nval);
             printf(" node:%d value:%lf dist:%lf\n\n", nval, val, sqrt(rval));
             sprintf(parameter[0],"%d", nval);
@@ -5851,7 +5851,7 @@ int enquireEntities(char *string)
       }
       break;
       case 'l':
-      { 
+      {
         if(valFlag)
 	{
           /* search values below value in range */
@@ -5867,7 +5867,7 @@ int enquireEntities(char *string)
               sprintf(parameter[1],"%e", val);
               sprintf(parameter[2],"%e", sqrt(rval));
               write2stack(3, parameter);
-            }  
+            }
           }
 	}
         else
@@ -5901,7 +5901,7 @@ int enquireEntities(char *string)
       sprintf(filenam,"enq_lc%d_e%d_%d.out", cur_lc+1, cur_entity+1, enq_nr);
       handle = fopen (filenam, "w+b");
       if (handle==NULL) { printf ("\nThe output file \"%s\" could not be opened.\n\n", filenam ); }
-      else 
+      else
       {
         printf (" result is written to \"%s\"\n\n", filenam);
         fprintf(handle, " node: %d val: %f dist: %f\n", nval, val, sqrt(rval));
@@ -5912,9 +5912,9 @@ int enquireEntities(char *string)
 
   if(set[setNr].anz_p)
   {
-    /* calculate dr of all points and sort the indexes according to distance**2 (rsort[i].r) */ 
+    /* calculate dr of all points and sort the indexes according to distance**2 (rsort[i].r) */
     if ( (rsort = (Rsort *)malloc( (set[setNr].anz_p+1) * sizeof(Rsort))) == NULL )
-      printf("ERROR: realloc failed: Rsort\n\n" ); 
+      printf("ERROR: realloc failed: Rsort\n\n" );
 
     for(i=0; i<set[setNr].anz_p; i++)
     {
@@ -5945,7 +5945,7 @@ int enquireEntities(char *string)
       }
       else if((dat[2][0]=='c')&&(dat[2][2]=='l'))
       {
-        printf(" WARNING: The 'cyl x|y|z <r> <z>' option was replaced by 'cx|cy|cz <r> <fi> <z>' and will be deleted in future. Please consult the manual\n"); 
+        printf(" WARNING: The 'cyl x|y|z <r> <z>' option was replaced by 'cx|cy|cz <r> <fi> <z>' and will be deleted in future. Please consult the manual\n");
         switch(dat[3][0])
         {
           case 'x':
@@ -6010,7 +6010,7 @@ int enquireEntities(char *string)
       case 'i':
       {
         if(rsort[0].r<=tol*tol)
-        { 
+        {
 	  printf("p:%s r:%f\n",  point[rsort[0].i].name, rsort[0].r);
           seta(trgtSet, "p", rsort[0].i);
           sprintf(parameter[0],"%s", point[rsort[0].i].name);
@@ -6041,7 +6041,7 @@ int enquireEntities(char *string)
   {
     // calculate dr of all points and sort the indexes according to distance**2 (rsort[i].r)
     if ( (rsort = (Rsort *)malloc( (set[setNr].anz_l+1)*ddiv  * sizeof(Rsort))) == NULL )
-      printf("ERROR: realloc failed: Rsort\n\n" ); 
+      printf("ERROR: realloc failed: Rsort\n\n" );
 
     j=0;
     for(i=0; i<set[setNr].anz_l; i++)
@@ -6059,7 +6059,7 @@ int enquireEntities(char *string)
   	  }
           else if(set[setPos].anz_p)
           {
-            dx=point[set[setPos].pnt[0]].px-((line[l].ip[n]* scale->w)+scale->x);  
+            dx=point[set[setPos].pnt[0]].px-((line[l].ip[n]* scale->w)+scale->x);
             dy=point[set[setPos].pnt[0]].py-((line[l].ip[n+1]* scale->w)+scale->y);
             dz=point[set[setPos].pnt[0]].pz-((line[l].ip[n+2]* scale->w)+scale->z);
   	  }
@@ -6079,7 +6079,7 @@ int enquireEntities(char *string)
           nx=(line[l].ip[n]* scale->w)+scale->x;
           ny=(line[l].ip[n+1]* scale->w)+scale->y;
           nz=(line[l].ip[n+2]* scale->w)+scale->z;
-	  //printf("pnt ! %f %f %f\n",nx,ny,nz); 
+	  //printf("pnt ! %f %f %f\n",nx,ny,nz);
           switch(dat[3][0])
           {
             case 'x':
@@ -6117,7 +6117,7 @@ int enquireEntities(char *string)
 	{
           if ( (rsort = (Rsort *)realloc((Rsort *)rsort,  (j+1)  * sizeof(Rsort))) == NULL )
             printf("ERROR: realloc failed: Rsort\n\n" );
-	} 
+	}
       }
     }
     if(j==0) goto nolines;
@@ -6159,7 +6159,7 @@ int enquireEntities(char *string)
   {
     // calculate dr of all points and sort the indexes according to distance**2 (rsort[i].r)
     if ( (rsort = (Rsort *)malloc( (set[setNr].anz_s+1)*ddiv*ddiv  * sizeof(Rsort))) == NULL )
-      printf("ERROR: realloc failed: Rsort\n\n" ); 
+      printf("ERROR: realloc failed: Rsort\n\n" );
 
     j=0;
     for(i=0; i<set[setNr].anz_s; i++)
@@ -6168,12 +6168,12 @@ int enquireEntities(char *string)
       n=0;
       while((surf[l].npgn-n))
       {
-        n++; // jump over the polygon token (ie.GL_POLYGON_TOKEN) 
+        n++; // jump over the polygon token (ie.GL_POLYGON_TOKEN)
         m=surf[l].pgn[n++];
         n+=3; // jump over the normal-vector
         for(k=0; k<m; k++)
         {
-          //printf("%d %s %lf %lf %lf\n", k,surf[l].name, surf[l].pgn[n],surf[l].pgn[n+1],surf[l].pgn[n+2]); 
+          //printf("%d %s %lf %lf %lf\n", k,surf[l].name, surf[l].pgn[n],surf[l].pgn[n+1],surf[l].pgn[n+2]);
           if(dat[2][0]=='s')
           {
             if(set[setPos].anz_n)
@@ -6184,7 +6184,7 @@ int enquireEntities(char *string)
     	    }
             else if(set[setPos].anz_p)
             {
-              dx=point[set[setPos].pnt[0]].px-((surf[l].pgn[n]* scale->w)+scale->x);  
+              dx=point[set[setPos].pnt[0]].px-((surf[l].pgn[n]* scale->w)+scale->x);
               dy=point[set[setPos].pnt[0]].py-((surf[l].pgn[n+1]* scale->w)+scale->y);
               dz=point[set[setPos].pnt[0]].pz-((surf[l].pgn[n+2]* scale->w)+scale->z);
     	    }
@@ -6204,7 +6204,7 @@ int enquireEntities(char *string)
             nx=(surf[l].pgn[n]* scale->w)+scale->x;
             ny=(surf[l].pgn[n+1]* scale->w)+scale->y;
             nz=(surf[l].pgn[n+2]* scale->w)+scale->z;
-  	    //printf("pnt ! %f %f %f\n",nx,ny,nz); 
+  	    //printf("pnt ! %f %f %f\n",nx,ny,nz);
             switch(dat[3][0])
             {
               case 'x':
@@ -6236,15 +6236,15 @@ int enquireEntities(char *string)
             break;
           }
           rsort[j].i=l;
-  
+
           j++;
           if(j>=(set[setNr].anz_s+1)*ddiv*ddiv  )
   	  {
             if ( (rsort = (Rsort *)realloc((Rsort *)rsort,  (j+1)  * sizeof(Rsort))) == NULL )
               printf("ERROR: realloc failed: Rsort\n\n" );
-          } 
+          }
 
-          n+=3; 
+          n+=3;
         }
       }
     }

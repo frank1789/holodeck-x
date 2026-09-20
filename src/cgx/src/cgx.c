@@ -11,7 +11,7 @@
 /*     the License.                                                      */
 /*                                                                       */
 /*     This program is distributed in the hope that it will be useful,   */
-/*     but WITHOUT ANY WARRANTY; without even the implied warranty of    */ 
+/*     but WITHOUT ANY WARRANTY; without even the implied warranty of    */
 /*     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the      */
 /*     GNU General Public License for more details.                      */
 /*                                                                       */
@@ -23,7 +23,7 @@
 #include <cgx.h>
 #include <time.h>
 #include <sys/utsname.h>
-
+#define GL_SILENCE_DEPRECATION
 #define     TEST            0
 
 #define   GLUT_WEEL_UP 3
@@ -53,7 +53,7 @@ void generalinfo()
   printf("      the License.                                                      \n");
   printf("                                                                        \n");
   printf("      This program is distributed in the hope that it will be useful,   \n");
-  printf("      but WITHOUT ANY WARRANTY; without even the implied warranty of    \n"); 
+  printf("      but WITHOUT ANY WARRANTY; without even the implied warranty of    \n");
   printf("      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the      \n");
   printf("      GNU General Public License for more details.                      \n");
   printf("                                                                        \n");
@@ -88,41 +88,41 @@ void generalinfo()
   printf("      input file (ccx) which provides the sets and loads used in the    \n");
   printf("      calculation.                                                      \n");
   printf("  -vtk   read vtk native format                                         \n");
-  printf("                                                                        \n"); 
-  printf("  special purpose options:                                              \n");                                               
-  printf("  -mksets       make node-sets from *DLOAD-values (setname:''_<value>'')\n");  
-  printf("  -read         forces the program to read the complete result-file     \n"); 
-  printf("                at startup                                              \n");     
-  printf("                                                                        \n"); 
+  printf("                                                                        \n");
+  printf("  special purpose options:                                              \n");
+  printf("  -mksets       make node-sets from *DLOAD-values (setname:''_<value>'')\n");
+  printf("  -read         forces the program to read the complete result-file     \n");
+  printf("                at startup                                              \n");
+  printf("                                                                        \n");
 }
 
-/* 
+/*
 Necessary system-routines and libs:
     glut
-    openGL, libGL and libGLU (the one from SGI which handles nurbs) 
+    openGL, libGL and libGLU (the one from SGI which handles nurbs)
     system
     sort
     rm
 */
-/* 
+/*
 Necessary stand alone programs:
-- for postscript Hardcopys 
+- for postscript Hardcopys
     convert
-- for multi-picture postscript Hardcopys 
+- for multi-picture postscript Hardcopys
     convert, pstops (from psutils), ghostscript (new version (2015) replace -sDEVICE=pswrite with ps2write)
 - for 2D plots
     gnuplot
 - for online-help
     netscape, or other html-browser
 */
-/* 
+/*
 TODO:
 - "big" node and element numbers should be possible, hash-table has to be implemented
 */
-/* 
+/*
 POSSIBLE TROUBLE:
 - if(flipflop) etc. was commented. might cause trouble on some systems with movi and hcpy
-- some points and sets might use the same name. This leads to problems with lines. The line command 
+- some points and sets might use the same name. This leads to problems with lines. The line command
   determines if it is a center-point or a sequence (seqa) based on the name of the track-parameter.
   If a point and a seqa use both the specified name then only a sraight line can be generated.
 
@@ -131,7 +131,7 @@ POSSIBLE TROUBLE:
 
 - seach NEWELEM: This block might be unnecessary. Has to be checked
 */
-/* 
+/*
 Known bugs:
 - search for debug
 */
@@ -144,13 +144,13 @@ char  *keystroke;
 
 /* Display-lists */
 GLuint list_model_edges, list_surf_edges, list_elem_edges ;
-GLuint list_elem_light, list_elem_load, list_elem_elstress;           
+GLuint list_elem_light, list_elem_load, list_elem_elstress;
 GLuint list_surf_light, list_surf_load;
 GLuint list_anim_light, list_anim_model_edges, list_anim_surf_edges, list_anim_elem_edges;
 GLuint *list_animate=NULL, *list_animate_model_edges=NULL, *list_animate_surf_edges=NULL, *list_animate_elem_edges=NULL;
 GLint  range_animate_light;
 
-Summen    anz[1]; 
+Summen    anz[1];
 SumGeo    anzGeo[1];
 SumAsci   sumAsci[1];
 
@@ -163,8 +163,8 @@ NodeBlocks *nBlock;
 Alias     *alias=NULL;
 Sets      *set=NULL;
 Shapes    *shape=NULL;
-Materials *material=NULL; 
-Amplitudes *amplitude=NULL; 
+Materials *material=NULL;
+Amplitudes *amplitude=NULL;
 Psets     *pset=NULL;
 Values    *value=NULL;
 Points    *point=NULL;
@@ -193,10 +193,10 @@ GLfloat   *contur_tex=NULL;
 struct utsname  cursys[1];
 int             bitplanes;            /*  colorbuffer depth */
 
-Display       *dpy;
-int           dpycells;
-Colormap      cmap;
-XColor        *xcolor;
+// Display       *dpy;
+// int           dpycells;
+// Colormap      cmap;
+// XColor        *xcolor;
 unsigned long *pixels_return;
 unsigned int  npixels;
 double         priv_cmap[256][3];
@@ -294,7 +294,7 @@ char  captionFlag={1};                 /* mit (1) oder ohne filename im Menufens
 char  textFlag={1};                    /* mit (1) oder ohne text im Menufenster */
 char  commandLineFlag={0};             /* mit (1) oder ohne Kommandozeile im Menufenster */
 char  printFlag=0;                     /* printf on/off on=1 (kommando 'msg' 'on'|'off' )*/
-char  scalaFlag={1};                   /* mit (1) oder ohne scala und wertetexte */ 
+char  scalaFlag={1};                   /* mit (1) oder ohne scala und wertetexte */
 char  sequenceFlag=0;                  /* 1: play a sequence of LC */
 char  vectorFlag=0;                    /* 0: scalar plot, 1: vector plot */
 char  addDispFlag=0;                   /* 0: original node-coordinates, 1: node-coordinates+displacements */
@@ -304,7 +304,7 @@ char  graphFlag=0;                     /* 0:out, 1:graph line, 2: graph n, 3: gr
 char  cutFlag=0;                       /* 0:out, 1: last node selected, cut structure */
 char  illumFlag=0;                     /* sequence with illumination */
 char  illumResultFlag=ILLUMINATE_RESULTS;              /* results with illumination */
-char  saveillumResultFlag=ILLUMINATE_RESULTS;              
+char  saveillumResultFlag=ILLUMINATE_RESULTS;
 char  movieFlag=0;                     /* >0: save sequence of gif pictures */
 char  rulerFlag=1;                     /* 1: drawRu1er in window w1 */
 char  rulerString[MAX_LINE_LENGTH];    /* units */
@@ -366,7 +366,7 @@ int       draw_font=DEF_GLUT_FONT;                         /* active font for th
 int       menu_font=SUM_GLUT_FONTS-1;                         /* active font for the menu */
 int       elemMat[MAX_MATERIALS]={1,1};      /*  Material Numbers, Number of Materials stored in elemMat[0]  */
 int       nasMpc=1;                                       /* 1: areampc generates mpcs; 0: rbes with optional heat-expansion-coefficient */
-double    nasRbeHec=0.; 
+double    nasRbeHec=0.;
 char  picture_caption[MAX_LINE_LENGTH]= {""};               /* Caption on window base line */
 char  picture_text[MAX_LINE_LENGTH]= {""};               /* Text on window base line */
 
@@ -453,20 +453,20 @@ void nodalDataset( int entity, int lc, Summen *anz, Scale *scale, Nodes *node_du
   double ds,max,min,divisor;
 #if TEST
   printf ("in nodalDataset drawMode:%d\n",drawMode );
-#endif 
+#endif
 
   if(!anz->l)
   {
       printf(" WARNING: No values available (should not come to this point)\n");
-      return;    
+      return;
   }
 
   /* check if the data of the specified lcase (Dataset) are already available */
   if (!lcase[lc].loaded)
   {
-    if( pre_readfrdblock(copiedNodeSets , lc, anz, node, lcase )==-1) 
+    if( pre_readfrdblock(copiedNodeSets , lc, anz, node, lcase )==-1)
     {
-      printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", lc+1); 
+      printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", lc+1);
       return;
     }
     calcDatasets( lc, anz, node, lcase );
@@ -474,7 +474,7 @@ void nodalDataset( int entity, int lc, Summen *anz, Scale *scale, Nodes *node_du
   }
 
   /* if currently a section (qcut) is in use realloc the lcase and generate the necessary values */
-  if(set_qcut>-1) updLcase(lc, set_qcut); 
+  if(set_qcut>-1) updLcase(lc, set_qcut);
   else
   {
     if ( (lcase[lc].dat[entity] = (float *)realloc(lcase[lc].dat[entity], (anz->nmax+1) * sizeof(float))) == NULL )
@@ -524,7 +524,7 @@ void nodalDataset( int entity, int lc, Summen *anz, Scale *scale, Nodes *node_du
           lcase[lc].dat[entity][e_enqire[e_enqire[i].nr].nod[4]]+lcase[lc].dat[entity][e_enqire[e_enqire[i].nr].nod[7]] )  + 0.5*(
           lcase[lc].dat[entity][e_enqire[e_enqire[i].nr].nod[11]]+lcase[lc].dat[entity][e_enqire[e_enqire[i].nr].nod[12]]   +
           lcase[lc].dat[entity][e_enqire[e_enqire[i].nr].nod[19]]+lcase[lc].dat[entity][e_enqire[e_enqire[i].nr].nod[15]]) ;
-      for (n=0; n<2; n++)  
+      for (n=0; n<2; n++)
       {
         n1=n*4;
         n2=n*8;
@@ -538,7 +538,7 @@ void nodalDataset( int entity, int lc, Summen *anz, Scale *scale, Nodes *node_du
 
 
       case 5:
-      for (n=0; n<2; n++) 
+      for (n=0; n<2; n++)
       {
         lcase[lc].dat[entity][e_enqire[e_enqire[i].nr].nod[15+n]] = -0.25* (
           lcase[lc].dat[entity][e_enqire[e_enqire[i].nr].nod[0+n]]+lcase[lc].dat[entity][e_enqire[e_enqire[i].nr].nod[1+n]]    +
@@ -622,7 +622,7 @@ void nodalDataset( int entity, int lc, Summen *anz, Scale *scale, Nodes *node_du
         if(lcase[lc].dat[entity][set[settmp].node[i]] > vmax ) { vmax = lcase[lc].dat[entity][set[settmp].node[i]]; nmax=set[settmp].node[i]; }
       }
       delSet(specialset->tmp);
-  
+
       /* if no plotset is defined */
       if(vmin==MAX_FLOAT)
       {
@@ -726,7 +726,7 @@ void elementDataset( int entity, int lc, Summen *anz, Scale *scale, Datasets *lc
   if(!anz->l)
   {
       printf(" WARNING: No values available\n");
-      return;    
+      return;
   }
 
   if ( (vp = (double **)malloc( (anz->emax+1) * sizeof(double))) == NULL )
@@ -740,7 +740,7 @@ void elementDataset( int entity, int lc, Summen *anz, Scale *scale, Datasets *lc
 /*
   if (lcase[lc].edat[entity] == NULL )
     errMsg("ERROR: Component not available\n");
-  else 
+  else
   {
     for (i=0; i<num_etype[11]; i++ )
     {
@@ -792,9 +792,9 @@ void elementDataset( int entity, int lc, Summen *anz, Scale *scale, Datasets *lc
 
 
 /* from j. baylor for tga-screen-shot */
-int WriteTGA(char *filename, 
-             short int width, 
-             short int height, 
+int WriteTGA(char *filename,
+             short int width,
+             short int height,
              char *imageData) {
 
    char cGarbage = 0;
@@ -873,7 +873,7 @@ void getTGAScreenShot(int nr)
     while( access( "0__.tga", F_OK ) != 0 );
     while( access( "1__.tga", F_OK ) != 0 );
     while( access( "2__.tga", F_OK ) != 0 );
-    
+
     // get the orientation of the tga files right
     sprintf( buffer, "mogrify -auto-orient 0__.tga");
     system (buffer);
@@ -1030,13 +1030,13 @@ void createHardcopy( int selection, char *filePtr )
         /* read a cgx-command file which will be executed after the movie is created */
         if(strlen(movieCommandFile))
         {
-          pre_read(movieCommandFile); 
+          pre_read(movieCommandFile);
         }
       }
     }
     if(selection==4)
     {
-      gifNr++; 
+      gifNr++;
       if(filePtr!=NULL) sprintf(fileName,"%s.gif",filePtr); else sprintf(fileName,"hcpy_%d.gif",gifNr);
       printf("create %s\n ",fileName);
       getTGAScreenShot(gifNr);
@@ -1236,7 +1236,7 @@ void qcutNodes(int x, int y)
   dx_cur=PICK_LENGTH; dy_cur=PICK_LENGTH;
 
   //printf("anz_n:%d set[setNrbuf].anz_n:%d\n", anz_n, set[setNrbuf].anz_n);
-  //for(i=0; i<set[setNrbuf].anz_n; i++)  printf("n:%d\n",set[setNrbuf].node[i]); 
+  //for(i=0; i<set[setNrbuf].anz_n; i++)  printf("n:%d\n",set[setNrbuf].node[i]);
   if( anz_n==set[setNrbuf].anz_n )
   {
     printf (" found no node, try again\n");
@@ -1249,7 +1249,7 @@ void qcutNodes(int x, int y)
     else if(cutFlag==7) { pre_cut( set[setNrbuf].node[set[setNrbuf].anz_n-1], 'z' ); setr(setNrbuf, "n", set[setNrbuf].node[set[setNrbuf].anz_n-1]); }
     else cutnode[cutFlag-1]=set[setNrbuf].node[set[setNrbuf].anz_n-1];
     if(cutFlag==3) for (i=0; i<3; i++) pre_cut( cutnode[i], 'n' );
-    cutFlag=0; 
+    cutFlag=0;
   }
   pick( (char)'q', x, y );
   glutSetWindow( activWindow );
@@ -1312,7 +1312,7 @@ void qgraph(int x, int y)
     if(graphFlag==3) sprintf(buffer,"%s t", specialset->plot2d);
     graph(buffer);
   }
-  graphFlag=0; 
+  graphFlag=0;
 }
 
 
@@ -1399,7 +1399,7 @@ void MouseState( int button, int state, int x, int y )
   }
 
   /* update the elem-edges in case the view was zoomed */
-  if( (button == GLUT_MIDDLE_BUTTON && state == GLUT_UP)|| 
+  if( (button == GLUT_MIDDLE_BUTTON && state == GLUT_UP)||
       ( ((button == GLUT_RIGHT_BUTTON && state == GLUT_UP)||(button == GLUT_LEFT_BUTTON && state == GLUT_UP))&&(weelWasUsedFlag) ))
   {
     weelWasUsedFlag=0;
@@ -1411,7 +1411,7 @@ void MouseState( int button, int state, int x, int y )
     }
   }
 
-  if(( MouseMode==1 )&&( activWindow==w0 )) 
+  if(( MouseMode==1 )&&( activWindow==w0 ))
   {
     stopFlag=1;
     glutSetWindow( w1);
@@ -1438,7 +1438,7 @@ void MouseState( int button, int state, int x, int y )
       if ((!sequenceFlag)&&( animList>=anim_steps)) animList=0;
     }
   }
-  if(( MouseMode==2 )&&( activWindow==w0 )) 
+  if(( MouseMode==2 )&&( activWindow==w0 ))
   {
     stopFlag=!stopFlag;
     if(animList>0) animList--;
@@ -1512,7 +1512,7 @@ void frameSet(int setNrbuf)
   getScaleValues( setNr, set, point, node, scaleSet);
 
   center( scaleSet->x, scaleSet->y, scaleSet->z);
-  // zoom 
+  // zoom
   ds=0.5*scaleSet->w;
   // determine the pos of setnr on the screen
   glutSetWindow( w1);
@@ -1561,7 +1561,7 @@ void menu( int selection )
     {
       glutInitDisplayMode ( GLUT_RGBA | GLUT_DOUBLE  );
       activWindow= w3 = glutCreateSubWindow ( w0, 0, height_w0-pixPerChary[menu_font], width_w0, pixPerChary[menu_font] );
-      glutDisplayFunc ( updCommandLine );
+   //   glutDisplayFunc ( updCommandLine );
       glDisable(GL_DITHER);
       glShadeModel ( GL_FLAT );
     }
@@ -1678,21 +1678,21 @@ void selectCutNode( int selection )
 
   if(!activeFlag) { elemEdgeFlagBuf=elemEdgeFlag; activeFlag=1; }
   pre_view("elem");
-  
+
   switch (selection) {
   case 1:
     saveillumResultFlag=illumResultFlag;
-    cutFlag=1; 
+    cutFlag=1;
     printf("\n Select 1st node with 'left mouse button'\n");
     break;
   case 2:
     saveillumResultFlag=illumResultFlag;
-    cutFlag=2; 
+    cutFlag=2;
     printf("\n Select 2nd node with 'left mouse button'\n");
     break;
   case 3:
     saveillumResultFlag=illumResultFlag;
-    cutFlag=3; 
+    cutFlag=3;
     printf("\n Select 3rd node with 'left mouse button'\n");
     surfFlagBuffer=surfFlag;
     break;
@@ -1703,22 +1703,22 @@ void selectCutNode( int selection )
     break;
   case 5:
     saveillumResultFlag=illumResultFlag;
-    cutFlag=4; 
+    cutFlag=4;
     printf("\n Select one node with 'left mouse button'\n");
     break;
   case 6:
     saveillumResultFlag=illumResultFlag;
-    cutFlag=5; 
+    cutFlag=5;
     printf("\n Select one node with 'left mouse button'\n");
     break;
   case 7:
     saveillumResultFlag=illumResultFlag;
-    cutFlag=6; 
+    cutFlag=6;
     printf("\n Select one node with 'left mouse button'\n");
     break;
   case 8:
     saveillumResultFlag=illumResultFlag;
-    cutFlag=7; 
+    cutFlag=7;
     printf("\n Select one node with 'left mouse button'\n");
     break;
   case 9:
@@ -1739,7 +1739,7 @@ void selectGraphMode( int selection )
   switch (selection) {
   case 1:
     printf("\n Values over length. Select nodes with 'left mouse button' then quit with 'right mouse button'\n");
-    graphFlag=1; 
+    graphFlag=1;
     break;
   case 2:
     if(!sequenceFlag)
@@ -1748,7 +1748,7 @@ void selectGraphMode( int selection )
       return;
     }
     printf("\n Values over datasets. Select nodes with 'left mouse button' then quit with 'right mouse button'\n");
-    graphFlag=2; 
+    graphFlag=2;
     break;
   case 3:
     if(!sequenceFlag)
@@ -1757,7 +1757,7 @@ void selectGraphMode( int selection )
       return;
     }
     printf("\n Values over time. Select nodes with 'left mouse button' then quit with 'right mouse button'\n");
-    graphFlag=3; 
+    graphFlag=3;
     break;
   }
   sprintf(buffer,"se %s", specialset->copy);
@@ -1812,7 +1812,7 @@ void updateDispLists()
 {
 #if TEST
   printf ("in updateDispLists drawMode=%d \n",drawMode );
-#endif 
+#endif
   if(!inpformat) return;
 
   glutSetWindow( w1);
@@ -1824,7 +1824,7 @@ void updateDispLists()
       if (lcase[cur_lc].irtype == 3) printf("ERROR: Element-results are not supported so far!\n");
       else drawDispList( list_surf_load, 'f', node, colNr );
     }
-    else        
+    else
     {
       if (lcase[cur_lc].irtype == 3) printf("ERROR: Element-results are not supported so far!\n");
       else drawDispList( list_elem_load, 'e', node, colNr );
@@ -1849,7 +1849,7 @@ void updateDispLists()
   else          drawDispListEdges(list_elem_edges, basCol[0], 1., 'e', node );
 #if TEST
   printf (" end updateDispLists drawMode=%d \n",drawMode );
-#endif 
+#endif
 }
 
 
@@ -1875,849 +1875,849 @@ void set_cur_lc(int lc)
 
 
 
-void ConfigureAndShowWindow_Light()
-{
-  int j;
-#if TEST
-  printf(" in ConfigureAndShowWindow_Light\n");
-#endif 
-  if(!inpformat) return;
-
-  glutSetWindow( w2);
-  DrawAxes();
-
-  if(sequenceFlag)
-  {
-    ConfigureAndShowWindow_Sequence(1);
-    return;
-  }
-
-  glutPostRedisplay();
- reselect:;
-  glutSetWindow( w0);
-  if (animFlag==0) { glutDisplayFunc ( DrawMenuLight ); DrawMenuLight();  }
-  else             
-  {
-    if(drawMode==2)
-    {
-      /* change the color to "illuminated" */
-      for (j=0; j<anzGeo->psets; j++ )
-      {
-        if((pset[j].type[0]=='e')||(pset[j].type[0]=='f'))
-	{
-          if(pset[j].type[1]==0) pset[j].type[2]=0;
-          if(pset[j].type[1]=='b');
-          else if(pset[j].type[2]=='b') { pset[j].type[1]='b'; pset[j].type[2]=0; }
-          else { pset[j].type[1]=0; pset[j].type[2]=0; }
-	}
-      }
-      glutDisplayFunc ( DrawMenuAnimate ); DrawMenuAnimate();
-    }
-    else { glutDisplayFunc ( DrawMenuLoad ); DrawMenuLoad(); }
-  }
-
-  glutSetWindow( w1 );
-  activWindow = w1;
-  if (animFlag==0)
-  {
-    /* reset entities */
-    if(surfFlag)
-    {
-      if(blendFlag) sprintf(buffer,"fb all %s", entitycol[DEF_COL].name);
-      else          sprintf(buffer,"f all %s",  entitycol[DEF_COL].name);
-    }
-    else
-    {
-      if(blendFlag) sprintf(buffer,"eb all %s", entitycol[DEF_COL].name);
-      else          sprintf(buffer,"e all %s", entitycol[DEF_COL].name);
-    }
-    plot(buffer);
-
-    /* change to disp-lists */
-    drawMode=2;
-    updateDispLists();
-    glutDisplayFunc ( DrawGraficLight );
-    DrawGraficLight();
-  }
-  else if (animFlag==1)
-  {
-    if((drawMode!=2)&&(cur_entity>=lcase[pre_lc].ncomps))
-    {
-      printf(" Warning: No valid entity or shaded view selected\n\n");
-      cur_entity=lcase[pre_lc].ncomps-1;
-      if(drawMode!=4) drawMode=2;
-      goto reselect;
-    }
-    set_cur_lc(pre_lc);
-
-    printf ("\nDataset:%d name= %s\n", cur_lc+1, lcase[cur_lc].name);
-
-    glDeleteLists( (GLuint)list_anim_light, (GLint)range_animate_light );
-    glDeleteLists( (GLuint)list_anim_model_edges, (GLint)range_animate_light );
-    glDeleteLists( (GLuint)list_anim_surf_edges, (GLint)range_animate_light );
-    glDeleteLists( (GLuint)list_anim_elem_edges, (GLint)range_animate_light );
-    range_animate_light = anim_steps;
-    list_anim_light = glGenLists( (GLint)(range_animate_light) );
-    list_anim_model_edges = glGenLists( (GLint)(range_animate_light) );
-    list_anim_surf_edges = glGenLists( (GLint)(range_animate_light) );
-    list_anim_elem_edges = glGenLists( (GLint)(range_animate_light) );
-
-    if((anim_alfa=(int *)realloc((int *)anim_alfa, (range_animate_light+1)*sizeof(char *)))==NULL)
-    { printf("\n\n ERROR: malloc failure\n\n" ); exit(1); }
-    
-    updateDispLists();
-    calcAnimation( anim_steps, anim_faktor, anim_alfa, halfperiod, centerNode, anz, node, e_enqire, lcase, cur_lc, cur_entity, scale, surfFlag, colNr, steps );
-    glutDisplayFunc ( DrawGraficAnimate );
-    DrawGraficAnimate();
-  }
-}
-
-
-
-void ConfigureAndShowWindow_Plot( void )
-{
-  int i;
-#if TEST
-  printf(" in ConfigureAndShowWindow_Plot\n");
-#endif 
-
-  if(!inpformat)
-  {
-    if(cur_lc<anz->l) nodalDataset( cur_entity, cur_lc, anz, scale, node, lcase, colNr, 1 );
-    return;
-  }
-
-  glutSetWindow( w2);
-  DrawAxes();
-
-  for(i=0; i<anzGeo->psets; i++)
-  {
-    if ((pset[i].type[1]=='v')&&(anz->l)) break;
-  }
-  if (i==anzGeo->psets)
-  {
-    glutSetWindow( w0);
-    glutDisplayFunc ( DrawMenuSet );
-    DrawMenuSet();
-  }
-  else
-  {
-    if(cur_lc<anz->l) nodalDataset( cur_entity, cur_lc, anz, scale, node, lcase, colNr, 1 );
-    glutSetWindow( w0);
-    glutDisplayFunc ( DrawMenuLoad );
-    DrawMenuLoad();
-  }
-  glutSetWindow( w1);
-  glutDisplayFunc ( DrawPickedItems );
-  DrawPickedItems();
-}
-
-
-
-void ConfigureAndShowWindow_Load( void )
-{
-#if TEST
-  printf(" in ConfigureAndShowWindow_Load\n");
-#endif 
-
-  if(sequenceFlag)
-  {
-    if(inpformat) ConfigureAndShowWindow_Sequence(0);
-    else { printf("ERROR in ConfigureAndShowWindow_Load: not possible in -bg mode.\n"); }
-    return;
-  }
-
-  if(inpformat)
-  {
-    glutSetWindow( w2);
-    DrawAxes();
-
-    glutSetWindow( w1 );
-  }
-
-  if (lcase[cur_lc].irtype == 3) /* element data */
-  {
-    elementDataset( cur_entity, cur_lc, anz, scale, lcase, offset, maxIndex, steps );
-  }
-  else
-  {
-    nodalDataset( cur_entity, cur_lc, anz, scale, node, lcase, colNr, 1 );
-  }
-
-  if(inpformat)
-  {
-    glutSetWindow( w0);
-    glutDisplayFunc ( DrawMenuLoad );
-    DrawMenuLoad();
-
-    /* change to disp-lists */
-    drawMode=1;
-    updateDispLists();
-    glutSetWindow( w1);
-    glutDisplayFunc ( DrawGraficLoad );
-    DrawGraficLoad();
-  }
-}
-
-
-
-void ConfigureAndShowWindow_Sequence( int dispFlag )
-{
-#if TEST
-  printf(" in ConfigureAndShowWindow_Sequence\n");
-#endif 
-  int i,j, n;
-  int nmax=0, nmin=0;
-  double vmax=-MAX_FLOAT, vmin=MAX_FLOAT;
-
-  if(!inpformat) return;
-
-  /* make sure the 1st frame uses the 1st ds */
-  animList=0;
-
-  glutSetWindow(w1);
-  glDeleteLists( (GLuint)list_anim_light, (GLint)range_animate_light );
-  glDeleteLists( (GLuint)list_anim_model_edges, (GLint)range_animate_light );
-  glDeleteLists( (GLuint)list_anim_surf_edges, (GLint)range_animate_light );
-  glDeleteLists( (GLuint)list_anim_elem_edges, (GLint)range_animate_light );
-  range_animate_light = dsSequence.nds;
-  list_anim_light = glGenLists( (GLint)(range_animate_light) );
-  list_anim_model_edges = glGenLists( (GLint)(range_animate_light) );
-  list_anim_surf_edges = glGenLists( (GLint)(range_animate_light) );
-  list_anim_elem_edges = glGenLists( (GLint)(range_animate_light) );
-
-  /* load the loadcases for the sequence, has to be loaded prior to lcase allocation because the ncomps have to be extended before */
-
-  printf("Loading data, please wait\n");
-
-  for(i=0; i<dsSequence.nds; i++)
-  {
-    //printf("ds[%d]:%d %s\n",i+1,dsSequence.ds[i]+1, lcase[dsSequence.ds[i]].name );
-
-    /* check if the data of the specified lcase (Dataset) are already available */
-    if (!lcase[dsSequence.ds[i]].loaded)
-    {
-      if( pre_readfrdblock(copiedNodeSets, dsSequence.ds[i], anz, node, lcase )==-1) 
-      {
-        printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", dsSequence.ds[i]+1); 
-        return;
-      }
-      calcDatasets( dsSequence.ds[i], anz, node, lcase );
-      recompileEntitiesInMenu(dsSequence.ds[i]);
-    }
-
-    if(vmax<lcase[dsSequence.ds[i]].max[cur_entity])
-    { vmax=lcase[dsSequence.ds[i]].max[cur_entity]; nmax=lcase[dsSequence.ds[i]].nmax[cur_entity]; }
-    if(vmin>lcase[dsSequence.ds[i]].min[cur_entity])
-    { vmin=lcase[dsSequence.ds[i]].min[cur_entity]; nmin=lcase[dsSequence.ds[i]].nmin[cur_entity]; }
-  }
-  /* set to the max-vals in range */
-  if((scale->smin ==scale->smax )&&(scale->lock!='l'))
-  {
-    scale->smin = vmin;
-    scale->smax = vmax;
-  }
-  
-  if(drawMode==2) /* light */
-  {
-    /* switch the psets to the shaded mode */
-    for (j=0; j<anzGeo->psets; j++ )
-    {
-      if((pset[j].type[0]=='e')||(pset[j].type[0]=='f'))
-      {
-        if(pset[j].type[1]==0) pset[j].type[2]=0;
-        if(pset[j].type[1]=='b');
-        else if(pset[j].type[2]=='b') { pset[j].type[1]='b'; pset[j].type[2]=0; }
-        else pset[j].type[1]=0;
-      }
-    }
-    
-    illumFlag=1;
-    glutSetWindow( w1 );
-
-    if(lcase_animList<0)
-    {
-      /* create an additional lcase for the vector length of all steps */
-      if ( (lcase = (Datasets *)realloc((Datasets *)lcase, (anz->l+2) * sizeof(Datasets))) == NULL )
-      { printf("\n\n ERROR: malloc failure\n\n" ); exit(1); }
-
-      lcase[anz->l].ncomps = dsSequence.nds;
-      lcase[anz->l].irtype = 1;
-      lcase[anz->l].npheader = 0;
-      if(( lcase[anz->l].pheader=(char **)malloc( sizeof(char *))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      lcase[anz->l].fileptr = NULL;
-      lcase[anz->l].loaded = 1;
-      lcase[anz->l].value=0;
-      strcpy(lcase[anz->l].analysis_name,"");
-      strcpy(lcase[anz->l].dataset_name,"");
-      strcpy(lcase[anz->l].dataset_text,"");
-      lcase[anz->l].step_number=0;
-      lcase[anz->l].analysis_type=1;
-  
-      if ( (lcase[anz->l].nmax = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].nmin = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].max = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].min = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].dat = (float **)malloc( lcase[anz->l].ncomps * sizeof(float *))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].compName = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].icname = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      for(j=0; j<lcase[anz->l].ncomps; j++)
-      {
-        if ( (lcase[anz->l].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
-          printf("\n\n ERROR: malloc failure\n\n" );	               
-        if ( (lcase[anz->l].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-           printf("\n\n ERROR: malloc failed\n\n" );
-        if ( (lcase[anz->l].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-           printf("\n\n ERROR: malloc failed\n\n" );
-        lcase[anz->l].max[j]=-MAX_FLOAT;
-        lcase[anz->l].min[j]=MAX_FLOAT;
-      }
-      if ( (lcase[anz->l].menu = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].ictype = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].icind1 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].icind2 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].iexist = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-  
-      for(j=0; j<lcase[anz->l].ncomps; j++)
-      {
-        lcase[anz->l].menu[j] = 1;
-        lcase[anz->l].ictype[j] = 2;
-        lcase[anz->l].icind1[j] = j+1;
-        lcase[anz->l].icind2[j] = 0;
-        lcase[anz->l].iexist[j] = 0;
-        sprintf(lcase[anz->l].compName[j], "step");
-      }
-      lcase_animList=anz->l;
-    }
-    else
-    {
-      /* realloc the additional lcase after for the vector length of all steps */
-      for(j=0; j<lcase[lcase_animList].ncomps; j++)
-      {
-        free(lcase[lcase_animList].dat[j]);
-        free(lcase[lcase_animList].compName[j]);
-        free(lcase[lcase_animList].icname[j]);
-      }
-  
-      lcase[lcase_animList].ncomps = dsSequence.nds;
-      lcase[lcase_animList].irtype = 1;
-      for(j=0; j<lcase[lcase_animList].npheader; j++) free(lcase[lcase_animList].pheader[j]);
-      lcase[lcase_animList].npheader = 0;
-      lcase[lcase_animList].fileptr = NULL;
-      lcase[lcase_animList].loaded = 1;
-
-      if ( (lcase[lcase_animList].nmax = (int *)realloc( lcase[lcase_animList].nmax, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].nmin = (int *)realloc( lcase[lcase_animList].nmin, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].max = (float *)realloc( lcase[lcase_animList].max, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].min = (float *)realloc( lcase[lcase_animList].min, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].dat = (float **)realloc( lcase[lcase_animList].dat, lcase[lcase_animList].ncomps * sizeof(float *))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].compName = (char **)realloc( lcase[lcase_animList].compName, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].icname = (char **)realloc( lcase[lcase_animList].icname, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      for(j=0; j<lcase[lcase_animList].ncomps; j++)
-      {
-        if ( (lcase[lcase_animList].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
-          printf("\n\n ERROR: malloc failure\n\n" );	               
-        if ( (lcase[lcase_animList].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-           printf("\n\n ERROR: malloc failed\n\n" );
-        if ( (lcase[lcase_animList].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-           printf("\n\n ERROR: malloc failed\n\n" );
-        lcase[lcase_animList].max[j]=-MAX_FLOAT;
-        lcase[lcase_animList].min[j]=MAX_FLOAT;
-      }
-      if ( (lcase[lcase_animList].menu = (int *)realloc( lcase[lcase_animList].menu, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].ictype = (int *)realloc( lcase[lcase_animList].ictype, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].icind1 = (int *)realloc( lcase[lcase_animList].icind1, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].icind2 = (int *)realloc( lcase[lcase_animList].icind2, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].iexist = (int *)realloc( lcase[lcase_animList].iexist, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-  
-      for(j=0; j<lcase[lcase_animList].ncomps; j++)
-      {
-        lcase[lcase_animList].menu[j] = 1;
-        lcase[lcase_animList].ictype[j] = 2;
-        lcase[lcase_animList].icind1[j] = j+1;
-        lcase[lcase_animList].icind2[j] = 0;
-        lcase[lcase_animList].iexist[j] = 0;
-        sprintf(lcase[lcase_animList].compName[j], "step");
-      }
-    }
-    calcSequence( dsSequence, anim_faktor, halfperiod, centerNode, anz, node, e_enqire, lcase, scale, surfFlag, colNr, steps, lcase_animList, dispFlag);
-    glutSetWindow( w0);
-
-    strcpy(lcase[lcase_animList].name,lcase[dsSequence.ds[0]].name);
-    strcpy(lcase[lcase_animList].dataset_text,lcase[dsSequence.ds[0]].dataset_text);
-    lcase[lcase_animList].step_number=lcase[anz->l-1].step_number+1;
-    lcase[lcase_animList].analysis_type=lcase[anz->l-1].analysis_type;
-
-    glutDisplayFunc ( DrawMenuAnimate );
-    DrawMenuAnimate();
-    activWindow = w1;
-  }
-  else /* load */
-  {
-    drawMode=1;
-    illumFlag=0;
-    glutSetWindow( w1 );
-
-    if(lcase_animList<0)
-    {
-      /* create an additional lcase after for the vector length of all steps */
-      if ( (lcase = (Datasets *)realloc((Datasets *)lcase, (anz->l+2) * sizeof(Datasets))) == NULL )
-      { printf("\n\n ERROR: malloc failure\n\n" ); exit(1); }
-
-      lcase[anz->l].ncomps = dsSequence.nds;
-      lcase[anz->l].irtype = 1;
-      lcase[anz->l].npheader = 0;
-      if(( lcase[anz->l].pheader=(char **)malloc( sizeof(char *))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-    
-      if ( (lcase[anz->l].nmax = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].nmin = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].max = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].min = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].dat = (float **)malloc( lcase[anz->l].ncomps * sizeof(float *))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].compName = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].icname = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      for(j=0; j<lcase[anz->l].ncomps; j++)
-      {
-        if ( (lcase[anz->l].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
-          printf("\n\n ERROR: malloc failure\n\n" );	               
-        if ( (lcase[anz->l].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-           printf("\n\n ERROR: malloc failed\n\n" );
-        if ( (lcase[anz->l].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-           printf("\n\n ERROR: malloc failed\n\n" );
-        lcase[anz->l].max[j]=-MAX_FLOAT;
-        lcase[anz->l].min[j]=MAX_FLOAT;
-      }
-      if ( (lcase[anz->l].menu = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].ictype = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].icind1 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].icind2 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-      if ( (lcase[anz->l].iexist = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );
-    
-      for(j=0; j<lcase[anz->l].ncomps; j++)
-      {
-        lcase[anz->l].menu[j] = 1;
-        lcase[anz->l].ictype[j] = 2;
-        lcase[anz->l].icind1[j] = j+1;
-        lcase[anz->l].icind2[j] = 0;
-        lcase[anz->l].iexist[j] = 0;
-      }
-      lcase_animList=anz->l;
-    }
-    else
-    {
-      /* realloc the additional lcase after for the vector length of all steps */
-      for(j=0; j<lcase[lcase_animList].ncomps; j++)
-      {
-        free(lcase[lcase_animList].dat[j]);
-        free(lcase[lcase_animList].compName[j]);
-        free(lcase[lcase_animList].icname[j]);
-      }
-  
-      lcase[lcase_animList].ncomps = dsSequence.nds;
-      lcase[lcase_animList].irtype = 1;
-      for(j=0; j<lcase[lcase_animList].npheader; j++) free(lcase[lcase_animList].pheader[j]);
-      lcase[lcase_animList].npheader = 0;
-    
-      if ( (lcase[lcase_animList].nmax = (int *)realloc( lcase[lcase_animList].nmax, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].nmin = (int *)realloc( lcase[lcase_animList].nmin, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].max = (float *)realloc( lcase[lcase_animList].max, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].min = (float *)realloc( lcase[lcase_animList].min, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].dat = (float **)realloc( lcase[lcase_animList].dat, lcase[lcase_animList].ncomps * sizeof(float *))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].compName = (char **)realloc( lcase[lcase_animList].compName, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].icname = (char **)realloc( lcase[lcase_animList].icname, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      for(j=0; j<lcase[lcase_animList].ncomps; j++)
-      {
-        if ( (lcase[lcase_animList].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
-          printf("\n\n ERROR: malloc failure\n\n" );	               
-        if ( (lcase[lcase_animList].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-           printf("\n\n ERROR: malloc failed\n\n" );
-        if ( (lcase[lcase_animList].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-           printf("\n\n ERROR: malloc failed\n\n" );
-        lcase[lcase_animList].max[j]=-MAX_FLOAT;
-        lcase[lcase_animList].min[j]=MAX_FLOAT;
-      }
-      if ( (lcase[lcase_animList].menu = (int *)realloc( lcase[lcase_animList].menu, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].ictype = (int *)realloc( lcase[lcase_animList].ictype, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].icind1 = (int *)realloc( lcase[lcase_animList].icind1, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].icind2 = (int *)realloc( lcase[lcase_animList].icind2, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-      if ( (lcase[lcase_animList].iexist = (int *)realloc( lcase[lcase_animList].iexist, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-        printf("\n\n ERROR: realloc failure\n\n" );
-    
-      for(j=0; j<lcase[lcase_animList].ncomps; j++)
-      {
-        lcase[lcase_animList].menu[j] = 1;
-        lcase[lcase_animList].ictype[j] = 2;
-        lcase[lcase_animList].icind1[j] = j+1;
-        lcase[lcase_animList].icind2[j] = 0;
-        lcase[lcase_animList].iexist[j] = 0;
-      }
-    }
-
-    calcSequence( dsSequence, anim_faktor, halfperiod, centerNode, anz, node, e_enqire, lcase, scale, surfFlag, colNr, steps, lcase_animList, dispFlag);
-    glutSetWindow( w0);
-
-    strcpy(lcase[lcase_animList].name,lcase[dsSequence.ds[0]].name);
-    strcpy(lcase[lcase_animList].dataset_text,lcase[dsSequence.ds[0]].dataset_text);
-    lcase[lcase_animList].step_number=lcase[anz->l-1].step_number+1;
-    lcase[lcase_animList].analysis_type=lcase[anz->l-1].analysis_type;
-    // cur_lc needed in DrawMenuSequence to plot max/min value in legend
-    set_cur_lc(lcase_animList);
-    lcase[lcase_animList].value=0;
-    lcase[lcase_animList].max[0]=vmax;
-    lcase[lcase_animList].min[0]=vmin;
-    lcase[lcase_animList].nmax[0]=nmax;
-    lcase[lcase_animList].nmin[0]=nmin;
-
-    glutDisplayFunc ( DrawMenuSequence );
-    DrawMenuSequence();
-    activWindow = w1;
-  }
-
-  for(n=0; n<lcase[lcase_animList].ncomps; n++)
-  {
-    lcase[lcase_animList].dat[n][0]=lcase[dsSequence.ds[n]].value;
-    if(( lcase[lcase_animList].pheader=(char **)realloc((char **)lcase[lcase_animList].pheader, (lcase[lcase_animList].npheader+1) * sizeof(char *))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if(( lcase[lcase_animList].pheader[lcase[lcase_animList].npheader]=(char *)malloc(MAX_LINE_LENGTH * sizeof(char))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    sprintf(lcase[lcase_animList].pheader[lcase[lcase_animList].npheader],"%s",lcase[dsSequence.ds[n]].dataset_text);
-    lcase[lcase_animList].npheader++;
-  }
-  glutSetWindow( w1 );
-  glutDisplayFunc ( DrawGraficSequence );
-  DrawGraficSequence();
-}
-
-
-
-void ConfigureAndShowWindow_Vector( void )
-{
-#if TEST
-  printf(" in ConfigureAndShowWindow_Vector\n");
-#endif 
-  int i,j,k,n;
-  int nmax=0, nmin=0;
-  double vmax=-MAX_FLOAT, vmin=MAX_FLOAT;
-  
-  if(!inpformat) return;
-  if(!dsSequence.nds) {  printf("ERROR: No ds selected:%d\n",dsSequence.nds); return; }
-
-  /* make sure the 1st frame uses the 1st ds */
-  animList=0;
-
-  glutSetWindow(w1);
-  if(!sequenceFlag)
-  {
-    drawModelEdges( list_model_edges, basCol[0], edgeWidth, anz->g, node );
-    if (surfFlag) drawDispListEdges(list_surf_edges, basCol[0], 1., 'f', node );
-    else          drawDispListEdges(list_elem_edges, basCol[0], 1., 'e', node );
-  }
-  glDeleteLists( (GLuint)list_anim_light, (GLint)range_animate_light );
-  range_animate_light=dsSequence.nds;
-  list_anim_light = glGenLists( (GLint)(range_animate_light) );
-
-  illumFlag=0;
-
-  /* load the loadcases for the vectors, has to be loaded prior to lcase allocation because the ncomps have to be extended before */
-
-  printf("Loading data, please wait\n");
-
-  for(i=0; i<dsSequence.nds; i++)
-  {
-    printf("ds[%d]:%d %s\n",i+1,dsSequence.ds[i]+1, lcase[dsSequence.ds[i]].name );
-
-    /* check if the data of the specified lcase (Dataset) are already available */
-    if (!lcase[dsSequence.ds[i]].loaded)
-    {
-      if( pre_readfrdblock(copiedNodeSets , dsSequence.ds[i], anz, node, lcase )==-1) 
-      {
-        printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", dsSequence.ds[i]+1); 
-        return;
-      }
-      calcDatasets( dsSequence.ds[i], anz, node, lcase );
-      recompileEntitiesInMenu(dsSequence.ds[i]);
-    }
-  }
-
-  if(lcase_animList<0)
-  {
-    /* create an additional lcase for the vector length of all steps */
-    if ( (lcase = (Datasets *)realloc((Datasets *)lcase, (anz->l+2) * sizeof(Datasets))) == NULL )
-      printf("\n\n ERROR: realloc failed, lcase\n\n") ;
-    strcpy(lcase[anz->l].name,lcase[dsSequence.ds[0]].name);
-    lcase[anz->l].ncomps = dsSequence.nds;
-    strcpy(lcase[anz->l].dataset_name,"");
-    strcpy(lcase[anz->l].dataset_text,"");
-    lcase[anz->l].value = 0.;
-    lcase[anz->l].irtype = 1;
-    if(( lcase[anz->l].pheader=(char **)malloc( sizeof(char *))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    lcase[anz->l].npheader = 0;
-    lcase[anz->l].fileptr = NULL;
-    lcase[anz->l].loaded = 1;
-    lcase[anz->l].step_number=0;
-
-    if ( (lcase[anz->l].nmax = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    if ( (lcase[anz->l].nmin = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    if ( (lcase[anz->l].max = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    if ( (lcase[anz->l].min = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    if ( (lcase[anz->l].dat = (float **)malloc( lcase[anz->l].ncomps * sizeof(float *))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    if ( (lcase[anz->l].compName = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    if ( (lcase[anz->l].icname = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    for(j=0; j<lcase[anz->l].ncomps; j++)
-    {
-      if ( (lcase[anz->l].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );	               
-      if ( (lcase[anz->l].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-         printf("\n\n ERROR: malloc failed\n\n" );
-      if ( (lcase[anz->l].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-         printf("\n\n ERROR: malloc failed\n\n" );
-      lcase[anz->l].max[j]=-MAX_FLOAT;
-      lcase[anz->l].min[j]=MAX_FLOAT;
-    }
-    if ( (lcase[anz->l].menu = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    if ( (lcase[anz->l].ictype = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    if ( (lcase[anz->l].icind1 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    if ( (lcase[anz->l].icind2 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    if ( (lcase[anz->l].iexist = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-
-    for(j=0; j<lcase[anz->l].ncomps; j++)
-    {
-      lcase[anz->l].menu[j] = 1;
-      lcase[anz->l].ictype[j] = 2;
-      lcase[anz->l].icind1[j] = j+1;
-      lcase[anz->l].icind2[j] = 0;
-      lcase[anz->l].iexist[j] = 0;
-    }
-    lcase_animList=anz->l;
-  }
-  else
-  {
-    /* realloc the additional lcase for the vector length of all steps */
-    for(j=0; j<lcase[lcase_animList].ncomps; j++)
-    {
-      free(lcase[lcase_animList].dat[j]);
-      free(lcase[lcase_animList].compName[j]);
-      free(lcase[lcase_animList].icname[j]);
-    }
-
-    lcase[lcase_animList].ncomps = dsSequence.nds;
-    lcase[lcase_animList].irtype = 1;
-    for(j=0; j<lcase[lcase_animList].npheader; j++) free(lcase[lcase_animList].pheader[j]);
-    lcase[lcase_animList].npheader = 0;
-    lcase[lcase_animList].fileptr = NULL;
-    lcase[lcase_animList].loaded = 1;
-
-    if ( (lcase[lcase_animList].nmax = (int *)realloc( lcase[lcase_animList].nmax, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if ( (lcase[lcase_animList].nmin = (int *)realloc( lcase[lcase_animList].nmin, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if ( (lcase[lcase_animList].max = (float *)realloc( lcase[lcase_animList].max, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if ( (lcase[lcase_animList].min = (float *)realloc( lcase[lcase_animList].min, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if ( (lcase[lcase_animList].dat = (float **)realloc( lcase[lcase_animList].dat, lcase[lcase_animList].ncomps * sizeof(float *))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if ( (lcase[lcase_animList].compName = (char **)realloc( lcase[lcase_animList].compName, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if ( (lcase[lcase_animList].icname = (char **)realloc( lcase[lcase_animList].icname, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    for(j=0; j<lcase[lcase_animList].ncomps; j++)
-    {
-      if ( (lcase[lcase_animList].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
-        printf("\n\n ERROR: malloc failure\n\n" );	               
-      if ( (lcase[lcase_animList].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-         printf("\n\n ERROR: malloc failed\n\n" );
-      if ( (lcase[lcase_animList].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
-         printf("\n\n ERROR: malloc failed\n\n" );
-      lcase[lcase_animList].max[j]=-MAX_FLOAT;
-      lcase[lcase_animList].min[j]=MAX_FLOAT;
-    }
-    if ( (lcase[lcase_animList].menu = (int *)realloc( lcase[lcase_animList].menu, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if ( (lcase[lcase_animList].ictype = (int *)realloc( lcase[lcase_animList].ictype, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if ( (lcase[lcase_animList].icind1 = (int *)realloc( lcase[lcase_animList].icind1, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if ( (lcase[lcase_animList].icind2 = (int *)realloc( lcase[lcase_animList].icind2, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if ( (lcase[lcase_animList].iexist = (int *)realloc( lcase[lcase_animList].iexist, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-
-    for(j=0; j<lcase[lcase_animList].ncomps; j++)
-    {
-      lcase[lcase_animList].menu[j] = 1;
-      lcase[lcase_animList].ictype[j] = 2;
-      lcase[lcase_animList].icind1[j] = j+1;
-      lcase[lcase_animList].icind2[j] = 0;
-      lcase[lcase_animList].iexist[j] = 0;
-    }
-  }
-  //cur_lc=lcase_animList;  // not active because some functions need the original dataset and use cur_lc to find it (cut)
-  set_cur_lc(dsSequence.ds[0]);
-
-  /* store and calculate the vector length */
-  for(n=0; n<dsSequence.nds; n++)
-  {
-    i=dsSequence.ds[n];
-    if(v_dim==4) sprintf(lcase[lcase_animList].compName[n], lcase[i].compName[cur_entity]);
-    else 
-    {
-      if(v_dim==3) sprintf(lcase[lcase_animList].compName[n], "v(%s,%s,%s)", lcase[i].compName[entity_v[0]], lcase[i].compName[entity_v[1]], lcase[i].compName[entity_v[2]]);
-      else         sprintf(lcase[lcase_animList].compName[n], "v(%s,%s)", lcase[i].compName[entity_v[0]], lcase[i].compName[entity_v[1]]);
-      /* delete blanks */
-      k=0; for(j=0; j<strlen(lcase[lcase_animList].compName[n]); j++) if(lcase[lcase_animList].compName[n][j]!=' ') { lcase[lcase_animList].compName[n][k++]=lcase[lcase_animList].compName[n][j]; }
-      lcase[lcase_animList].compName[n][k]='\0';
-    }
-    /* select the vector length (color plot) */
-    if (lcase[i].irtype == 3) { printf("Element results are not supported\n"); return; }
-
-    for(j=0; j<anz->n; j++)
-    {
-      if(node[node[j].nr].pflag==-1) continue;
-      if(v_dim==4)
-      {
-        lcase[lcase_animList].dat[n][node[j].nr]=lcase[i].dat[entity_v[3]][node[j].nr];
-      }
-      else
-      {
-        lcase[lcase_animList].dat[n][node[j].nr]=0.;
-        for(k=0; k<v_dim; k++)
-          lcase[lcase_animList].dat[n][node[j].nr]+=lcase[i].dat[entity_v[k]][node[j].nr]*lcase[i].dat[entity_v[k]][node[j].nr];
-        lcase[lcase_animList].dat[n][node[j].nr]=sqrt(lcase[lcase_animList].dat[n][node[j].nr]);
-      }
-    }
-  }
-
-  /* max and min for plotting */
-  for(k=0; k<lcase[lcase_animList].ncomps; k++)
-  {
-    for(j=0; j<anz->n; j++)
-    {
-      if(node[node[j].nr].pflag==-1) continue;
-      if(lcase[lcase_animList].dat[k][node[j].nr] > vmax)
-      {
-        vmax=lcase[lcase_animList].dat[k][node[j].nr];
-        nmax=node[j].nr;
-      }
-      if(lcase[lcase_animList].dat[k][node[j].nr] < vmin)
-      {
-        vmin=lcase[lcase_animList].dat[k][node[j].nr];
-        nmin=node[j].nr;
-      }
-    }
-  }
-  //printf (" maxval:%e at node:%d\n minval:%e at node:%d  cur_lc:%d cur_entity:%d\n", vmax, nmax, vmin, nmin, cur_lc, cur_entity);
-
-  /* set to the max-vals in range */
-  if(scale->smin ==scale->smax )
-  {
-    scale->smin = vmin;
-    scale->smax = vmax;
-  }
-
-  /* save the overall values for the drawing */ 
-  lcase[lcase_animList].max[0] =vmax;
-  lcase[lcase_animList].nmax[0]=nmax;
-  lcase[lcase_animList].min[0] =vmin;
-  lcase[lcase_animList].nmin[0]=nmin;
-    
-  if(vmax*vmax>vmin*vmin) v_factor=1./vmax;
-  else v_factor=1./vmin;
-
-  /* prepare the color values */
-  for(k=0; k<lcase[lcase_animList].ncomps; k++)
-  {
-    nodalDataset( k, lcase_animList, anz, scale, node, lcase, colNr, 1 );
-    lcase[lcase_animList].dat[k][0]=lcase[dsSequence.ds[k]].value;
-    if(( lcase[lcase_animList].pheader=(char **)realloc((char **)lcase[lcase_animList].pheader, (lcase[lcase_animList].npheader+1) * sizeof(char *))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    if(( lcase[lcase_animList].pheader[lcase[lcase_animList].npheader]=(char *)malloc(MAX_LINE_LENGTH * sizeof(char))) == NULL )
-      printf("\n\n ERROR: malloc failure\n\n" );
-    sprintf(lcase[lcase_animList].pheader[lcase[lcase_animList].npheader],"%s",lcase[dsSequence.ds[k]].dataset_text);
-    lcase[lcase_animList].npheader++;
-
-    glutSetWindow( w1);
-    if ( (list_animate = (GLuint *)realloc( list_animate, (k+1) * sizeof(GLuint))) == NULL )
-      printf("\n\n ERROR: realloc failure\n\n" );
-    list_animate[k]=list_anim_light+k;
-    if (surfFlag)   drawDispList( list_animate[k], 'f', node, colNr );
-    if (!surfFlag)  drawDispList( list_animate[k], 'e', node, colNr );
-  }
-  lcase[lcase_animList].value=0;
-  lcase[lcase_animList].dataset_text[0]=0;
-  strcpy(lcase[lcase_animList].name,lcase[dsSequence.ds[0]].name);
-  lcase[lcase_animList].step_number=lcase[anz->l-1].step_number+1;
-  lcase[lcase_animList].analysis_type=lcase[anz->l-1].analysis_type;
-
-  glutSetWindow( w0);
-  glutDisplayFunc ( DrawMenuSequence );
-  DrawMenuSequence();
-  glutSetWindow( w1 );
-  glutDisplayFunc ( DrawGraficSequence );
-  DrawGraficSequence();
-}
+// void ConfigureAndShowWindow_Light()
+// {
+//   int j;
+// #if TEST
+//   printf(" in ConfigureAndShowWindow_Light\n");
+// #endif
+//   if(!inpformat) return;
+
+//   glutSetWindow( w2);
+//   DrawAxes();
+
+//   if(sequenceFlag)
+//   {
+//     ConfigureAndShowWindow_Sequence(1);
+//     return;
+//   }
+
+//   glutPostRedisplay();
+//  reselect:;
+//   glutSetWindow( w0);
+//   if (animFlag==0) { glutDisplayFunc ( DrawMenuLight ); DrawMenuLight();  }
+//   else
+//   {
+//     if(drawMode==2)
+//     {
+//       /* change the color to "illuminated" */
+//       for (j=0; j<anzGeo->psets; j++ )
+//       {
+//         if((pset[j].type[0]=='e')||(pset[j].type[0]=='f'))
+// 	{
+//           if(pset[j].type[1]==0) pset[j].type[2]=0;
+//           if(pset[j].type[1]=='b');
+//           else if(pset[j].type[2]=='b') { pset[j].type[1]='b'; pset[j].type[2]=0; }
+//           else { pset[j].type[1]=0; pset[j].type[2]=0; }
+// 	}
+//       }
+//       glutDisplayFunc ( DrawMenuAnimate ); DrawMenuAnimate();
+//     }
+//     else { glutDisplayFunc ( DrawMenuLoad ); DrawMenuLoad(); }
+//   }
+
+//   glutSetWindow( w1 );
+//   activWindow = w1;
+//   if (animFlag==0)
+//   {
+//     /* reset entities */
+//     if(surfFlag)
+//     {
+//       if(blendFlag) sprintf(buffer,"fb all %s", entitycol[DEF_COL].name);
+//       else          sprintf(buffer,"f all %s",  entitycol[DEF_COL].name);
+//     }
+//     else
+//     {
+//       if(blendFlag) sprintf(buffer,"eb all %s", entitycol[DEF_COL].name);
+//       else          sprintf(buffer,"e all %s", entitycol[DEF_COL].name);
+//     }
+//     plot(buffer);
+
+//     /* change to disp-lists */
+//     drawMode=2;
+//     updateDispLists();
+//     glutDisplayFunc ( DrawGraficLight );
+//     DrawGraficLight();
+//   }
+//   else if (animFlag==1)
+//   {
+//     if((drawMode!=2)&&(cur_entity>=lcase[pre_lc].ncomps))
+//     {
+//       printf(" Warning: No valid entity or shaded view selected\n\n");
+//       cur_entity=lcase[pre_lc].ncomps-1;
+//       if(drawMode!=4) drawMode=2;
+//       goto reselect;
+//     }
+//     set_cur_lc(pre_lc);
+
+//     printf ("\nDataset:%d name= %s\n", cur_lc+1, lcase[cur_lc].name);
+
+//     glDeleteLists( (GLuint)list_anim_light, (GLint)range_animate_light );
+//     glDeleteLists( (GLuint)list_anim_model_edges, (GLint)range_animate_light );
+//     glDeleteLists( (GLuint)list_anim_surf_edges, (GLint)range_animate_light );
+//     glDeleteLists( (GLuint)list_anim_elem_edges, (GLint)range_animate_light );
+//     range_animate_light = anim_steps;
+//     list_anim_light = glGenLists( (GLint)(range_animate_light) );
+//     list_anim_model_edges = glGenLists( (GLint)(range_animate_light) );
+//     list_anim_surf_edges = glGenLists( (GLint)(range_animate_light) );
+//     list_anim_elem_edges = glGenLists( (GLint)(range_animate_light) );
+
+//     if((anim_alfa=(int *)realloc((int *)anim_alfa, (range_animate_light+1)*sizeof(char *)))==NULL)
+//     { printf("\n\n ERROR: malloc failure\n\n" ); exit(1); }
+
+//     updateDispLists();
+//     calcAnimation( anim_steps, anim_faktor, anim_alfa, halfperiod, centerNode, anz, node, e_enqire, lcase, cur_lc, cur_entity, scale, surfFlag, colNr, steps );
+//     glutDisplayFunc ( DrawGraficAnimate );
+//     DrawGraficAnimate();
+//   }
+// }
+
+
+
+// void ConfigureAndShowWindow_Plot( void )
+// {
+//   int i;
+// #if TEST
+//   printf(" in ConfigureAndShowWindow_Plot\n");
+// #endif
+
+//   if(!inpformat)
+//   {
+//     if(cur_lc<anz->l) nodalDataset( cur_entity, cur_lc, anz, scale, node, lcase, colNr, 1 );
+//     return;
+//   }
+
+//   glutSetWindow( w2);
+//   DrawAxes();
+
+//   for(i=0; i<anzGeo->psets; i++)
+//   {
+//     if ((pset[i].type[1]=='v')&&(anz->l)) break;
+//   }
+//   if (i==anzGeo->psets)
+//   {
+//     glutSetWindow( w0);
+//     glutDisplayFunc ( DrawMenuSet );
+//     DrawMenuSet();
+//   }
+//   else
+//   {
+//     if(cur_lc<anz->l) nodalDataset( cur_entity, cur_lc, anz, scale, node, lcase, colNr, 1 );
+//     glutSetWindow( w0);
+//     glutDisplayFunc ( DrawMenuLoad );
+//     DrawMenuLoad();
+//   }
+//   glutSetWindow( w1);
+//   glutDisplayFunc ( DrawPickedItems );
+//   DrawPickedItems();
+// }
+
+
+
+// void ConfigureAndShowWindow_Load( void )
+// {
+// #if TEST
+//   printf(" in ConfigureAndShowWindow_Load\n");
+// #endif
+
+//   if(sequenceFlag)
+//   {
+//     if(inpformat) ConfigureAndShowWindow_Sequence(0);
+//     else { printf("ERROR in ConfigureAndShowWindow_Load: not possible in -bg mode.\n"); }
+//     return;
+//   }
+
+//   if(inpformat)
+//   {
+//     glutSetWindow( w2);
+//     DrawAxes();
+
+//     glutSetWindow( w1 );
+//   }
+
+//   if (lcase[cur_lc].irtype == 3) /* element data */
+//   {
+//     elementDataset( cur_entity, cur_lc, anz, scale, lcase, offset, maxIndex, steps );
+//   }
+//   else
+//   {
+//     nodalDataset( cur_entity, cur_lc, anz, scale, node, lcase, colNr, 1 );
+//   }
+
+//   if(inpformat)
+//   {
+//     glutSetWindow( w0);
+//     glutDisplayFunc ( DrawMenuLoad );
+//     DrawMenuLoad();
+
+//     /* change to disp-lists */
+//     drawMode=1;
+//     updateDispLists();
+//     glutSetWindow( w1);
+//     glutDisplayFunc ( DrawGraficLoad );
+//     DrawGraficLoad();
+//   }
+// }
+
+
+
+// void ConfigureAndShowWindow_Sequence( int dispFlag )
+// {
+// #if TEST
+//   printf(" in ConfigureAndShowWindow_Sequence\n");
+// #endif
+//   int i,j, n;
+//   int nmax=0, nmin=0;
+//   double vmax=-MAX_FLOAT, vmin=MAX_FLOAT;
+
+//   if(!inpformat) return;
+
+//   /* make sure the 1st frame uses the 1st ds */
+//   animList=0;
+
+//   glutSetWindow(w1);
+//   glDeleteLists( (GLuint)list_anim_light, (GLint)range_animate_light );
+//   glDeleteLists( (GLuint)list_anim_model_edges, (GLint)range_animate_light );
+//   glDeleteLists( (GLuint)list_anim_surf_edges, (GLint)range_animate_light );
+//   glDeleteLists( (GLuint)list_anim_elem_edges, (GLint)range_animate_light );
+//   range_animate_light = dsSequence.nds;
+//   list_anim_light = glGenLists( (GLint)(range_animate_light) );
+//   list_anim_model_edges = glGenLists( (GLint)(range_animate_light) );
+//   list_anim_surf_edges = glGenLists( (GLint)(range_animate_light) );
+//   list_anim_elem_edges = glGenLists( (GLint)(range_animate_light) );
+
+//   /* load the loadcases for the sequence, has to be loaded prior to lcase allocation because the ncomps have to be extended before */
+
+//   printf("Loading data, please wait\n");
+
+//   for(i=0; i<dsSequence.nds; i++)
+//   {
+//     //printf("ds[%d]:%d %s\n",i+1,dsSequence.ds[i]+1, lcase[dsSequence.ds[i]].name );
+
+//     /* check if the data of the specified lcase (Dataset) are already available */
+//     if (!lcase[dsSequence.ds[i]].loaded)
+//     {
+//       if( pre_readfrdblock(copiedNodeSets, dsSequence.ds[i], anz, node, lcase )==-1)
+//       {
+//         printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", dsSequence.ds[i]+1);
+//         return;
+//       }
+//       calcDatasets( dsSequence.ds[i], anz, node, lcase );
+//       recompileEntitiesInMenu(dsSequence.ds[i]);
+//     }
+
+//     if(vmax<lcase[dsSequence.ds[i]].max[cur_entity])
+//     { vmax=lcase[dsSequence.ds[i]].max[cur_entity]; nmax=lcase[dsSequence.ds[i]].nmax[cur_entity]; }
+//     if(vmin>lcase[dsSequence.ds[i]].min[cur_entity])
+//     { vmin=lcase[dsSequence.ds[i]].min[cur_entity]; nmin=lcase[dsSequence.ds[i]].nmin[cur_entity]; }
+//   }
+//   /* set to the max-vals in range */
+//   if((scale->smin ==scale->smax )&&(scale->lock!='l'))
+//   {
+//     scale->smin = vmin;
+//     scale->smax = vmax;
+//   }
+
+//   if(drawMode==2) /* light */
+//   {
+//     /* switch the psets to the shaded mode */
+//     for (j=0; j<anzGeo->psets; j++ )
+//     {
+//       if((pset[j].type[0]=='e')||(pset[j].type[0]=='f'))
+//       {
+//         if(pset[j].type[1]==0) pset[j].type[2]=0;
+//         if(pset[j].type[1]=='b');
+//         else if(pset[j].type[2]=='b') { pset[j].type[1]='b'; pset[j].type[2]=0; }
+//         else pset[j].type[1]=0;
+//       }
+//     }
+
+//     illumFlag=1;
+//     glutSetWindow( w1 );
+
+//     if(lcase_animList<0)
+//     {
+//       /* create an additional lcase for the vector length of all steps */
+//       if ( (lcase = (Datasets *)realloc((Datasets *)lcase, (anz->l+2) * sizeof(Datasets))) == NULL )
+//       { printf("\n\n ERROR: malloc failure\n\n" ); exit(1); }
+
+//       lcase[anz->l].ncomps = dsSequence.nds;
+//       lcase[anz->l].irtype = 1;
+//       lcase[anz->l].npheader = 0;
+//       if(( lcase[anz->l].pheader=(char **)malloc( sizeof(char *))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       lcase[anz->l].fileptr = NULL;
+//       lcase[anz->l].loaded = 1;
+//       lcase[anz->l].value=0;
+//       strcpy(lcase[anz->l].analysis_name,"");
+//       strcpy(lcase[anz->l].dataset_name,"");
+//       strcpy(lcase[anz->l].dataset_text,"");
+//       lcase[anz->l].step_number=0;
+//       lcase[anz->l].analysis_type=1;
+
+//       if ( (lcase[anz->l].nmax = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].nmin = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].max = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].min = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].dat = (float **)malloc( lcase[anz->l].ncomps * sizeof(float *))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].compName = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].icname = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       for(j=0; j<lcase[anz->l].ncomps; j++)
+//       {
+//         if ( (lcase[anz->l].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
+//           printf("\n\n ERROR: malloc failure\n\n" );
+//         if ( (lcase[anz->l].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//            printf("\n\n ERROR: malloc failed\n\n" );
+//         if ( (lcase[anz->l].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//            printf("\n\n ERROR: malloc failed\n\n" );
+//         lcase[anz->l].max[j]=-MAX_FLOAT;
+//         lcase[anz->l].min[j]=MAX_FLOAT;
+//       }
+//       if ( (lcase[anz->l].menu = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].ictype = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].icind1 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].icind2 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].iexist = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+
+//       for(j=0; j<lcase[anz->l].ncomps; j++)
+//       {
+//         lcase[anz->l].menu[j] = 1;
+//         lcase[anz->l].ictype[j] = 2;
+//         lcase[anz->l].icind1[j] = j+1;
+//         lcase[anz->l].icind2[j] = 0;
+//         lcase[anz->l].iexist[j] = 0;
+//         sprintf(lcase[anz->l].compName[j], "step");
+//       }
+//       lcase_animList=anz->l;
+//     }
+//     else
+//     {
+//       /* realloc the additional lcase after for the vector length of all steps */
+//       for(j=0; j<lcase[lcase_animList].ncomps; j++)
+//       {
+//         free(lcase[lcase_animList].dat[j]);
+//         free(lcase[lcase_animList].compName[j]);
+//         free(lcase[lcase_animList].icname[j]);
+//       }
+
+//       lcase[lcase_animList].ncomps = dsSequence.nds;
+//       lcase[lcase_animList].irtype = 1;
+//       for(j=0; j<lcase[lcase_animList].npheader; j++) free(lcase[lcase_animList].pheader[j]);
+//       lcase[lcase_animList].npheader = 0;
+//       lcase[lcase_animList].fileptr = NULL;
+//       lcase[lcase_animList].loaded = 1;
+
+//       if ( (lcase[lcase_animList].nmax = (int *)realloc( lcase[lcase_animList].nmax, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].nmin = (int *)realloc( lcase[lcase_animList].nmin, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].max = (float *)realloc( lcase[lcase_animList].max, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].min = (float *)realloc( lcase[lcase_animList].min, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].dat = (float **)realloc( lcase[lcase_animList].dat, lcase[lcase_animList].ncomps * sizeof(float *))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].compName = (char **)realloc( lcase[lcase_animList].compName, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].icname = (char **)realloc( lcase[lcase_animList].icname, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       for(j=0; j<lcase[lcase_animList].ncomps; j++)
+//       {
+//         if ( (lcase[lcase_animList].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
+//           printf("\n\n ERROR: malloc failure\n\n" );
+//         if ( (lcase[lcase_animList].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//            printf("\n\n ERROR: malloc failed\n\n" );
+//         if ( (lcase[lcase_animList].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//            printf("\n\n ERROR: malloc failed\n\n" );
+//         lcase[lcase_animList].max[j]=-MAX_FLOAT;
+//         lcase[lcase_animList].min[j]=MAX_FLOAT;
+//       }
+//       if ( (lcase[lcase_animList].menu = (int *)realloc( lcase[lcase_animList].menu, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].ictype = (int *)realloc( lcase[lcase_animList].ictype, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].icind1 = (int *)realloc( lcase[lcase_animList].icind1, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].icind2 = (int *)realloc( lcase[lcase_animList].icind2, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].iexist = (int *)realloc( lcase[lcase_animList].iexist, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+
+//       for(j=0; j<lcase[lcase_animList].ncomps; j++)
+//       {
+//         lcase[lcase_animList].menu[j] = 1;
+//         lcase[lcase_animList].ictype[j] = 2;
+//         lcase[lcase_animList].icind1[j] = j+1;
+//         lcase[lcase_animList].icind2[j] = 0;
+//         lcase[lcase_animList].iexist[j] = 0;
+//         sprintf(lcase[lcase_animList].compName[j], "step");
+//       }
+//     }
+//     calcSequence( dsSequence, anim_faktor, halfperiod, centerNode, anz, node, e_enqire, lcase, scale, surfFlag, colNr, steps, lcase_animList, dispFlag);
+//     glutSetWindow( w0);
+
+//     strcpy(lcase[lcase_animList].name,lcase[dsSequence.ds[0]].name);
+//     strcpy(lcase[lcase_animList].dataset_text,lcase[dsSequence.ds[0]].dataset_text);
+//     lcase[lcase_animList].step_number=lcase[anz->l-1].step_number+1;
+//     lcase[lcase_animList].analysis_type=lcase[anz->l-1].analysis_type;
+
+//     glutDisplayFunc ( DrawMenuAnimate );
+//     DrawMenuAnimate();
+//     activWindow = w1;
+//   }
+//   else /* load */
+//   {
+//     drawMode=1;
+//     illumFlag=0;
+//     glutSetWindow( w1 );
+
+//     if(lcase_animList<0)
+//     {
+//       /* create an additional lcase after for the vector length of all steps */
+//       if ( (lcase = (Datasets *)realloc((Datasets *)lcase, (anz->l+2) * sizeof(Datasets))) == NULL )
+//       { printf("\n\n ERROR: malloc failure\n\n" ); exit(1); }
+
+//       lcase[anz->l].ncomps = dsSequence.nds;
+//       lcase[anz->l].irtype = 1;
+//       lcase[anz->l].npheader = 0;
+//       if(( lcase[anz->l].pheader=(char **)malloc( sizeof(char *))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+
+//       if ( (lcase[anz->l].nmax = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].nmin = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].max = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].min = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].dat = (float **)malloc( lcase[anz->l].ncomps * sizeof(float *))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].compName = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].icname = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       for(j=0; j<lcase[anz->l].ncomps; j++)
+//       {
+//         if ( (lcase[anz->l].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
+//           printf("\n\n ERROR: malloc failure\n\n" );
+//         if ( (lcase[anz->l].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//            printf("\n\n ERROR: malloc failed\n\n" );
+//         if ( (lcase[anz->l].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//            printf("\n\n ERROR: malloc failed\n\n" );
+//         lcase[anz->l].max[j]=-MAX_FLOAT;
+//         lcase[anz->l].min[j]=MAX_FLOAT;
+//       }
+//       if ( (lcase[anz->l].menu = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].ictype = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].icind1 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].icind2 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].iexist = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+
+//       for(j=0; j<lcase[anz->l].ncomps; j++)
+//       {
+//         lcase[anz->l].menu[j] = 1;
+//         lcase[anz->l].ictype[j] = 2;
+//         lcase[anz->l].icind1[j] = j+1;
+//         lcase[anz->l].icind2[j] = 0;
+//         lcase[anz->l].iexist[j] = 0;
+//       }
+//       lcase_animList=anz->l;
+//     }
+//     else
+//     {
+//       /* realloc the additional lcase after for the vector length of all steps */
+//       for(j=0; j<lcase[lcase_animList].ncomps; j++)
+//       {
+//         free(lcase[lcase_animList].dat[j]);
+//         free(lcase[lcase_animList].compName[j]);
+//         free(lcase[lcase_animList].icname[j]);
+//       }
+
+//       lcase[lcase_animList].ncomps = dsSequence.nds;
+//       lcase[lcase_animList].irtype = 1;
+//       for(j=0; j<lcase[lcase_animList].npheader; j++) free(lcase[lcase_animList].pheader[j]);
+//       lcase[lcase_animList].npheader = 0;
+
+//       if ( (lcase[lcase_animList].nmax = (int *)realloc( lcase[lcase_animList].nmax, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].nmin = (int *)realloc( lcase[lcase_animList].nmin, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].max = (float *)realloc( lcase[lcase_animList].max, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].min = (float *)realloc( lcase[lcase_animList].min, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].dat = (float **)realloc( lcase[lcase_animList].dat, lcase[lcase_animList].ncomps * sizeof(float *))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].compName = (char **)realloc( lcase[lcase_animList].compName, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].icname = (char **)realloc( lcase[lcase_animList].icname, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       for(j=0; j<lcase[lcase_animList].ncomps; j++)
+//       {
+//         if ( (lcase[lcase_animList].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
+//           printf("\n\n ERROR: malloc failure\n\n" );
+//         if ( (lcase[lcase_animList].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//            printf("\n\n ERROR: malloc failed\n\n" );
+//         if ( (lcase[lcase_animList].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//            printf("\n\n ERROR: malloc failed\n\n" );
+//         lcase[lcase_animList].max[j]=-MAX_FLOAT;
+//         lcase[lcase_animList].min[j]=MAX_FLOAT;
+//       }
+//       if ( (lcase[lcase_animList].menu = (int *)realloc( lcase[lcase_animList].menu, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].ictype = (int *)realloc( lcase[lcase_animList].ictype, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].icind1 = (int *)realloc( lcase[lcase_animList].icind1, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].icind2 = (int *)realloc( lcase[lcase_animList].icind2, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+//       if ( (lcase[lcase_animList].iexist = (int *)realloc( lcase[lcase_animList].iexist, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//         printf("\n\n ERROR: realloc failure\n\n" );
+
+//       for(j=0; j<lcase[lcase_animList].ncomps; j++)
+//       {
+//         lcase[lcase_animList].menu[j] = 1;
+//         lcase[lcase_animList].ictype[j] = 2;
+//         lcase[lcase_animList].icind1[j] = j+1;
+//         lcase[lcase_animList].icind2[j] = 0;
+//         lcase[lcase_animList].iexist[j] = 0;
+//       }
+//     }
+
+//     calcSequence( dsSequence, anim_faktor, halfperiod, centerNode, anz, node, e_enqire, lcase, scale, surfFlag, colNr, steps, lcase_animList, dispFlag);
+//     glutSetWindow( w0);
+
+//     strcpy(lcase[lcase_animList].name,lcase[dsSequence.ds[0]].name);
+//     strcpy(lcase[lcase_animList].dataset_text,lcase[dsSequence.ds[0]].dataset_text);
+//     lcase[lcase_animList].step_number=lcase[anz->l-1].step_number+1;
+//     lcase[lcase_animList].analysis_type=lcase[anz->l-1].analysis_type;
+//     // cur_lc needed in DrawMenuSequence to plot max/min value in legend
+//     set_cur_lc(lcase_animList);
+//     lcase[lcase_animList].value=0;
+//     lcase[lcase_animList].max[0]=vmax;
+//     lcase[lcase_animList].min[0]=vmin;
+//     lcase[lcase_animList].nmax[0]=nmax;
+//     lcase[lcase_animList].nmin[0]=nmin;
+
+//     glutDisplayFunc ( DrawMenuSequence );
+//     DrawMenuSequence();
+//     activWindow = w1;
+//   }
+
+//   for(n=0; n<lcase[lcase_animList].ncomps; n++)
+//   {
+//     lcase[lcase_animList].dat[n][0]=lcase[dsSequence.ds[n]].value;
+//     if(( lcase[lcase_animList].pheader=(char **)realloc((char **)lcase[lcase_animList].pheader, (lcase[lcase_animList].npheader+1) * sizeof(char *))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if(( lcase[lcase_animList].pheader[lcase[lcase_animList].npheader]=(char *)malloc(MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     sprintf(lcase[lcase_animList].pheader[lcase[lcase_animList].npheader],"%s",lcase[dsSequence.ds[n]].dataset_text);
+//     lcase[lcase_animList].npheader++;
+//   }
+//   glutSetWindow( w1 );
+//   glutDisplayFunc ( DrawGraficSequence );
+//   DrawGraficSequence();
+// }
+
+
+
+// void ConfigureAndShowWindow_Vector( void )
+// {
+// #if TEST
+//   printf(" in ConfigureAndShowWindow_Vector\n");
+// #endif
+//   int i,j,k,n;
+//   int nmax=0, nmin=0;
+//   double vmax=-MAX_FLOAT, vmin=MAX_FLOAT;
+
+//   if(!inpformat) return;
+//   if(!dsSequence.nds) {  printf("ERROR: No ds selected:%d\n",dsSequence.nds); return; }
+
+//   /* make sure the 1st frame uses the 1st ds */
+//   animList=0;
+
+//   glutSetWindow(w1);
+//   if(!sequenceFlag)
+//   {
+//     drawModelEdges( list_model_edges, basCol[0], edgeWidth, anz->g, node );
+//     if (surfFlag) drawDispListEdges(list_surf_edges, basCol[0], 1., 'f', node );
+//     else          drawDispListEdges(list_elem_edges, basCol[0], 1., 'e', node );
+//   }
+//   glDeleteLists( (GLuint)list_anim_light, (GLint)range_animate_light );
+//   range_animate_light=dsSequence.nds;
+//   list_anim_light = glGenLists( (GLint)(range_animate_light) );
+
+//   illumFlag=0;
+
+//   /* load the loadcases for the vectors, has to be loaded prior to lcase allocation because the ncomps have to be extended before */
+
+//   printf("Loading data, please wait\n");
+
+//   for(i=0; i<dsSequence.nds; i++)
+//   {
+//     printf("ds[%d]:%d %s\n",i+1,dsSequence.ds[i]+1, lcase[dsSequence.ds[i]].name );
+
+//     /* check if the data of the specified lcase (Dataset) are already available */
+//     if (!lcase[dsSequence.ds[i]].loaded)
+//     {
+//       if( pre_readfrdblock(copiedNodeSets , dsSequence.ds[i], anz, node, lcase )==-1)
+//       {
+//         printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", dsSequence.ds[i]+1);
+//         return;
+//       }
+//       calcDatasets( dsSequence.ds[i], anz, node, lcase );
+//       recompileEntitiesInMenu(dsSequence.ds[i]);
+//     }
+//   }
+
+//   if(lcase_animList<0)
+//   {
+//     /* create an additional lcase for the vector length of all steps */
+//     if ( (lcase = (Datasets *)realloc((Datasets *)lcase, (anz->l+2) * sizeof(Datasets))) == NULL )
+//       printf("\n\n ERROR: realloc failed, lcase\n\n") ;
+//     strcpy(lcase[anz->l].name,lcase[dsSequence.ds[0]].name);
+//     lcase[anz->l].ncomps = dsSequence.nds;
+//     strcpy(lcase[anz->l].dataset_name,"");
+//     strcpy(lcase[anz->l].dataset_text,"");
+//     lcase[anz->l].value = 0.;
+//     lcase[anz->l].irtype = 1;
+//     if(( lcase[anz->l].pheader=(char **)malloc( sizeof(char *))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     lcase[anz->l].npheader = 0;
+//     lcase[anz->l].fileptr = NULL;
+//     lcase[anz->l].loaded = 1;
+//     lcase[anz->l].step_number=0;
+
+//     if ( (lcase[anz->l].nmax = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     if ( (lcase[anz->l].nmin = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     if ( (lcase[anz->l].max = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     if ( (lcase[anz->l].min = (float *)malloc( lcase[anz->l].ncomps * sizeof(float))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     if ( (lcase[anz->l].dat = (float **)malloc( lcase[anz->l].ncomps * sizeof(float *))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     if ( (lcase[anz->l].compName = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     if ( (lcase[anz->l].icname = (char **)malloc( lcase[anz->l].ncomps * sizeof(char *))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     for(j=0; j<lcase[anz->l].ncomps; j++)
+//     {
+//       if ( (lcase[anz->l].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[anz->l].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//          printf("\n\n ERROR: malloc failed\n\n" );
+//       if ( (lcase[anz->l].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//          printf("\n\n ERROR: malloc failed\n\n" );
+//       lcase[anz->l].max[j]=-MAX_FLOAT;
+//       lcase[anz->l].min[j]=MAX_FLOAT;
+//     }
+//     if ( (lcase[anz->l].menu = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     if ( (lcase[anz->l].ictype = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     if ( (lcase[anz->l].icind1 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     if ( (lcase[anz->l].icind2 = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     if ( (lcase[anz->l].iexist = (int *)malloc( lcase[anz->l].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+
+//     for(j=0; j<lcase[anz->l].ncomps; j++)
+//     {
+//       lcase[anz->l].menu[j] = 1;
+//       lcase[anz->l].ictype[j] = 2;
+//       lcase[anz->l].icind1[j] = j+1;
+//       lcase[anz->l].icind2[j] = 0;
+//       lcase[anz->l].iexist[j] = 0;
+//     }
+//     lcase_animList=anz->l;
+//   }
+//   else
+//   {
+//     /* realloc the additional lcase for the vector length of all steps */
+//     for(j=0; j<lcase[lcase_animList].ncomps; j++)
+//     {
+//       free(lcase[lcase_animList].dat[j]);
+//       free(lcase[lcase_animList].compName[j]);
+//       free(lcase[lcase_animList].icname[j]);
+//     }
+
+//     lcase[lcase_animList].ncomps = dsSequence.nds;
+//     lcase[lcase_animList].irtype = 1;
+//     for(j=0; j<lcase[lcase_animList].npheader; j++) free(lcase[lcase_animList].pheader[j]);
+//     lcase[lcase_animList].npheader = 0;
+//     lcase[lcase_animList].fileptr = NULL;
+//     lcase[lcase_animList].loaded = 1;
+
+//     if ( (lcase[lcase_animList].nmax = (int *)realloc( lcase[lcase_animList].nmax, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if ( (lcase[lcase_animList].nmin = (int *)realloc( lcase[lcase_animList].nmin, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if ( (lcase[lcase_animList].max = (float *)realloc( lcase[lcase_animList].max, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if ( (lcase[lcase_animList].min = (float *)realloc( lcase[lcase_animList].min, lcase[lcase_animList].ncomps * sizeof(float))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if ( (lcase[lcase_animList].dat = (float **)realloc( lcase[lcase_animList].dat, lcase[lcase_animList].ncomps * sizeof(float *))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if ( (lcase[lcase_animList].compName = (char **)realloc( lcase[lcase_animList].compName, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if ( (lcase[lcase_animList].icname = (char **)realloc( lcase[lcase_animList].icname, lcase[lcase_animList].ncomps * sizeof(char *))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     for(j=0; j<lcase[lcase_animList].ncomps; j++)
+//     {
+//       if ( (lcase[lcase_animList].dat[j] = (float *)malloc( (anz->nmax+1) * sizeof(float))) == NULL )
+//         printf("\n\n ERROR: malloc failure\n\n" );
+//       if ( (lcase[lcase_animList].compName[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//          printf("\n\n ERROR: malloc failed\n\n" );
+//       if ( (lcase[lcase_animList].icname[j] = (char *)malloc( MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//          printf("\n\n ERROR: malloc failed\n\n" );
+//       lcase[lcase_animList].max[j]=-MAX_FLOAT;
+//       lcase[lcase_animList].min[j]=MAX_FLOAT;
+//     }
+//     if ( (lcase[lcase_animList].menu = (int *)realloc( lcase[lcase_animList].menu, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if ( (lcase[lcase_animList].ictype = (int *)realloc( lcase[lcase_animList].ictype, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if ( (lcase[lcase_animList].icind1 = (int *)realloc( lcase[lcase_animList].icind1, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if ( (lcase[lcase_animList].icind2 = (int *)realloc( lcase[lcase_animList].icind2, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if ( (lcase[lcase_animList].iexist = (int *)realloc( lcase[lcase_animList].iexist, lcase[lcase_animList].ncomps * sizeof(int))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+
+//     for(j=0; j<lcase[lcase_animList].ncomps; j++)
+//     {
+//       lcase[lcase_animList].menu[j] = 1;
+//       lcase[lcase_animList].ictype[j] = 2;
+//       lcase[lcase_animList].icind1[j] = j+1;
+//       lcase[lcase_animList].icind2[j] = 0;
+//       lcase[lcase_animList].iexist[j] = 0;
+//     }
+//   }
+//   //cur_lc=lcase_animList;  // not active because some functions need the original dataset and use cur_lc to find it (cut)
+//   set_cur_lc(dsSequence.ds[0]);
+
+//   /* store and calculate the vector length */
+//   for(n=0; n<dsSequence.nds; n++)
+//   {
+//     i=dsSequence.ds[n];
+//     if(v_dim==4) sprintf(lcase[lcase_animList].compName[n], lcase[i].compName[cur_entity]);
+//     else
+//     {
+//       if(v_dim==3) sprintf(lcase[lcase_animList].compName[n], "v(%s,%s,%s)", lcase[i].compName[entity_v[0]], lcase[i].compName[entity_v[1]], lcase[i].compName[entity_v[2]]);
+//       else         sprintf(lcase[lcase_animList].compName[n], "v(%s,%s)", lcase[i].compName[entity_v[0]], lcase[i].compName[entity_v[1]]);
+//       /* delete blanks */
+//       k=0; for(j=0; j<strlen(lcase[lcase_animList].compName[n]); j++) if(lcase[lcase_animList].compName[n][j]!=' ') { lcase[lcase_animList].compName[n][k++]=lcase[lcase_animList].compName[n][j]; }
+//       lcase[lcase_animList].compName[n][k]='\0';
+//     }
+//     /* select the vector length (color plot) */
+//     if (lcase[i].irtype == 3) { printf("Element results are not supported\n"); return; }
+
+//     for(j=0; j<anz->n; j++)
+//     {
+//       if(node[node[j].nr].pflag==-1) continue;
+//       if(v_dim==4)
+//       {
+//         lcase[lcase_animList].dat[n][node[j].nr]=lcase[i].dat[entity_v[3]][node[j].nr];
+//       }
+//       else
+//       {
+//         lcase[lcase_animList].dat[n][node[j].nr]=0.;
+//         for(k=0; k<v_dim; k++)
+//           lcase[lcase_animList].dat[n][node[j].nr]+=lcase[i].dat[entity_v[k]][node[j].nr]*lcase[i].dat[entity_v[k]][node[j].nr];
+//         lcase[lcase_animList].dat[n][node[j].nr]=sqrt(lcase[lcase_animList].dat[n][node[j].nr]);
+//       }
+//     }
+//   }
+
+//   /* max and min for plotting */
+//   for(k=0; k<lcase[lcase_animList].ncomps; k++)
+//   {
+//     for(j=0; j<anz->n; j++)
+//     {
+//       if(node[node[j].nr].pflag==-1) continue;
+//       if(lcase[lcase_animList].dat[k][node[j].nr] > vmax)
+//       {
+//         vmax=lcase[lcase_animList].dat[k][node[j].nr];
+//         nmax=node[j].nr;
+//       }
+//       if(lcase[lcase_animList].dat[k][node[j].nr] < vmin)
+//       {
+//         vmin=lcase[lcase_animList].dat[k][node[j].nr];
+//         nmin=node[j].nr;
+//       }
+//     }
+//   }
+//   //printf (" maxval:%e at node:%d\n minval:%e at node:%d  cur_lc:%d cur_entity:%d\n", vmax, nmax, vmin, nmin, cur_lc, cur_entity);
+
+//   /* set to the max-vals in range */
+//   if(scale->smin ==scale->smax )
+//   {
+//     scale->smin = vmin;
+//     scale->smax = vmax;
+//   }
+
+//   /* save the overall values for the drawing */
+//   lcase[lcase_animList].max[0] =vmax;
+//   lcase[lcase_animList].nmax[0]=nmax;
+//   lcase[lcase_animList].min[0] =vmin;
+//   lcase[lcase_animList].nmin[0]=nmin;
+
+//   if(vmax*vmax>vmin*vmin) v_factor=1./vmax;
+//   else v_factor=1./vmin;
+
+//   /* prepare the color values */
+//   for(k=0; k<lcase[lcase_animList].ncomps; k++)
+//   {
+//     nodalDataset( k, lcase_animList, anz, scale, node, lcase, colNr, 1 );
+//     lcase[lcase_animList].dat[k][0]=lcase[dsSequence.ds[k]].value;
+//     if(( lcase[lcase_animList].pheader=(char **)realloc((char **)lcase[lcase_animList].pheader, (lcase[lcase_animList].npheader+1) * sizeof(char *))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     if(( lcase[lcase_animList].pheader[lcase[lcase_animList].npheader]=(char *)malloc(MAX_LINE_LENGTH * sizeof(char))) == NULL )
+//       printf("\n\n ERROR: malloc failure\n\n" );
+//     sprintf(lcase[lcase_animList].pheader[lcase[lcase_animList].npheader],"%s",lcase[dsSequence.ds[k]].dataset_text);
+//     lcase[lcase_animList].npheader++;
+
+//     glutSetWindow( w1);
+//     if ( (list_animate = (GLuint *)realloc( list_animate, (k+1) * sizeof(GLuint))) == NULL )
+//       printf("\n\n ERROR: realloc failure\n\n" );
+//     list_animate[k]=list_anim_light+k;
+//     if (surfFlag)   drawDispList( list_animate[k], 'f', node, colNr );
+//     if (!surfFlag)  drawDispList( list_animate[k], 'e', node, colNr );
+//   }
+//   lcase[lcase_animList].value=0;
+//   lcase[lcase_animList].dataset_text[0]=0;
+//   strcpy(lcase[lcase_animList].name,lcase[dsSequence.ds[0]].name);
+//   lcase[lcase_animList].step_number=lcase[anz->l-1].step_number+1;
+//   lcase[lcase_animList].analysis_type=lcase[anz->l-1].analysis_type;
+
+//   glutSetWindow( w0);
+//   glutDisplayFunc ( DrawMenuSequence );
+//   DrawMenuSequence();
+//   glutSetWindow( w1 );
+//   glutDisplayFunc ( DrawGraficSequence );
+//   DrawGraficSequence();
+// }
 
 
 
@@ -2767,7 +2767,7 @@ void buildUserMenu()
   static int  menus;
   static int  *subsubmenu_user=NULL;
   static char **subsubmenu_user_string=NULL;
-  
+
   glutSetWindow( w0);
 
   /* free the old menu */
@@ -2780,7 +2780,7 @@ void buildUserMenu()
   menus=0;
 
   submenu_user = glutCreateMenu( selectUserFunc );
-    
+
   for(i=0; i<userCommands; i++)
   {
     if(!userCommand[i].submenu) glutAddMenuEntry( userCommand[i].name, i+1);
@@ -2800,7 +2800,7 @@ void buildUserMenu()
           printf("\n\n ERROR: realloc failed buildUserMenu\n\n") ;
         if ( (subsubmenu_user_string[menus] = (char *)malloc( (MAX_LINE_LENGTH) * sizeof(char))) == NULL )
           printf("\n\n ERROR: realloc failed buildUserMenu\n\n") ;
-	
+
         subsubmenu_user[menus] = glutCreateMenu( selectUserFunc );
         strcpy(subsubmenu_user_string[menus],userCommand[i].submenu);
         glutAddMenuEntry( userCommand[i].name, i+1);
@@ -2843,7 +2843,7 @@ void pre_menu( char *record)
   strcpy(userCommand[userCommands].command,&record[length+1]);
   printf(" add userCommand: name:%s command:%s\n",userCommand[userCommands].name,userCommand[userCommands].command);
   userCommands++;
-  
+
   buildUserMenu();
 }
 
@@ -2870,7 +2870,7 @@ void pre_subm( char *record)
   strcpy(userCommand[userCommands].command,&record[length+1]);
   printf(" add userCommand: submenu:%s name:%s command:%s\n",userCommand[userCommands].submenu,userCommand[userCommands].name,userCommand[userCommands].command);
   userCommands++;
-  
+
   buildUserMenu();
 }
 
@@ -2935,7 +2935,7 @@ int wildcard_plot(char *typ, char *name, int plotflag)
   char  **dat;
 
   //printf(" typ:%s name:%s flag:%d\n", typ, name, plotflag);
-  
+
   /* check if wildcards (*) were used, else return with '0' */
   length= strsplt( name, '*', &dat);
   //printf(" length:%d\n", length);
@@ -3033,7 +3033,7 @@ int plot( char *record )
   if (typ[0]=='m') typ[0]='e';
 
   if(i>1) if(wildcard_plot(typ, setnam, 1) == 1) return(1);
-  
+
   /* plot all entities of the given type for all sets except "all" if no setnam is given */
   if((i==1)||(setnam[0]=='*'))
   {
@@ -3081,7 +3081,7 @@ int plot( char *record )
   for(i=0; i<entitycols; i++) if(compareStrings(col,entitycol[i].name)>0) { pset[0].col=i; n=1; }
   /* if no valid color was set */
   if (n==0)
-  { 
+  {
     if        (typ[0]=='n') pset[0].col=3;
     else if   (typ[0]=='e') pset[0].col=4;
     else if   (typ[0]=='f') pset[0].col=6;
@@ -3117,13 +3117,13 @@ int plot( char *record )
       index=2;
       for(i=1; i<anz->sets; i++) if(!set[i].type) set[i].index=index++;
       printf("->[ ");
-      for(i=0; i<set[setNr].anz_se; i++) 
+      for(i=0; i<set[setNr].anz_se; i++)
         printf("%s(%d) ",set[set[setNr].set[i]].name,set[set[setNr].set[i]].index);
       printf("]\n");
     }
   }
 
-  ConfigureAndShowWindow_Plot();
+  // ConfigureAndShowWindow_Plot();
   return(1);
 }
 
@@ -3181,7 +3181,7 @@ int plus( char *record )
     printf (" plus: set:%s does not exist\n", setnam);
     return (-1);
   }
-  
+
   if ((pset = (Psets *)realloc( (Psets *)pset, (anzGeo->psets+1)*sizeof(Psets)) ) == NULL )
   {
     printf(" ERROR: realloc failure in plot, pset not installed\n\n");
@@ -3192,7 +3192,7 @@ int plus( char *record )
   for(i=0; i<entitycols; i++) if(compareStrings(col,entitycol[i].name)>0) { pset[anzGeo->psets].col=i; n=1; }
   /* if no valid color was set */
   if (n==0)
-  { 
+  {
     if        (typ[0]=='n') pset[anzGeo->psets].col=3;
     else if   (typ[0]=='e') pset[anzGeo->psets].col=4;
     else if   (typ[0]=='f') pset[anzGeo->psets].col=6;
@@ -3212,7 +3212,7 @@ int plus( char *record )
   pset[anzGeo->psets].width=ewidth;
   //printf("plus pset:%d setNr:%d type:%s width:%d\n",anzGeo->psets,pset[anzGeo->psets].nr,pset[anzGeo->psets].type,pset[anzGeo->psets].width);
   anzGeo->psets++;
-  
+
   drawMode=4;
   if((typ[0]=='e')||(typ[0]=='f'))
   {
@@ -3228,13 +3228,13 @@ int plus( char *record )
       index=2;
       for(i=1; i<anz->sets; i++) if(!set[i].type) set[i].index=index++;
       printf("->[ ");
-      for(i=0; i<set[setNr].anz_se; i++) 
+      for(i=0; i<set[setNr].anz_se; i++)
         printf("%s(%d) ",set[set[setNr].set[i]].name,set[set[setNr].set[i]].index);
       printf("]\n");
     }
   }
 
-  ConfigureAndShowWindow_Plot();
+  // ConfigureAndShowWindow_Plot();
   return(1);
 }
 
@@ -3272,12 +3272,12 @@ int minus( char *record )
         strcpy( pset[i].type, "    ");
       }
     }
-    updateDispLists(); 
+    updateDispLists();
     flag=1;
   }
   if(flag==0) printf (" set:%s is not on the screen\n", setnam);
 
-  ConfigureAndShowWindow_Plot();
+  // ConfigureAndShowWindow_Plot();
   return(1);
 }
 
@@ -3417,37 +3417,37 @@ void stepsAnimation( int selection )
 
 void redraw(void)
 {
-  if(!inpformat) return;
-#if TEST
-  printf("in redraw: drawMode:%d animFlag:%d\n", drawMode, animFlag);
-#endif
-  if ((drawMode==1)&&(!animFlag))
-  {
-    ConfigureAndShowWindow_Load();
-  }
-  if ((drawMode==1)&&(animFlag))
-  {
-    ConfigureAndShowWindow_Load();
-    ConfigureAndShowWindow_Light();
-    glutSetWindow(w0);
-    DrawMenuLoad();
-  }
-  if (drawMode==2)
-  {
-    ConfigureAndShowWindow_Light();
-  }
-  if (drawMode==4)
-  {
-    ConfigureAndShowWindow_Plot();
-    if (animFlag) ConfigureAndShowWindow_Light();
-  }
-  if (drawMode==5)
-  {
-    ConfigureAndShowWindow_Vector();
-  }
-  drawModelEdges( list_model_edges, basCol[0], edgeWidth, anz->g, node );
-  // it might be necessary to shift drawElem_edge+drawFaces_edge from drawSets to this loc.
-  glutPostRedisplay();
+//   if(!inpformat) return;
+// #if TEST
+//   printf("in redraw: drawMode:%d animFlag:%d\n", drawMode, animFlag);
+// #endif
+//   if ((drawMode==1)&&(!animFlag))
+//   {
+//     ConfigureAndShowWindow_Load();
+//   }
+//   if ((drawMode==1)&&(animFlag))
+//   {
+//     ConfigureAndShowWindow_Load();
+//     ConfigureAndShowWindow_Light();
+//     glutSetWindow(w0);
+//     DrawMenuLoad();
+//   }
+//   if (drawMode==2)
+//   {
+//     ConfigureAndShowWindow_Light();
+//   }
+//   if (drawMode==4)
+//   {
+//     ConfigureAndShowWindow_Plot();
+//     if (animFlag) ConfigureAndShowWindow_Light();
+//   }
+//   if (drawMode==5)
+//   {
+//     ConfigureAndShowWindow_Vector();
+//   }
+//   drawModelEdges( list_model_edges, basCol[0], edgeWidth, anz->g, node );
+//   // it might be necessary to shift drawElem_edge+drawFaces_edge from drawSets to this loc.
+//   glutPostRedisplay();
 }
 
 
@@ -3460,7 +3460,7 @@ void createDsSequence(int seq_nlc, int *seqLC)
   if( seq_nlc<3) seqLC[2]=anz->l-1;
   /* remove the displacements if its not a single vector plot  */
   if( seq_nlc>0)  if(addDispFlag==1) addDispToCoordinates(node);;
- 
+
   //printf("seqLC %d %d %d\n",seqLC[0],seqLC[1],seqLC[2]);
 
   /* determine the frequency */
@@ -3483,7 +3483,7 @@ void createDsSequence(int seq_nlc, int *seqLC)
         if((dsSequence.ds=(int *)realloc((int *)dsSequence.ds, (dsSequence.nds+1)*sizeof(int)))==NULL) printf("\nERROR realloc in createDsSequence\n\n");
         dsSequence.ds[dsSequence.nds]=i;
         //printf("nr:%d ds:%d i:%d\n", dsSequence.nds, dsSequence.ds[dsSequence.nds], i);
-        dsSequence.nds++; 
+        dsSequence.nds++;
       }
     }
   }
@@ -3494,8 +3494,8 @@ void createDsSequence(int seq_nlc, int *seqLC)
 void selectParameter( int selection )
 {
   char  buffer[MAX_LINE_LENGTH],  parameter[MAX_LINE_LENGTH];
-  
-  sscanf(&lcase[pre_lc].pheader[selection-1][6],"%s",parameter ); 
+
+  sscanf(&lcase[pre_lc].pheader[selection-1][6],"%s",parameter );
   //printf("%s selected:%d %s\n", lcase[pre_lc].name, selection, parameter );
   sprintf(buffer, "-p nr %s %s %d", lcase[pre_lc].name, parameter, pre_lc+1);
   graph(buffer);
@@ -3508,7 +3508,7 @@ void selectEntity( int selection )
   int i,j,e[4];
 #if TEST
   printf (" in selectEntity sequenceFlag:%d animFlag:%d\n",sequenceFlag, animFlag);
-#endif 
+#endif
 
   /* change the element and face mode to 'value' (if not translucent and if not a single one does not already show results ('v') ) */
   j=1;
@@ -3541,9 +3541,9 @@ void selectEntity( int selection )
     if((vectorFlag)&&(lcase[cur_lc].ictype[cur_entity]==2))
     {
       /* search all necessary entities */
-      if (lcase[seqLC[0]].icind1[cur_entity]==1)      { e[0]=cur_entity+1; e[1]=cur_entity+2; e[2]=cur_entity+3; e[3]=-1;}         
-      else if (lcase[seqLC[0]].icind1[cur_entity]==2) { e[0]=cur_entity; e[1]=cur_entity+1; e[2]=cur_entity+2; e[3]=-1;}         
-      else if (lcase[seqLC[0]].icind1[cur_entity]==3) { e[0]=cur_entity-1; e[1]=cur_entity; e[2]=cur_entity+1; e[3]=-1;}         
+      if (lcase[seqLC[0]].icind1[cur_entity]==1)      { e[0]=cur_entity+1; e[1]=cur_entity+2; e[2]=cur_entity+3; e[3]=-1;}
+      else if (lcase[seqLC[0]].icind1[cur_entity]==2) { e[0]=cur_entity; e[1]=cur_entity+1; e[2]=cur_entity+2; e[3]=-1;}
+      else if (lcase[seqLC[0]].icind1[cur_entity]==3) { e[0]=cur_entity-1; e[1]=cur_entity; e[2]=cur_entity+1; e[3]=-1;}
       else if (lcase[seqLC[0]].icind1[cur_entity]==0) { e[0]=cur_entity-2; e[1]=cur_entity-1; e[2]=cur_entity; e[3]=cur_entity+1;}
       else
       {
@@ -3604,7 +3604,7 @@ void selectEntity( int selection )
       {
         if((lcase[cur_lc].icind1[e[i]-1]==i+1)&&(lcase[cur_lc].ncomps>=e[i]))
           sprintf( &buffer[strlen(buffer)]," %d",e[i]);
-        else 
+        else
         {
           /* components not located before the entity of the vector-length */
           printf("\n ERROR: entity is not part of a vector\n");
@@ -3617,15 +3617,15 @@ void selectEntity( int selection )
     }
   }
 
-  if(drawMode==4)
-  {
-    if(!animFlag) ConfigureAndShowWindow_Plot();
-  }
-  else
-  {
-    drawMode=1;
-    if(!animFlag) ConfigureAndShowWindow_Load();
-  }
+  // if(drawMode==4)
+  // {
+  //   if(!animFlag) ConfigureAndShowWindow_Plot();
+  // }
+  // else
+  // {
+  //   drawMode=1;
+  //   if(!animFlag) ConfigureAndShowWindow_Load();
+  // }
 }
 
 
@@ -3643,7 +3643,7 @@ void selectEntityMenu( int selection )
 
 #if TEST
   printf (" in selectEntityMenu\n");
-#endif 
+#endif
   animFlag=0;
   selectEntity(selection);
 }
@@ -3658,7 +3658,7 @@ void createDatasetEntries(void)
   static int  *mds=NULL;
   static int  *subsubmenu_load, *sub3menu_load;
   char strvalue[MAX_LINE_LENGTH];
-  
+
   if(!inpformat) return;
 
   glutSetWindow( w0);
@@ -3704,12 +3704,12 @@ void createDatasetEntries(void)
   /* calculate how much lines of Steps can be displayed on the screen */
   screen_height=glutGet(GLUT_SCREEN_HEIGHT);
   if (!screen_height)
-  { screen_height=800; printf(" screen not known, assume screen_height of 800 pixels\n"); } 
+  { screen_height=800; printf(" screen not known, assume screen_height of 800 pixels\n"); }
   lc_per_menu=screen_height/GLUT_MENU_POINT_HEIGHT ;
 
 #if TEST
   printf ("lc_per_menu:%d \n",lc_per_menu);
-#endif  
+#endif
 
   submenu_load = glutCreateMenu( selectDatasetMenu );
   glutAddSubMenu( "-Entity- ", subsubmenu_entity );
@@ -3735,7 +3735,7 @@ void createDatasetEntries(void)
         if (i>=anz->l) break;
       }while(lcase[i-1].step_number==lcase[i].step_number);
     }
-  
+
     /* define the additional submenus */
     if ( (subsubmenu_load = (int *)realloc((int *)subsubmenu_load, (steps+1) * sizeof(int))) == NULL )
         printf("\n\n ERROR: realloc failed createDatasetEntries\n\n") ;
@@ -3747,7 +3747,7 @@ void createDatasetEntries(void)
       {
         if (i>=steps)
         {
-          printf (" WARNING: Too many Datasets for the menu. Please use the 'ds' command to access the Datasets %d to %d\n", mds[i], anz->l); 
+          printf (" WARNING: Too many Datasets for the menu. Please use the 'ds' command to access the Datasets %d to %d\n", mds[i], anz->l);
           break;
 	}
 	stringValue(&lcase[mds[i]].value, strvalue);
@@ -3757,7 +3757,7 @@ void createDatasetEntries(void)
         i++;
       }
     }
-  
+
     /* define the main-lc-menu */
     glutSetMenu( submenu_load );
     for (i=0; i<lc_per_basmenu; i++ )
@@ -3767,7 +3767,7 @@ void createDatasetEntries(void)
       sprintf (buffer,"%d %.8s %s %s", lcase[mds[i]].step_number, lcase[mds[i]].dataset_name, strvalue, lcase[mds[i]].dataset_text );
       glutAddSubMenu( buffer, sub3menu_load[i] );
     }
-    for (i=0; i<menus; i++) 
+    for (i=0; i<menus; i++)
     {
       glutAddSubMenu( "-MORE- ", subsubmenu_load[i] );
       if(i>lc_per_menu) break;
@@ -3782,7 +3782,7 @@ void createDatasetEntries(void)
 
 #if TEST
     printf ("lc_per_menu:%d lc_per_basmenu:%d menus:%d\n",lc_per_menu, lc_per_basmenu, menus );
-#endif  
+#endif
 
     /* define the additional submenus */
     if ( (subsubmenu_load = (int *)realloc((int *)subsubmenu_load, (menus+1) * sizeof(int))) == NULL )
@@ -3800,7 +3800,7 @@ void createDatasetEntries(void)
         i++;
       }
     }
-  
+
     /* define the main-lc-menu */
     glutSetMenu( submenu_load );
     for (i=0; i<lc_per_basmenu; i++ )
@@ -3809,7 +3809,7 @@ void createDatasetEntries(void)
         sprintf (buffer,"%d %.8s %s %s", i+1, lcase[i].name, strvalue, lcase[i].dataset_text );
         glutAddMenuEntry( buffer, i);
     }
-    for (i=0; i<menus; i++) 
+    for (i=0; i<menus; i++)
     {
         glutAddSubMenu( "-MORE- ", subsubmenu_load[i] );
         if(i>lc_per_menu) break;
@@ -3829,9 +3829,9 @@ void selectDataset( int selection )
   /* check if the data of the specified lcase (Dataset) are already available */
   if (!lcase[pre_lc].loaded)
   {
-    if( pre_readfrdblock(copiedNodeSets , pre_lc, anz, node, lcase )==-1) 
+    if( pre_readfrdblock(copiedNodeSets , pre_lc, anz, node, lcase )==-1)
     {
-      printf("ERROR in selectDataset: Could not read data for Dataset:%d\n", pre_lc+1); 
+      printf("ERROR in selectDataset: Could not read data for Dataset:%d\n", pre_lc+1);
       return;
     }
     calcDatasets( pre_lc, anz, node, lcase );
@@ -3949,7 +3949,7 @@ void addDispToCoordinates( Nodes *node_local)
     if(((compare(lcase[lc].dataset_name, "DISP", 4)==4)||(compare(lcase[lc].name, "DISP", 4)==4))&&(lcase[lc].ictype[0]!= 12)) foundDisp=1;
     else
     {
-      /* since real and imaginary part use different names since ccx_2.9 it is necessary to compare the 
+      /* since real and imaginary part use different names since ccx_2.9 it is necessary to compare the
          names only for the length excluding the last char if its a 'I' */
       compareChars=strlen(lcase[lc].name)-1;
       for(k=compareChars;k>0; k--) if(lcase[lc].name[k]!=' ') break;
@@ -3969,9 +3969,9 @@ void addDispToCoordinates( Nodes *node_local)
           /* check if the data of the specified lcase (Dataset) are already available */
           if (!lcase[lc].loaded)
           {
-            if( pre_readfrdblock(copiedNodeSets , lc, anz, node_local, lcase )==-1) 
+            if( pre_readfrdblock(copiedNodeSets , lc, anz, node_local, lcase )==-1)
             {
-              printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", lc+1); 
+              printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", lc+1);
               return;
             }
             calcDatasets( lc, anz, node_local, lcase );
@@ -3995,9 +3995,9 @@ void addDispToCoordinates( Nodes *node_local)
       /* check if the data of the specified lcase (Dataset) are already available */
       if (!lcase[lc].loaded)
       {
-        if( pre_readfrdblock(copiedNodeSets , lc, anz, node_local, lcase )==-1) 
+        if( pre_readfrdblock(copiedNodeSets , lc, anz, node_local, lcase )==-1)
         {
-          printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", lc+1); 
+          printf("ERROR in nodalDataset: Could not read data for Dataset:%d\n", lc+1);
           scalNodes ( anz->n, node_local, scale );
           return;
         }
@@ -4006,8 +4006,8 @@ void addDispToCoordinates( Nodes *node_local)
       }
       descalNodes ( anz->n, node_local, scale );
 
-   
-      /* check in which system (cyl, rec) the displacements are defined */ 
+
+      /* check in which system (cyl, rec) the displacements are defined */
       for(i=0;i<lcase[lc].npheader; i++)
       {
         if(compare(&lcase[lc].pheader[i][5],"PTRFM", 5)==5)
@@ -4053,7 +4053,7 @@ void addDispToCoordinates( Nodes *node_local)
               phi= p_angle(p1[dir[1]], p1[dir[2]]);
 	    }
             else phi=0.;
-    
+
             if(mode==1)
             {
               dy=cos(phi)*lcase[lc].dat[0][node[i].nr] - sin(phi)*lcase[lc].dat[1][node[i].nr];
@@ -4078,38 +4078,38 @@ void addDispToCoordinates( Nodes *node_local)
           }
         }
       }
-    
+
       /* calculate the position of the additional drawing nodes in the deformed mesh */
-      posMidsideNodes(n_disp);  
+      posMidsideNodes(n_disp);
 
       scalNodes ( anz->n, n_disp, scale );
 
       addDispFlag=!addDispFlag;
       orig_nodes=node_local;
-      orig->orign=    anz->orign;	  
-      orig->n=	  anz->n;	  
-      orig->e=	  anz->e;	  
-      orig->f=	  anz->f;	  
-      orig->g=	  anz->g;	  
-      orig->t=	  anz->t;	  
-      orig->l=	  anz->l;	  
-      orig->olc=	  anz->olc;	  
-      orig->orignmax= anz->orignmax;  
-      orig->nmax=	  anz->nmax;	  
-      orig->nmin=	  anz->nmin;	  
-      orig->emax=	  anz->emax;	  
-      orig->emin=	  anz->emin;	  
-      orig->sets=	  anz->sets;	  
-      orig->mats=	  anz->mats;	  
-      orig->amps=	  anz->amps;	  
-      orig->nnext=	  anz->nnext;	  
-      orig->enext=	  anz->enext;     
+      orig->orign=    anz->orign;
+      orig->n=	  anz->n;
+      orig->e=	  anz->e;
+      orig->f=	  anz->f;
+      orig->g=	  anz->g;
+      orig->t=	  anz->t;
+      orig->l=	  anz->l;
+      orig->olc=	  anz->olc;
+      orig->orignmax= anz->orignmax;
+      orig->nmax=	  anz->nmax;
+      orig->nmin=	  anz->nmin;
+      orig->emax=	  anz->emax;
+      orig->emin=	  anz->emin;
+      orig->sets=	  anz->sets;
+      orig->mats=	  anz->mats;
+      orig->amps=	  anz->amps;
+      orig->nnext=	  anz->nnext;
+      orig->enext=	  anz->enext;
 
       /* update node */
       node=n_disp;
       getFaceNormalen( face, node, anz );
       getElemNormalen( e_enqire, node, anz->e );
-      updateDispLists(); 
+      updateDispLists();
       return;
     }
     else
@@ -4137,28 +4137,28 @@ void addDispToCoordinates( Nodes *node_local)
 
     /* update node */
     node=orig_nodes;
-    anz->orign=   orig->orign;   
-    anz->n=	orig->n;	 
-    //anz->e=	orig->e;	 
-    //anz->f=	orig->f;	 
-    //anz->g=	orig->g;	 
-    //anz->t=	orig->t;	 
-    //anz->l=	orig->l;	 
-    //anz->olc=	orig->olc;	 
+    anz->orign=   orig->orign;
+    anz->n=	orig->n;
+    //anz->e=	orig->e;
+    //anz->f=	orig->f;
+    //anz->g=	orig->g;
+    //anz->t=	orig->t;
+    //anz->l=	orig->l;
+    //anz->olc=	orig->olc;
     anz->orignmax=orig->orignmax;
-    anz->nmax=	orig->nmax;	 
-    anz->nmin=	orig->nmin;	 
-    //anz->emax=	orig->emax;	 
-    //anz->emin=	orig->emin;	 
-    //anz->sets=	orig->sets;	 
-    //anz->mats=	orig->mats;	 
-    //anz->amps=	orig->amps;	 
-    //anz->nnext=	orig->nnext;	 
-    //anz->enext=	orig->enext;	 
+    anz->nmax=	orig->nmax;
+    anz->nmin=	orig->nmin;
+    //anz->emax=	orig->emax;
+    //anz->emin=	orig->emin;
+    //anz->sets=	orig->sets;
+    //anz->mats=	orig->mats;
+    //anz->amps=	orig->amps;
+    //anz->nnext=	orig->nnext;
+    //anz->enext=	orig->enext;
     scalNodes ( anz->n, node, scale );
     getFaceNormalen( face, node, anz );
     getElemNormalen( e_enqire, node, anz->e );
-    updateDispLists(); 
+    updateDispLists();
     return;
   }
 }
@@ -4175,7 +4175,7 @@ void selectView( int selection )
   glutSetWindow( w1);
   switch (selection) {
   case 1:
-      if(getSetNr("-qcut")) 
+      if(getSetNr("-qcut"))
       {
         if(addDispFlag==1) { addDispToCoordinates(node); addDispFlagLocal=2; }
         zap("-qcut");
@@ -4200,7 +4200,7 @@ void selectView( int selection )
     }
     else
     {
-      delSet(specialset->njby); 
+      delSet(specialset->njby);
       printf("No bad elements in set:all\n");
     }
     if(drawMode==1) ConfigureAndShowWindow_Load();
@@ -4282,7 +4282,7 @@ void selectView( int selection )
         if(drawMode!=4)
         {
           if(mem_surfFlag==1)
-          { 
+          {
             for(i=0; i<anzGeo->psets; i++ ) if(pset[i].type[0]=='f') pset[i].type[0]='e';
           }
         }
@@ -4304,7 +4304,7 @@ void selectView( int selection )
         if(drawMode!=4)
         {
           if(mem_surfFlag==1)
-          { 
+          {
             for(i=0; i<anzGeo->psets; i++ ) if(pset[i].type[0]=='e') pset[i].type[0]='f';
           }
         }
@@ -4351,7 +4351,7 @@ void selectView( int selection )
     {
       addDispToCoordinates(node);
       if(addDispFlag) printf("\n displacements related to dataset:%d added. Scale them with 'scal d <value>'\n",pre_lc+1);
-      else printf("\n displacements removed\n");  
+      else printf("\n displacements removed\n");
       redraw();
     }
     else printf("\n ERROR: 'Toggle Add-Displacement' can not be selected during animations.\n");
@@ -4372,13 +4372,13 @@ void selectView( int selection )
       }
     break;
   case 16:
-    
+
     if((!surfFlag)&&(!blendFlag))
     {
       printf(" Transparency works only in surface mode\n");
       return;
     }
-    
+
     //printf("psettype:%s\n",pset[0].type);
     blendFlag=!blendFlag;
     //if((drawMode==1)||(drawMode==5))
@@ -4468,7 +4468,7 @@ void pre_animate(char *string)
       //if (surfFlag) drawDispListEdges(list_surf_edges, basCol[0], 1., 'f', node );
       //else          drawDispListEdges(list_elem_edges, basCol[0], 1., 'e', node );
     }
-  } 
+  }
   redraw();
 }
 
@@ -4506,7 +4506,7 @@ void pre_view(char *string)
       else
       {
         addDispToCoordinates(node);
-        printf("\n displacements of dataset:%d added. Scale them with 'scal d <value>'\n",pre_lc+1); 
+        printf("\n displacements of dataset:%d added. Scale them with 'scal d <value>'\n",pre_lc+1);
       }
     }
   }
@@ -4521,7 +4521,7 @@ void pre_view(char *string)
     {
       glutInitDisplayMode ( GLUT_RGBA | GLUT_DOUBLE  );
       activWindow= w3 = glutCreateSubWindow ( w0, 0, height_w0-pixPerChary[menu_font], width_w0, pixPerChary[menu_font] );
-      glutDisplayFunc ( updCommandLine );
+      //glutDisplayFunc ( updCommandLine );
       glDisable(GL_DITHER);
       glShadeModel ( GL_FLAT );
     }
@@ -4591,7 +4591,7 @@ void pre_view(char *string)
   }
   else if (compare(type, "surf", 2)==2)
   {
-      if(getSetNr("-qcut")) 
+      if(getSetNr("-qcut"))
       {
         if(addDispFlag==1) { addDispToCoordinates(node); addDispFlagLocal=2; }
         zap("-qcut");
@@ -4606,7 +4606,7 @@ void pre_view(char *string)
   }
   else if (compare(type, "volu", 2)==2)
   {
-      if(getSetNr("-qcut")) 
+      if(getSetNr("-qcut"))
       {
         if(addDispFlag==1) { addDispToCoordinates(node); addDispFlagLocal=2; }
         zap("-qcut");
@@ -4635,7 +4635,7 @@ void pre_view(char *string)
   {
     if(anz->l>0)
     {
-      vectorFlag=1;  
+      vectorFlag=1;
       if(length==2) { if (compare(param, "off", 2)==2) vectorFlag=0; }
       if(vectorFlag)
       {
@@ -4687,7 +4687,7 @@ void combidatasets(int lc1, int e1, int operator, int lc2, int e2, int newLC)
 {
   int i,n,comps,analysis_type,lc;
   static int last_step_number=-1;
-  
+
   if(lc2==-1)
   {
     printf(" ERROR: no dataset given to be added\n");
@@ -4695,9 +4695,9 @@ void combidatasets(int lc1, int e1, int operator, int lc2, int e2, int newLC)
   }
   if (!lcase[lc2].loaded)
   {
-    if( pre_readfrdblock(copiedNodeSets , lc2, anz, node, lcase )==-1) 
+    if( pre_readfrdblock(copiedNodeSets , lc2, anz, node, lcase )==-1)
     {
-      printf("ERROR in selectData: Could not read data for Dataset:%d\n", lc2); 
+      printf("ERROR in selectData: Could not read data for Dataset:%d\n", lc2);
       return;
     }
     calcDatasets( lc2, anz, node, lcase );
@@ -4732,7 +4732,7 @@ void combidatasets(int lc1, int e1, int operator, int lc2, int e2, int newLC)
     comps=0;
     for(i=0; i<lcase[lc1].ncomps; i++) if(lcase[lc1].iexist[i]==0) comps++;
   }
-  
+
   if(newLC)
   {
     /* create a new dataset */
@@ -4759,7 +4759,7 @@ void combidatasets(int lc1, int e1, int operator, int lc2, int e2, int newLC)
     lcase[lc].icind1[0] = 1;
     lcase[lc].icind2[0] = 1;
     lcase[lc].iexist[0] = 0;
-    
+
     if(operator=='+')
     {
       for(n=0; n<anz->n; n++)
@@ -4851,7 +4851,7 @@ void combidatasets(int lc1, int e1, int operator, int lc2, int e2, int newLC)
       lcase[lc].min[i]=lcase[lc1].min[i]/lcase[lc2].min[i];
     }
   } }
-  
+
   calcDatasets( lc, anz, node, lcase );
   if(newLC) createDatasetEntries();
 }
@@ -5073,7 +5073,7 @@ void selectData( char *record)
 
 #if TEST
   printf (" in selectData\n");
-#endif 
+#endif
 
   //printf("record %s\n",record);
   length = sscanf( record,"%s %s %s %s %s %s %s %s", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
@@ -5119,7 +5119,7 @@ void selectData( char *record)
     else if(!dim)
     {
       if(data[i][0]=='l') lc[nlc++]=anz->l;
-      else if(data[i][0]=='-') lc[nlc++]=anz->l+atoi(data[i]); 
+      else if(data[i][0]=='-') lc[nlc++]=anz->l+atoi(data[i]);
       else lc[nlc++]=atoi(data[i]);
     }
   }
@@ -5159,7 +5159,7 @@ void selectData( char *record)
       return;
     }
   }
-  
+
   /* if parameters are provided */
   if(dim==-4)
   {
@@ -5170,15 +5170,15 @@ void selectData( char *record)
     }
     return;
   }
-  
+
   /* check if the data of the specified lcase (Dataset) are already available */
   for(i=0; i<nlc; i++)
   {
     if (!lcase[lc[i]-1].loaded)
     {
-      if( pre_readfrdblock(copiedNodeSets , lc[i]-1, anz, node, lcase )==-1) 
+      if( pre_readfrdblock(copiedNodeSets , lc[i]-1, anz, node, lcase )==-1)
       {
-        printf("ERROR in selectData: Could not read data for Dataset:%d\n", lc[i]); 
+        printf("ERROR in selectData: Could not read data for Dataset:%d\n", lc[i]);
         return;
       }
       calcDatasets( lc[i]-1, anz, node, lcase );
@@ -5202,7 +5202,7 @@ void selectData( char *record)
           elementDataset( i, lc[0]-1, anz, scale, lcase, offset, maxIndex, steps );
         }
         else
-        {    
+        {
           nodalDataset( i, lc[0]-1, anz, scale, node, lcase, colNr, 1 );
         }
       }
@@ -5210,9 +5210,9 @@ void selectData( char *record)
       if(dim==-2) offsetdataset(lc[0]-1,offset, e[0]);
       if(dim==-3) expdataset(lc[0]-1,factor, e[0]);
       if(dim==-5) combidatasets(lc[0]-1, e[0]-1, operator, lc2-1, e[1]-1, (int)factor);
-    } 
+    }
     else
-    { 
+    {
       for(i=0; i<nlc; i++)
       {
         if((i>0)&&(compareStrings(lcase[lc[0]-1].name,lcase[lc[i]-1].name)<1))
@@ -5230,7 +5230,7 @@ void selectData( char *record)
             elementDataset( j, i, anz, scale, lcase, offset, maxIndex, steps );
           }
           else
-          {    
+          {
             nodalDataset( j, i, anz, scale, node, lcase, colNr, 1 );
           }
         }
@@ -5239,11 +5239,11 @@ void selectData( char *record)
       if(dim==-2) { for(i=lc[0]-1; i<lc[2]; i+=lc[1]-lc[0]) offsetdataset(i,offset, e[0]); }
       if(dim==-3) { for(i=lc[0]-1; i<lc[2]; i+=lc[1]-lc[0]) expdataset(i,factor, e[0]); }
       if(dim==-5) { for(i=lc[0]-1; i<lc[2]; i+=lc[1]-lc[0]) combidatasets(i, e[0]-1, operator, lc2-1, e[1]-1, (int)factor); }
-    } 
+    }
     ConfigureAndShowWindow_Load();
     return;
-  } 
- 
+  }
+
   /* no entity selected, just a single one or a sequence */
   if(!dim)
   {
@@ -5277,14 +5277,14 @@ void selectData( char *record)
       createDsSequence(seq_nlc, seqLC);
     }
     return;
-  } 
+  }
 
   /* if nlc > 1 generate a sequence */
   /* if dim > 1 generate a vector plot */
   if((dim>1)&&(e[0]!='a')) vectorFlag=1; else vectorFlag=0;
   if(nlc>1) historyFlag=1;
   if(!historyFlag)
-  { 
+  {
     sequenceFlag=0;
     v_dim=0;
     selectDataset(lc[0]-1);
@@ -5312,8 +5312,8 @@ void selectData( char *record)
       {
         if(drawMode!=4) drawMode=2;
       }
-      if((drawMode!=4)||(animFlag==1)){ ConfigureAndShowWindow_Light(); }
-      else { ConfigureAndShowWindow_Plot(); }
+      if((drawMode!=4)||(animFlag==1)){ /* ConfigureAndShowWindow_Light(); */ }
+      else { /* ConfigureAndShowWindow_Plot(); */}
     }
 
     /* prepare a vector-plot */
@@ -5432,7 +5432,7 @@ void specialKeyboard( int gkey, int x, int y )
       putchar(echo);
     }
     }
-  
+
     if(gkey==GLUT_KEY_UP)
     {
       key_pointer--;
@@ -5444,7 +5444,7 @@ void specialKeyboard( int gkey, int x, int y )
     if (key_pointer<0) key_pointer=0;
     if (key_pointer>=nkey_history) key_pointer=nkey_history-1;
     for (i=0; i<MAX_LINE_LENGTH; i++) keystroke[i]='\0';
-    if(key_history!=NULL) strcpy(keystroke,key_history[key_pointer]); 
+    if(key_history!=NULL) strcpy(keystroke,key_history[key_pointer]);
     curshft=0;
 
     if(!commandLineFlag) {
@@ -5460,7 +5460,7 @@ void specialKeyboard( int gkey, int x, int y )
       //echo=( char )0xff08;
       curshft--;
       if(curshft < (-strlen(keystroke)) ) curshft=-strlen(keystroke);
-      else 
+      else
       {
         echo=( char )8;
         if(!commandLineFlag) putchar(echo);
@@ -5475,13 +5475,13 @@ void specialKeyboard( int gkey, int x, int y )
       {
         curshft=0;
       }
-      else 
+      else
       {
         echo=( char )keystroke[strlen(keystroke)-1+curshft];
         if(!commandLineFlag) putchar(echo);
       }
     }
-    fflush(stdout);  
+    fflush(stdout);
   }
 
   else if((gkey==GLUT_KEY_PAGE_UP)||(gkey==GLUT_KEY_PAGE_DOWN))
@@ -5502,19 +5502,19 @@ void specialKeyboard( int gkey, int x, int y )
         col[0]='\0';
         sscanf(keystroke2, "%*s %s %s %s", type, lastset, col);
         setNr=getSetNr(lastset);
-    
+
         if(gkey==GLUT_KEY_PAGE_UP)
         {
           for(i=setNr-1; i>=0; i--)
           {
             if( ((set[i].name != (char *)NULL )&&(set[i].type==0))&&
     	  ( ( (type[0]=='n')&& (set[i].anz_n) ) ||
-                ( (type[0]=='e')&& (set[i].anz_e) ) || 
-                ( (type[0]=='f')&& (set[i].anz_f) ) ||  
-                ( (type[0]=='p')&& (set[i].anz_p) ) ||  
-                ( (type[0]=='l')&& (set[i].anz_l) ) ||  
-                ( (type[0]=='s')&& (set[i].anz_s) ) ||  
-                ( (type[0]=='b')&& (set[i].anz_b) ) ||  
+                ( (type[0]=='e')&& (set[i].anz_e) ) ||
+                ( (type[0]=='f')&& (set[i].anz_f) ) ||
+                ( (type[0]=='p')&& (set[i].anz_p) ) ||
+                ( (type[0]=='l')&& (set[i].anz_l) ) ||
+                ( (type[0]=='s')&& (set[i].anz_s) ) ||
+                ( (type[0]=='b')&& (set[i].anz_b) ) ||
     	    ( (type[0]=='L')&& (set[i].anz_nurl) ) ||
     	    ( (type[0]=='S')&& (set[i].anz_nurs) ) ))  break;
           }
@@ -5526,12 +5526,12 @@ void specialKeyboard( int gkey, int x, int y )
           {
             if( ((set[i].name != (char *)NULL )&&(set[i].type==0))&&
     	  ( ( (type[0]=='n')&& (set[i].anz_n) ) ||
-                ( (type[0]=='e')&& (set[i].anz_e) ) || 
-                ( (type[0]=='f')&& (set[i].anz_f) ) ||  
-                ( (type[0]=='p')&& (set[i].anz_p) ) ||  
-                ( (type[0]=='l')&& (set[i].anz_l) ) ||  
-                ( (type[0]=='s')&& (set[i].anz_s) ) ||  
-                ( (type[0]=='b')&& (set[i].anz_b) ) ||  
+                ( (type[0]=='e')&& (set[i].anz_e) ) ||
+                ( (type[0]=='f')&& (set[i].anz_f) ) ||
+                ( (type[0]=='p')&& (set[i].anz_p) ) ||
+                ( (type[0]=='l')&& (set[i].anz_l) ) ||
+                ( (type[0]=='s')&& (set[i].anz_s) ) ||
+                ( (type[0]=='b')&& (set[i].anz_b) ) ||
     	    ( (type[0]=='L')&& (set[i].anz_nurl) ) ||
     	    ( (type[0]=='S')&& (set[i].anz_nurs) ) ))  break;
           }
@@ -5587,7 +5587,7 @@ void specialKeyboard( int gkey, int x, int y )
     {
       addDispToCoordinates(node);
       addDispToCoordinates(node);
-      printf("\n displacements of dataset:%d added. Scale them with 'scal d <value>'\n",pre_lc+1); 
+      printf("\n displacements of dataset:%d added. Scale them with 'scal d <value>'\n",pre_lc+1);
     }
     if (animFlag==1)
     {
@@ -5601,7 +5601,7 @@ void specialKeyboard( int gkey, int x, int y )
       selectDataset( pre_lc );
       selectEntity(cur_entity+1 );
     }
-    
+
     /* history */
     if((key_history= (char **)realloc((char **)key_history, (nkey_history+2)*sizeof(char *))) == NULL )
     { printf("ERROR: malloc failed in Keyboard\n\n" ); return; }
@@ -5622,11 +5622,11 @@ void Keyboard( unsigned char gkey, int x, int y )
   int  i,j, pos, new_elems=0;
   int gtolFlag=0;
   static char  prognam[MAX_LINE_LENGTH];
-  
+
   if ( parser( gkey, keystroke, &curshft, commandLineFlag) )
   {
     if(strlen(keystroke)<1) return;
-    
+
     /* history */
     if((key_history= (char **)realloc((char **)key_history, (nkey_history+2)*sizeof(char *))) == NULL )
     { printf("ERROR: malloc failed in Keyboard\n\n" ); return; }
@@ -5690,7 +5690,7 @@ void Keyboard( unsigned char gkey, int x, int y )
       getElemNormalen( e_enqire, node, anz->e );
       makeSurfaces();
       realloc_colNr();
-      updateDispLists();       
+      updateDispLists();
     }
   }
 }
@@ -5749,7 +5749,7 @@ void center(double x, double y, double z)
 void moveModel()
 {
   glOrtho( -ds*aspectRatio_w1, ds*aspectRatio_w1, -ds, ds, -Z_DEPTH, Z_DEPTH ); /* nach glLoadIdentity() !! */
-  
+
   v[0]= centerPnt[0] ;            /* nodes sind scaliert, sonst scalieren mit scalNodes() */
   v[1]= centerPnt[1] ;
   v[2]= centerPnt[2] ;
@@ -5766,685 +5766,685 @@ void moveModel()
 
 void drawRuler( void )
 {
-  float dxscal;
-  glColor3dv( foregrndcol_rgb );
-  glLineWidth(1);
-  //printf(”window dx in model coords:%f\n", ds*aspectRatio_w1*scale->w*2);
-  sprintf (buffer, "%.0e %s", ds*scale->w*.5, rulerString);
-  dxscal=atof(buffer)/(ds*scale->w);
-  //printf("dxscal:%f %s %.3e\n", dxscal, buffer, ds*scale->w*.5);
-  text(1.-((0.7+strlen(buffer)*0.01)-dxscal*.5)/aspectRatio_w1, -0.96, -0.99,buffer, glut_font[legend_font]);
-  glBegin ( GL_LINES );
-    glVertex3d ( 1.-0.7/aspectRatio_w1, -.97, -0.99);
-    glVertex3d ( 1.-(0.7-dxscal)/aspectRatio_w1, -.97, -0.99);
-    glVertex3d ( 1.-0.68/aspectRatio_w1, -.95, -0.99);
-    glVertex3d ( 1.-0.72/aspectRatio_w1, -.99, -0.99);
-    glVertex3d ( 1.-(0.68-dxscal)/aspectRatio_w1, -.95, -0.99);
-    glVertex3d ( 1.-(0.72-dxscal)/aspectRatio_w1, -.99, -0.99);
-  glEnd();
+  // float dxscal;
+  // glColor3dv( foregrndcol_rgb );
+  // glLineWidth(1);
+  // //printf(”window dx in model coords:%f\n", ds*aspectRatio_w1*scale->w*2);
+  // sprintf (buffer, "%.0e %s", ds*scale->w*.5, rulerString);
+  // dxscal=atof(buffer)/(ds*scale->w);
+  // //printf("dxscal:%f %s %.3e\n", dxscal, buffer, ds*scale->w*.5);
+  // text(1.-((0.7+strlen(buffer)*0.01)-dxscal*.5)/aspectRatio_w1, -0.96, -0.99,buffer, glut_font[legend_font]);
+  // glBegin ( GL_LINES );
+  //   glVertex3d ( 1.-0.7/aspectRatio_w1, -.97, -0.99);
+  //   glVertex3d ( 1.-(0.7-dxscal)/aspectRatio_w1, -.97, -0.99);
+  //   glVertex3d ( 1.-0.68/aspectRatio_w1, -.95, -0.99);
+  //   glVertex3d ( 1.-0.72/aspectRatio_w1, -.99, -0.99);
+  //   glVertex3d ( 1.-(0.68-dxscal)/aspectRatio_w1, -.95, -0.99);
+  //   glVertex3d ( 1.-(0.72-dxscal)/aspectRatio_w1, -.99, -0.99);
+  // glEnd();
 }
 
 
 
-void DrawGraficLoad( void )
-{
-  int flipflop=0;
-  double xc, yc, dxscal;
-#if TEST
-  printf(" in DrawGraficLoad\n");
-#endif 
- redraw:;
-  flipflop=!flipflop;
-  glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+// void DrawGraficLoad( void )
+// {
+//   int flipflop=0;
+//   double xc, yc, dxscal;
+// #if TEST
+//   printf(" in DrawGraficLoad\n");
+// #endif
+//  redraw:;
+//   flipflop=!flipflop;
+//   glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
+//   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glLoadIdentity();
-  moveModel();
-  if (modelEdgeFlag)     glCallList( list_model_edges );
-  if (elemEdgeFlag)
-  {
-    if (surfFlag) glCallList( list_surf_edges );
-    else          glCallList( list_elem_edges );
-  }
-  /* enable all colors  */
-  glColor3d( 1,1,1);
-  // glEnable(GL_TEXTURE_1D);
-  if (lcase[cur_lc].irtype == 3)
-  {
-    glCallList( list_elem_elstress );
-  }
-  else
-  {
-    if (surfFlag)   glCallList( list_surf_load );
-    else            glCallList( list_elem_load );
-  }
+//   glLoadIdentity();
+//   moveModel();
+//   if (modelEdgeFlag)     glCallList( list_model_edges );
+//   if (elemEdgeFlag)
+//   {
+//     if (surfFlag) glCallList( list_surf_edges );
+//     else          glCallList( list_elem_edges );
+//   }
+//   /* enable all colors  */
+//   glColor3d( 1,1,1);
+//   // glEnable(GL_TEXTURE_1D);
+//   if (lcase[cur_lc].irtype == 3)
+//   {
+//     glCallList( list_elem_elstress );
+//   }
+//   else
+//   {
+//     if (surfFlag)   glCallList( list_surf_load );
+//     else            glCallList( list_elem_load );
+//   }
 
-  if (rulerFlag)
-  {
-    glLoadIdentity();
-    drawRuler();
-  }
-  if (bgpicture)
-  {
-    glLoadIdentity();
-    glRasterPos3f(-1., -1., 1.);
-    glPixelZoom(bgpicture->zoom[0],bgpicture->zoom[1]);
-    glDrawPixels( bgpicture->width, bgpicture->height, bgpicture->format, bgpicture->type, bgpicture->pixels);
-  }
-  if (pickFlag)
-  {
-    /* draw currend picking-Area  */
-    xc= dx_cur/(double)width_w1;
-    yc= dy_cur/(double)height_w1;
-    //printf("dxy_cur:%f %f xyc:%f %f p:%f %f\n", dx_cur,dy_cur, xc,yc, dx-xc,dy+yc);
-    glLoadIdentity();
-    glColor3dv( foregrndcol_rgb );
-    dxscal=dx*height_w1/width_w1;
-    glLineWidth(1.);
-    glBegin ( GL_LINE_LOOP );
-    glVertex3d ( dxscal-xc, dy+yc, -1. );
-    glVertex3d ( dxscal+xc, dy+yc, -1. );
-    glVertex3d ( dxscal+xc, dy-yc, -1. );
-    glVertex3d ( dxscal-xc, dy-yc, -1. );
-    glEnd();
-  }
-  glutSwapBuffers();
-  if(frameSetFlag>-2) { frameSet(frameSetFlag); frameSetFlag=-2; goto redraw; }
-  if((cur_commandFile>-1)&&(flipflop)) goto redraw;
+//   if (rulerFlag)
+//   {
+//     glLoadIdentity();
+//     drawRuler();
+//   }
+//   if (bgpicture)
+//   {
+//     glLoadIdentity();
+//     glRasterPos3f(-1., -1., 1.);
+//     glPixelZoom(bgpicture->zoom[0],bgpicture->zoom[1]);
+//     glDrawPixels( bgpicture->width, bgpicture->height, bgpicture->format, bgpicture->type, bgpicture->pixels);
+//   }
+//   if (pickFlag)
+//   {
+//     /* draw currend picking-Area  */
+//     xc= dx_cur/(double)width_w1;
+//     yc= dy_cur/(double)height_w1;
+//     //printf("dxy_cur:%f %f xyc:%f %f p:%f %f\n", dx_cur,dy_cur, xc,yc, dx-xc,dy+yc);
+//     glLoadIdentity();
+//     glColor3dv( foregrndcol_rgb );
+//     dxscal=dx*height_w1/width_w1;
+//     glLineWidth(1.);
+//     glBegin ( GL_LINE_LOOP );
+//     glVertex3d ( dxscal-xc, dy+yc, -1. );
+//     glVertex3d ( dxscal+xc, dy+yc, -1. );
+//     glVertex3d ( dxscal+xc, dy-yc, -1. );
+//     glVertex3d ( dxscal-xc, dy-yc, -1. );
+//     glEnd();
+//   }
+//   glutSwapBuffers();
+//   if(frameSetFlag>-2) { frameSet(frameSetFlag); frameSetFlag=-2; goto redraw; }
+//   if((cur_commandFile>-1)&&(flipflop)) goto redraw;
 
-  if((movieFlag>0)&&(!stopFlag))
-  {
-    glutPostRedisplay();
-    createHardcopy(3, NULL);
-  }
-  if(hcpyFlag)
-  {
-    createHardcopy(hcpyFlag, NULL); hcpyFlag=0; 
-  }
-}
-
-
-
-void DrawGraficLight( void )
-{
-  int flipflop=0;
-  double xc, yc, dxscal;
-#if TEST
-  printf(" in DrawGraficLight\n");
-#endif
- redraw:;
-  flipflop=!flipflop;
-  glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  glLoadIdentity();
-  moveModel();
-  if (modelEdgeFlag) glCallList( list_model_edges );
-  if (elemEdgeFlag)
-  {
-     if (surfFlag) glCallList( list_surf_edges );
-     else          glCallList( list_elem_edges );
-  }
-  if (surfFlag)    glCallList( list_surf_light );
-  else             glCallList( list_elem_light );
-
-  if (rulerFlag)
-  {
-    glLoadIdentity();
-    drawRuler();
-  }
-  if (bgpicture)
-  {
-    glLoadIdentity();
-    glRasterPos3f(-1., -1., 1.);
-    glPixelZoom(bgpicture->zoom[0],bgpicture->zoom[1]);
-    glDrawPixels( bgpicture->width, bgpicture->height, bgpicture->format, bgpicture->type, bgpicture->pixels);
-  }
-  if (pickFlag)
-  {
-    /* draw currend picking-Area  */
-    xc= dx_cur/(double)width_w1;
-    yc= dy_cur/(double)height_w1;
-    glLoadIdentity();
-    glColor3dv( foregrndcol_rgb );
-
-    dxscal=dx*height_w1/width_w1;
-    glBegin ( GL_LINE_LOOP );
-      glVertex3d ( dxscal-xc, dy+yc, -1. );
-      glVertex3d ( dxscal+xc, dy+yc, -1. );
-      glVertex3d ( dxscal+xc, dy-yc, -1. );
-      glVertex3d ( dxscal-xc, dy-yc, -1. );
-    glEnd();
-  }
-  glutSwapBuffers();
-  if(frameSetFlag>-2) { frameSet(frameSetFlag); frameSetFlag=-2;  goto redraw; }
-  if((cur_commandFile>-1)&&(flipflop)) goto redraw;
-
-  if((movieFlag>0)&&(!stopFlag))
-  {
-    glutPostRedisplay();
-    createHardcopy(3, NULL);
-  }
-  if(hcpyFlag)
-  {
-    createHardcopy(hcpyFlag, NULL); hcpyFlag=0;
-  }
-}
+//   if((movieFlag>0)&&(!stopFlag))
+//   {
+//     glutPostRedisplay();
+//     createHardcopy(3, NULL);
+//   }
+//   if(hcpyFlag)
+//   {
+//     createHardcopy(hcpyFlag, NULL); hcpyFlag=0;
+//   }
+// }
 
 
 
-void DrawGraficAnimate( void )
-{
-  static char buffer[MAX_LINE_LENGTH];
-  static int t0, t1;
-  int flipflop=0;
-  static double freqb, freqb_soll;
-  double xc, yc, dxscal;
-#if TEST
-  printf(" in DrawGraficAnimate\n");
-#endif 
- movieLoop:;
-  flipflop=!flipflop;
-#if TEST
-  frameNr++;
-  /* Zeit stoppen  */
-  if (frameNr==1) stopClock( frameNr );
-  if (frameNr==100) {stopClock( frameNr ); frameNr=0;}
-#endif
+// void DrawGraficLight( void )
+// {
+// //   int flipflop=0;
+// //   double xc, yc, dxscal;
+// // #if TEST
+// //   printf(" in DrawGraficLight\n");
+// // #endif
+// //  redraw:;
+// //   flipflop=!flipflop;
+// //   glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
+// //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+// //   glLoadIdentity();
+// //   moveModel();
+// //   if (modelEdgeFlag) glCallList( list_model_edges );
+// //   if (elemEdgeFlag)
+// //   {
+// //      if (surfFlag) glCallList( list_surf_edges );
+// //      else          glCallList( list_elem_edges );
+// //   }
+// //   if (surfFlag)    glCallList( list_surf_light );
+// //   else             glCallList( list_elem_light );
 
-  glLoadIdentity();
-  moveModel();
-  if (modelEdgeFlag_Static)     glCallList( list_model_edges );
-  if (modelEdgeFlag)     glCallList( list_animate_model_edges[animList] );
-  if (elemEdgeFlag_Static)
-  {
-    if (surfFlag) glCallList( list_surf_edges );
-    else          glCallList( list_elem_edges );
-  }
-  if (elemEdgeFlag)
-  {
-    if (surfFlag) glCallList( list_animate_surf_edges[animList] );
-    else          glCallList( list_animate_elem_edges[animList] );
-  }
-  glCallList( list_animate[animList] );
-  
-  glLoadIdentity();
-  sprintf (buffer,"%4d%%Amplitude     ", anim_alfa[animList]);
-  glColor3dv( foregrndcol_rgb );
-  text( -0.96, 0.96,-.99,buffer, glut_font[legend_font] );
+// //   if (rulerFlag)
+// //   {
+// //     glLoadIdentity();
+// //     drawRuler();
+// //   }
+// //   if (bgpicture)
+// //   {
+// //     glLoadIdentity();
+// //     glRasterPos3f(-1., -1., 1.);
+// //     glPixelZoom(bgpicture->zoom[0],bgpicture->zoom[1]);
+// //     glDrawPixels( bgpicture->width, bgpicture->height, bgpicture->format, bgpicture->type, bgpicture->pixels);
+// //   }
+// //   if (pickFlag)
+// //   {
+// //     /* draw currend picking-Area  */
+// //     xc= dx_cur/(double)width_w1;
+// //     yc= dy_cur/(double)height_w1;
+// //     glLoadIdentity();
+// //     glColor3dv( foregrndcol_rgb );
 
-  if (rulerFlag) drawRuler();
-  if (bgpicture)
-  {
-    glRasterPos3f(-1., -1., 1.);
-    glPixelZoom(bgpicture->zoom[0],bgpicture->zoom[1]);
-    glDrawPixels( bgpicture->width, bgpicture->height, bgpicture->format, bgpicture->type, bgpicture->pixels);
-  }
-  if (pickFlag)
-  {
-    /* draw currend picking-Area  */
-    xc= dx_cur/(double)width_w1;
-    yc= dy_cur/(double)height_w1;
-    glColor3dv( foregrndcol_rgb );
-    dxscal=dx*height_w1/width_w1;
-    glBegin ( GL_LINE_LOOP );
-      glVertex3d ( dxscal-xc, dy+yc, -1. );
-      glVertex3d ( dxscal+xc, dy+yc, -1. );
-      glVertex3d ( dxscal+xc, dy-yc, -1. );
-      glVertex3d ( dxscal-xc, dy-yc, -1. );
-    glEnd();
-  }
-  glutSwapBuffers();
-  if(frameSetFlag>-2) { frameSet(frameSetFlag); frameSetFlag=-2; goto movieLoop; }
-  if((cur_commandFile>-1)&&(flipflop)) goto movieLoop;
+// //     dxscal=dx*height_w1/width_w1;
+// //     glBegin ( GL_LINE_LOOP );
+// //       glVertex3d ( dxscal-xc, dy+yc, -1. );
+// //       glVertex3d ( dxscal+xc, dy+yc, -1. );
+// //       glVertex3d ( dxscal+xc, dy-yc, -1. );
+// //       glVertex3d ( dxscal-xc, dy-yc, -1. );
+// //     glEnd();
+// //   }
+// //   glutSwapBuffers();
+// //   if(frameSetFlag>-2) { frameSet(frameSetFlag); frameSetFlag=-2;  goto redraw; }
+// //   if((cur_commandFile>-1)&&(flipflop)) goto redraw;
 
-  // keeps animation going when the mouse is in w1 
-  if ( activWindow==w1 )  glutPostRedisplay();
-
-  if (!stopFlag)
-  {
-    animList++;
-    if ( animList>=anim_steps) animList=0;
-  }
-
-  /* because of a sgi-problem only one side of the graphics-buffer can be used for hcpy */
-  /* therefore each frame is displayed twice if a movie is recorded */
-  if((movieFlag>0)&&(!stopFlag))
-  {
-    if(movieFrames==-1) movieFrames=anim_steps;
-    printf("movieFrames:%d frameNr:%d animSteps:%d stepNr:%d\n", movieFrames,gifNr,anim_steps,animList);
-    glutPostRedisplay();
-    createHardcopy(3, NULL);
-    if(animList<movieFrames) goto movieLoop;
-  }
-  if(hcpyFlag)
-  {
-    createHardcopy(hcpyFlag, NULL); hcpyFlag=0;
-  }
-
-  /* real-time wait */
-  if(!movieFlag)
-  {
-    t0=t1;
-    do {
-      t1=glutGet(GLUT_ELAPSED_TIME);
-      freqb = 1000 / ((t1-t0)+1) ;
-      freqb_soll= anim_steps*1000 / time_per_period;
-    } while ( freqb > freqb_soll );
-  }
-}
+// //   if((movieFlag>0)&&(!stopFlag))
+// //   {
+// //     glutPostRedisplay();
+// //     createHardcopy(3, NULL);
+// //   }
+// //   if(hcpyFlag)
+// //   {
+// //     createHardcopy(hcpyFlag, NULL); hcpyFlag=0;
+// //   }
+// }
 
 
 
-void DrawGraficSequence( void )
-{
-  static int j;
-  static char buffer[MAX_LINE_LENGTH];
-  static int t0, t1;
-  int flipflop=0;
-  static double freqb, freqb_soll;
-  double xc, yc, dxscal;
-  char key;
-#if TEST
-  printf(" in DrawGraficSequence\n");
-#endif 
- movieLoop:;
-  flipflop=!flipflop;
-#if TEST
-  frameNr++;
-  /* Zeit stoppen  */
-  if (frameNr==1) stopClock( frameNr );
-  if (frameNr==100) {stopClock( frameNr ); frameNr=0;}
-#endif
+// void DrawGraficAnimate( void )
+// {
+//   static char buffer[MAX_LINE_LENGTH];
+//   static int t0, t1;
+//   int flipflop=0;
+//   static double freqb, freqb_soll;
+//   double xc, yc, dxscal;
+// #if TEST
+//   printf(" in DrawGraficAnimate\n");
+// #endif
+//  movieLoop:;
+//   flipflop=!flipflop;
+// #if TEST
+//   frameNr++;
+//   /* Zeit stoppen  */
+//   if (frameNr==1) stopClock( frameNr );
+//   if (frameNr==100) {stopClock( frameNr ); frameNr=0;}
+// #endif
 
-  glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//   glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
+//   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glLoadIdentity();
-  moveModel();
-  if(!sequenceFlag)
-  {
-    if (modelEdgeFlag)     glCallList( list_model_edges );
-    if (elemEdgeFlag)
-    {
-      if (surfFlag) glCallList( list_surf_edges );
-      else          glCallList( list_elem_edges );
-    }
-  }
-  else
-  {
-    if (modelEdgeFlag_Static)     glCallList( list_model_edges );
-    if (modelEdgeFlag)     glCallList( list_animate_model_edges[animList] );
-    if (elemEdgeFlag_Static)
-    {
-      if (surfFlag) glCallList( list_surf_edges );
-      else          glCallList( list_elem_edges );
-    }
-    if (elemEdgeFlag)
-    {
-      if (surfFlag) glCallList( list_animate_surf_edges[animList] );
-      else          glCallList( list_animate_elem_edges[animList] );
-    }
-  }
+//   glLoadIdentity();
+//   moveModel();
+//   if (modelEdgeFlag_Static)     glCallList( list_model_edges );
+//   if (modelEdgeFlag)     glCallList( list_animate_model_edges[animList] );
+//   if (elemEdgeFlag_Static)
+//   {
+//     if (surfFlag) glCallList( list_surf_edges );
+//     else          glCallList( list_elem_edges );
+//   }
+//   if (elemEdgeFlag)
+//   {
+//     if (surfFlag) glCallList( list_animate_surf_edges[animList] );
+//     else          glCallList( list_animate_elem_edges[animList] );
+//   }
+//   glCallList( list_animate[animList] );
 
-  if (illumFlag); 
-  else
-  {
-    /* enable all colors */
-    glColor3d( 1,1,1);
-    glEnable(GL_TEXTURE_1D);
-  }
-  glCallList( list_animate[animList] );
-  if (illumFlag); 
-  else
-  {
-    glDisable(GL_TEXTURE_1D);
-  }
+//   glLoadIdentity();
+//   sprintf (buffer,"%4d%%Amplitude     ", anim_alfa[animList]);
+//   glColor3dv( foregrndcol_rgb );
+//   text( -0.96, 0.96,-.99,buffer, glut_font[legend_font] );
 
-  /* immediate draw the vectors. no display-list used because vector-length should be updated immediately */
-  if ((vectorFlag)&&(v_dim>1))
-  {
-    if(surfFlag) key='f';
-    else         key='e';
-    for (j=0; j<anzGeo->psets; j++ )
-    {
-      if (pset[j].type[0]==key)
-      { 
-        /* vectors keep their length:*/
-        //if(key=='f') drawFaces_vector( dsSequence.ds[animList], v_dim, entity_v, v_factor*ds*0.1*v_scale, set[pset[j].nr].anz_f, set[pset[j].nr].face, node, face);  
-        //if(key=='e') drawElements_vector( dsSequence.ds[animList], v_dim, entity_v, v_factor*ds*0.1*v_scale, set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, e_enqire);
-        /* scale vector length with zoom. */
-        if(key=='f') drawFaces_vector( dsSequence.ds[animList], v_dim, entity_v, v_factor*0.025*v_scale, set[pset[j].nr].anz_f, set[pset[j].nr].face, node, face);  
-        if(key=='e') drawElements_vector( dsSequence.ds[animList], v_dim, entity_v, v_factor*0.025*v_scale, set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, e_enqire);
-      }
-    }
-  }
+//   if (rulerFlag) drawRuler();
+//   if (bgpicture)
+//   {
+//     glRasterPos3f(-1., -1., 1.);
+//     glPixelZoom(bgpicture->zoom[0],bgpicture->zoom[1]);
+//     glDrawPixels( bgpicture->width, bgpicture->height, bgpicture->format, bgpicture->type, bgpicture->pixels);
+//   }
+//   if (pickFlag)
+//   {
+//     /* draw currend picking-Area  */
+//     xc= dx_cur/(double)width_w1;
+//     yc= dy_cur/(double)height_w1;
+//     glColor3dv( foregrndcol_rgb );
+//     dxscal=dx*height_w1/width_w1;
+//     glBegin ( GL_LINE_LOOP );
+//       glVertex3d ( dxscal-xc, dy+yc, -1. );
+//       glVertex3d ( dxscal+xc, dy+yc, -1. );
+//       glVertex3d ( dxscal+xc, dy-yc, -1. );
+//       glVertex3d ( dxscal-xc, dy-yc, -1. );
+//     glEnd();
+//   }
+//   glutSwapBuffers();
+//   if(frameSetFlag>-2) { frameSet(frameSetFlag); frameSetFlag=-2; goto movieLoop; }
+//   if((cur_commandFile>-1)&&(flipflop)) goto movieLoop;
 
-  glLoadIdentity();
-  if(lcase[lcase_animList].analysis_type==2) sprintf (buffer,"Frame:%d Frequency:%e %s%c", animList+1, lcase[lcase_animList].dat[animList][0], lcase[lcase_animList].pheader[animList], '\0');
-  else sprintf (buffer,"Frame:%d Time:%e %s%c", animList+1, lcase[lcase_animList].dat[animList][0], lcase[lcase_animList].pheader[animList], '\0');
-  glColor3dv( foregrndcol_rgb );
-  text( -0.96, 0.96, -0.99,buffer, glut_font[legend_font] );
+//   // keeps animation going when the mouse is in w1
+//   if ( activWindow==w1 )  glutPostRedisplay();
 
-  if (rulerFlag) drawRuler();
-  if (bgpicture)
-  {
-    glRasterPos3f(-1., -1., 1.);
-    glPixelZoom(bgpicture->zoom[0],bgpicture->zoom[1]);
-    glDrawPixels( bgpicture->width, bgpicture->height, bgpicture->format, bgpicture->type, bgpicture->pixels);
-  }
-  if (pickFlag)
-  {
-    /* draw currend picking-Area  */
-    xc= dx_cur/(double)width_w1;
-    yc= dy_cur/(double)height_w1;
-    //glLoadIdentity();
-    glColor3dv( foregrndcol_rgb );
-    dxscal=dx*height_w1/width_w1;
-    glBegin ( GL_LINE_LOOP );
-      glVertex3d ( dxscal-xc, dy+yc, -1. );
-      glVertex3d ( dxscal+xc, dy+yc, -1. );
-      glVertex3d ( dxscal+xc, dy-yc, -1. );
-      glVertex3d ( dxscal-xc, dy-yc, -1. );
-    glEnd();
-  }
-  glutSwapBuffers();
-  if(frameSetFlag>-2) { frameSet(frameSetFlag); frameSetFlag=-2; goto movieLoop; }
-  if((cur_commandFile>-1)&&(flipflop)) goto movieLoop;
+//   if (!stopFlag)
+//   {
+//     animList++;
+//     if ( animList>=anim_steps) animList=0;
+//   }
 
-  if ( activWindow==w1 )  glutPostRedisplay();
+//   /* because of a sgi-problem only one side of the graphics-buffer can be used for hcpy */
+//   /* therefore each frame is displayed twice if a movie is recorded */
+//   if((movieFlag>0)&&(!stopFlag))
+//   {
+//     if(movieFrames==-1) movieFrames=anim_steps;
+//     printf("movieFrames:%d frameNr:%d animSteps:%d stepNr:%d\n", movieFrames,gifNr,anim_steps,animList);
+//     glutPostRedisplay();
+//     createHardcopy(3, NULL);
+//     if(animList<movieFrames) goto movieLoop;
+//   }
+//   if(hcpyFlag)
+//   {
+//     createHardcopy(hcpyFlag, NULL); hcpyFlag=0;
+//   }
 
-  if (!stopFlag)
-  {
-    animList++;
-    if ( animList>=dsSequence.nds) animList=0;
-  }
-
-  /* because of a sgi-problem only one side of the graphics-buffer can be used for hcpy */
-  /* therefore each frame is displayed twice if a movie is recorded */
-  if((movieFlag>0)&&(!stopFlag))
-  {
-    if(movieFrames==-1) movieFrames=dsSequence.nds;
-    printf("movieFrames:%d frameNr:%d seqSteps:%d stepNr:%d\n", movieFrames,gifNr,dsSequence.nds,animList);
-    glutPostRedisplay();
-    createHardcopy(3, NULL);
-    if(animList<movieFrames) goto movieLoop;
-  }
-  if(hcpyFlag)
-  {
-    createHardcopy(hcpyFlag, NULL); hcpyFlag=0;
-  }
-
-  /* real-time wait */
-  if(!movieFlag)
-  {
-    t0=t1;
-    do {
-    t1=glutGet(GLUT_ELAPSED_TIME);
-    freqb = 1000 / ((t1-t0)+1) ;
-    freqb_soll= anim_steps*1000 / time_per_period;
-    } while ( freqb > freqb_soll );
-  }
-}
+//   /* real-time wait */
+//   if(!movieFlag)
+//   {
+//     t0=t1;
+//     do {
+//       t1=glutGet(GLUT_ELAPSED_TIME);
+//       freqb = 1000 / ((t1-t0)+1) ;
+//       freqb_soll= anim_steps*1000 / time_per_period;
+//     } while ( freqb > freqb_soll );
+//   }
+// }
 
 
 
-void DrawPickedItems()
-{
-  int flipflop=0;
-  double xc, yc, dxscal;
-#if TEST
-  printf(" in DrawPickedItems\n");
-#endif 
- redraw:;
-  flipflop=!flipflop;
-  glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+// void DrawGraficSequence( void )
+// {
+//   static int j;
+//   static char buffer[MAX_LINE_LENGTH];
+//   static int t0, t1;
+//   int flipflop=0;
+//   static double freqb, freqb_soll;
+//   double xc, yc, dxscal;
+//   char key;
+// #if TEST
+//   printf(" in DrawGraficSequence\n");
+// #endif
+//  movieLoop:;
+//   flipflop=!flipflop;
+// #if TEST
+//   frameNr++;
+//   /* Zeit stoppen  */
+//   if (frameNr==1) stopClock( frameNr );
+//   if (frameNr==100) {stopClock( frameNr ); frameNr=0;}
+// #endif
 
-  glLoadIdentity();
-  moveModel();
-  if (modelEdgeFlag) glCallList( list_model_edges );
-  drawSets(!PICK);
+//   glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
+//   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  if (rulerFlag)
-  {
-    glLoadIdentity();
-    drawRuler();
-  }
-  if (bgpicture)
-  {
-    glLoadIdentity();
-    glRasterPos3f(-1., -1., 1.);
-    glPixelZoom(bgpicture->zoom[0],bgpicture->zoom[1]);
-    glDrawPixels( bgpicture->width, bgpicture->height, bgpicture->format, bgpicture->type, bgpicture->pixels);
-  }
-  if (pickFlag)
-  {
-    /* draw currend picking-Area  */
-    xc= dx_cur/(double)width_w1;
-    yc= dy_cur/(double)height_w1;
-    glLoadIdentity();
-    glColor3dv( foregrndcol_rgb );
-    dxscal=dx*height_w1/width_w1;
-    glBegin ( GL_LINE_LOOP );
-      glVertex3d ( dxscal-xc, dy+yc, -1. );
-      glVertex3d ( dxscal+xc, dy+yc, -1. );
-      glVertex3d ( dxscal+xc, dy-yc, -1. );
-      glVertex3d ( dxscal-xc, dy-yc, -1. );
-    glEnd();
-  }
-  glutSwapBuffers();
-  if(frameSetFlag>-2) { frameSet(frameSetFlag); frameSetFlag=-2; DrawPickedItems(); goto redraw; }
-  if((cur_commandFile>-1)&&(flipflop)) goto redraw;
+//   glLoadIdentity();
+//   moveModel();
+//   if(!sequenceFlag)
+//   {
+//     if (modelEdgeFlag)     glCallList( list_model_edges );
+//     if (elemEdgeFlag)
+//     {
+//       if (surfFlag) glCallList( list_surf_edges );
+//       else          glCallList( list_elem_edges );
+//     }
+//   }
+//   else
+//   {
+//     if (modelEdgeFlag_Static)     glCallList( list_model_edges );
+//     if (modelEdgeFlag)     glCallList( list_animate_model_edges[animList] );
+//     if (elemEdgeFlag_Static)
+//     {
+//       if (surfFlag) glCallList( list_surf_edges );
+//       else          glCallList( list_elem_edges );
+//     }
+//     if (elemEdgeFlag)
+//     {
+//       if (surfFlag) glCallList( list_animate_surf_edges[animList] );
+//       else          glCallList( list_animate_elem_edges[animList] );
+//     }
+//   }
 
-  if((movieFlag>0)&&(!stopFlag))
-  {
-    glutPostRedisplay();
-    createHardcopy(3, NULL);
-  }
-  if(hcpyFlag)
-  {
-    createHardcopy(hcpyFlag, NULL); hcpyFlag=0;
-  }
-}
+//   if (illumFlag);
+//   else
+//   {
+//     /* enable all colors */
+//     glColor3d( 1,1,1);
+//     glEnable(GL_TEXTURE_1D);
+//   }
+//   glCallList( list_animate[animList] );
+//   if (illumFlag);
+//   else
+//   {
+//     glDisable(GL_TEXTURE_1D);
+//   }
 
+//   /* immediate draw the vectors. no display-list used because vector-length should be updated immediately */
+//   if ((vectorFlag)&&(v_dim>1))
+//   {
+//     if(surfFlag) key='f';
+//     else         key='e';
+//     for (j=0; j<anzGeo->psets; j++ )
+//     {
+//       if (pset[j].type[0]==key)
+//       {
+//         /* vectors keep their length:*/
+//         //if(key=='f') drawFaces_vector( dsSequence.ds[animList], v_dim, entity_v, v_factor*ds*0.1*v_scale, set[pset[j].nr].anz_f, set[pset[j].nr].face, node, face);
+//         //if(key=='e') drawElements_vector( dsSequence.ds[animList], v_dim, entity_v, v_factor*ds*0.1*v_scale, set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, e_enqire);
+//         /* scale vector length with zoom. */
+//         if(key=='f') drawFaces_vector( dsSequence.ds[animList], v_dim, entity_v, v_factor*0.025*v_scale, set[pset[j].nr].anz_f, set[pset[j].nr].face, node, face);
+//         if(key=='e') drawElements_vector( dsSequence.ds[animList], v_dim, entity_v, v_factor*0.025*v_scale, set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, e_enqire);
+//       }
+//     }
+//   }
 
-void drawSets(int mode)
-{
-  int j;
-  GLint ipuf[2];
-  char typ;
+//   glLoadIdentity();
+//   if(lcase[lcase_animList].analysis_type==2) sprintf (buffer,"Frame:%d Frequency:%e %s%c", animList+1, lcase[lcase_animList].dat[animList][0], lcase[lcase_animList].pheader[animList], '\0');
+//   else sprintf (buffer,"Frame:%d Time:%e %s%c", animList+1, lcase[lcase_animList].dat[animList][0], lcase[lcase_animList].pheader[animList], '\0');
+//   glColor3dv( foregrndcol_rgb );
+//   text( -0.96, 0.96, -0.99,buffer, glut_font[legend_font] );
 
-#if TEST
-  printf(" in drawSets\n");
-#endif 
+//   if (rulerFlag) drawRuler();
+//   if (bgpicture)
+//   {
+//     glRasterPos3f(-1., -1., 1.);
+//     glPixelZoom(bgpicture->zoom[0],bgpicture->zoom[1]);
+//     glDrawPixels( bgpicture->width, bgpicture->height, bgpicture->format, bgpicture->type, bgpicture->pixels);
+//   }
+//   if (pickFlag)
+//   {
+//     /* draw currend picking-Area  */
+//     xc= dx_cur/(double)width_w1;
+//     yc= dy_cur/(double)height_w1;
+//     //glLoadIdentity();
+//     glColor3dv( foregrndcol_rgb );
+//     dxscal=dx*height_w1/width_w1;
+//     glBegin ( GL_LINE_LOOP );
+//       glVertex3d ( dxscal-xc, dy+yc, -1. );
+//       glVertex3d ( dxscal+xc, dy+yc, -1. );
+//       glVertex3d ( dxscal+xc, dy-yc, -1. );
+//       glVertex3d ( dxscal-xc, dy-yc, -1. );
+//     glEnd();
+//   }
+//   glutSwapBuffers();
+//   if(frameSetFlag>-2) { frameSet(frameSetFlag); frameSetFlag=-2; goto movieLoop; }
+//   if((cur_commandFile>-1)&&(flipflop)) goto movieLoop;
 
-  for (j=0; j<anzGeo->psets; j++ )
-  {
-    //printf("draw pset:%d set:%d type:%s width:%d\n",j,pset[j].nr,pset[j].type,pset[j].width);
-    /* don't draw the transparent faces */
-    if(pset[j].type[0]=='f')
-    {
-      if(mode) drawFaceNodes_plot( set[pset[j].nr].anz_f, set[pset[j].nr].face, node, face, 2, 0 );
-      if(elemEdgeFlag) drawFaces_edge( set[pset[j].nr].anz_f, set[pset[j].nr].face, node, face, basCol[0], pset[j].type[1] );
-      if((pset[j].type[1]!='b')&&(pset[j].type[2]!='b'))
-      {
-        drawFaces_plot( set[pset[j].nr].anz_f, set[pset[j].nr].face, node, colNr, face, pset[j].col, pset[j].type[1], pset[j].width, mode );
-      }
-    }
-    else if (pset[j].type[0]=='n')
-    {
-      drawNodes_plot( set[pset[j].nr].anz_n, set[pset[j].nr].node, node, pset[j].col, pset[j].type[1], pset[j].width );
-      if ((vectorFlag)&&(v_dim>1))
-      {
-        /* vectors keep their length:*/
-        // drawNodes_vector( dsSequence.ds[0], v_dim, entity_v, v_factor*ds*0.1*v_scale, set[pset[j].nr].anz_n, set[pset[j].nr].node, node);  
-        /* scale vector length with zoom. */
-        drawNodes_vector( dsSequence.ds[0], v_dim, entity_v, v_factor*0.025*v_scale, set[pset[j].nr].anz_n, set[pset[j].nr].node, node);
-      }
-    }
-    /* don't draw the transparent elements */
-    else if (pset[j].type[0]=='e')
-    {
-      if(mode) drawElemNodes_plot( set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, e_enqire, 2, 0 );
-      if(elemEdgeFlag) drawElem_edge( set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, e_enqire, basCol[0], pset[j].type[1] );
-      if((pset[j].type[1]!='b')&&(pset[j].type[2]!='b'))
-      {
-        drawElements_plot( set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, colNr, e_enqire, pset[j].col, pset[j].type[1], pset[j].width, mode );
-      }
-    }
-    else if (pset[j].type[0]=='p')
-    {
-      drawPoints_plot( set[pset[j].nr].anz_p, set[pset[j].nr].pnt, point, pset[j].col, pset[j].type[1], pset[j].width );
-    }
-    else if (pset[j].type[0]=='l')
-    {
-      drawLines_plot( set[pset[j].nr].anz_l, set[pset[j].nr].line, line, point, pset[j].col, pset[j].type[1], pset[j].width );
-    }
-    else if (pset[j].type[0]=='s')
-    {
-      if(pset[j].type[1]=='h') drawShapes_plot( set[pset[j].nr].anz_sh, set[pset[j].nr].shp, shape, point, pset[j].col, pset[j].type[1]);
-      else
-      {
-        drawSurfs_plot( set[pset[j].nr].anz_s, set[pset[j].nr].surf, surf, lcmb, line, point, pset[j].col, pset[j].type[1] );
-      }
-    }
-    else if (pset[j].type[0]=='b')
-    {
-      drawBodys_plot( set[pset[j].nr].anz_b, set[pset[j].nr].body, body, surf, lcmb, line, point, pset[j].col, pset[j].type[1] );
-    }
-    else if (pset[j].type[0]=='L')
-    {
-      drawNurl_plot( set[pset[j].nr].anz_nurl, set[pset[j].nr].nurl, pset[j].col, pset[j].type[1], pset[j].width, mode );
-    }
-    else if (pset[j].type[0]=='S')
-    {
-      drawNurs_plot( set[pset[j].nr].anz_nurs, set[pset[j].nr].nurs, pset[j].col, pset[j].type[1], mode );
-    }
-  }
-  /* draw the transparent objects */
-  for (j=0; j<anzGeo->psets; j++ )
-  {
-    if(((pset[j].type[0]=='f')||(pset[j].type[0]=='e'))&&((pset[j].type[1]=='b')||(pset[j].type[2]=='b')))
-    {
-      if(pset[j].type[2]=='b') typ='x'; else typ=pset[j].type[1];
-      glGetIntegerv( GL_CULL_FACE_MODE, ipuf );
-      glDepthFunc(GL_LESS);
-      glEnable (GL_BLEND);
-      glDepthMask(GL_FALSE);
-      glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-      glCullFace ( GL_FRONT );
-      if(pset[j].type[0]=='f') drawFaces_plot( set[pset[j].nr].anz_f, set[pset[j].nr].face, node, colNr, face, pset[j].col, typ, pset[j].width, mode );
-      else  drawElements_plot( set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, colNr, e_enqire, pset[j].col, typ, pset[j].width, mode );
-      glCullFace ( GL_BACK );
-      if(pset[j].type[0]=='f') drawFaces_plot( set[pset[j].nr].anz_f, set[pset[j].nr].face, node, colNr, face, pset[j].col, typ, pset[j].width, mode );
-      else  drawElements_plot( set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, colNr, e_enqire, pset[j].col, typ, pset[j].width, mode );
-      glDepthMask(GL_TRUE);
-      glDisable (GL_BLEND);
-      glDepthFunc(GL_LEQUAL);
-      if ( ipuf[0] == GL_FRONT ) glCullFace ( GL_FRONT );
-      else if ( ipuf[0] == GL_BACK ) glCullFace ( GL_BACK );
-    }
-  }
-}
+//   if ( activWindow==w1 )  glutPostRedisplay();
+
+//   if (!stopFlag)
+//   {
+//     animList++;
+//     if ( animList>=dsSequence.nds) animList=0;
+//   }
+
+//   /* because of a sgi-problem only one side of the graphics-buffer can be used for hcpy */
+//   /* therefore each frame is displayed twice if a movie is recorded */
+//   if((movieFlag>0)&&(!stopFlag))
+//   {
+//     if(movieFrames==-1) movieFrames=dsSequence.nds;
+//     printf("movieFrames:%d frameNr:%d seqSteps:%d stepNr:%d\n", movieFrames,gifNr,dsSequence.nds,animList);
+//     glutPostRedisplay();
+//     createHardcopy(3, NULL);
+//     if(animList<movieFrames) goto movieLoop;
+//   }
+//   if(hcpyFlag)
+//   {
+//     createHardcopy(hcpyFlag, NULL); hcpyFlag=0;
+//   }
+
+//   /* real-time wait */
+//   if(!movieFlag)
+//   {
+//     t0=t1;
+//     do {
+//     t1=glutGet(GLUT_ELAPSED_TIME);
+//     freqb = 1000 / ((t1-t0)+1) ;
+//     freqb_soll= anim_steps*1000 / time_per_period;
+//     } while ( freqb > freqb_soll );
+//   }
+// }
 
 
 
-void DrawAxes()
-{
-  static char buffer[MAX_LINE_LENGTH];
-#if TEST
-  printf(" in DrawAxes\n");
-#endif 
+// void DrawPickedItems()
+// {
+//   int flipflop=0;
+//   double xc, yc, dxscal;
+// #if TEST
+//   printf(" in DrawPickedItems\n");
+// #endif
+//  redraw:;
+//   flipflop=!flipflop;
+//   glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
+//   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
-  glClear(GL_COLOR_BUFFER_BIT );
+//   glLoadIdentity();
+//   moveModel();
+//   if (modelEdgeFlag) glCallList( list_model_edges );
+//   drawSets(!PICK);
 
-  glLoadIdentity();
-  glOrtho( -1., 1., -1., 1., -1., 1. ); /* nach glLoadIdentity() !! */
+//   if (rulerFlag)
+//   {
+//     glLoadIdentity();
+//     drawRuler();
+//   }
+//   if (bgpicture)
+//   {
+//     glLoadIdentity();
+//     glRasterPos3f(-1., -1., 1.);
+//     glPixelZoom(bgpicture->zoom[0],bgpicture->zoom[1]);
+//     glDrawPixels( bgpicture->width, bgpicture->height, bgpicture->format, bgpicture->type, bgpicture->pixels);
+//   }
+//   if (pickFlag)
+//   {
+//     /* draw currend picking-Area  */
+//     xc= dx_cur/(double)width_w1;
+//     yc= dy_cur/(double)height_w1;
+//     glLoadIdentity();
+//     glColor3dv( foregrndcol_rgb );
+//     dxscal=dx*height_w1/width_w1;
+//     glBegin ( GL_LINE_LOOP );
+//       glVertex3d ( dxscal-xc, dy+yc, -1. );
+//       glVertex3d ( dxscal+xc, dy+yc, -1. );
+//       glVertex3d ( dxscal+xc, dy-yc, -1. );
+//       glVertex3d ( dxscal-xc, dy-yc, -1. );
+//     glEnd();
+//   }
+//   glutSwapBuffers();
+//   if(frameSetFlag>-2) { frameSet(frameSetFlag); frameSetFlag=-2; DrawPickedItems(); goto redraw; }
+//   if((cur_commandFile>-1)&&(flipflop)) goto redraw;
 
-    v[0]= centerPnt[0] ;            /* nodes sind scaliert, sonst scalieren mit scalNodes() */
-    v[1]= centerPnt[1] ;
-    v[2]= centerPnt[2] ;
-    v[3]=1.;
-    m_sub( &dR[0][0], &R[0][0], &Rmem[0][0] );
-    v_matmult( v, &dR[0][0] );
-    glMultMatrixd( &R[0][0] );
-
-    glColor3dv( foregrndcol_rgb );
-    glBegin ( GL_LINE_STRIP );
-     glVertex3d(0.,.5,0.);
-     glVertex3d(0.,0.,0.);
-     glVertex3d(.5,0.,0.);
-    glEnd();
-    glBegin ( GL_LINES );
-     glVertex3d(0.,0.,0.);
-     glVertex3d(0.,0.,.5);
-    glEnd();
-  
-    text( .5, 0., 0., "X ", glut_font[legend_font] );
-    text( 0., .5, 0., "Y ", glut_font[legend_font] );
-    text( 0., 0., .5, "Z ", glut_font[legend_font] );
-
-  if(drawMode!=4)
-  {
-    glLoadIdentity();
-    if(surfFlag) sprintf (buffer,"s");
-    else         sprintf (buffer,"v");
-    glColor3dv( foregrndcol_rgb );
-    text( -1, -1, 0.,buffer, glut_font[legend_font] );
-  }    
-  if (movezFlag)
-  {
-    glLoadIdentity();
-    sprintf (buffer,"%.2f",(dtz-2.)*scale->w);
-    glColor3dv( foregrndcol_rgb );
-    text( -0.5, -1, 0.,buffer, glut_font[legend_font] );
-  }    
-  glutSwapBuffers();
-}
-
-
-void updCommandLine()
-{
-  DrawCommandLine(0,0);
-}
+//   if((movieFlag>0)&&(!stopFlag))
+//   {
+//     glutPostRedisplay();
+//     createHardcopy(3, NULL);
+//   }
+//   if(hcpyFlag)
+//   {
+//     createHardcopy(hcpyFlag, NULL); hcpyFlag=0;
+//   }
+// }
 
 
-void DrawCommandLine(char *string, int curpos)
-{
-  int i,pix=0;
-#if TEST
-  printf(" in DrawCommandLine\n");
-#endif 
-  if(!commandLineFlag) return;
-  glutSetWindow( w3);
+// void drawSets(int mode)
+// {
+//   int j;
+//   GLint ipuf[2];
+//   char typ;
 
-  glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
-  glClear(GL_COLOR_BUFFER_BIT );
+// #if TEST
+//   printf(" in drawSets\n");
+// #endif
 
-  glLoadIdentity();
-  glColor3dv( foregrndcol_rgb );
-  glOrtho( -1., 1., -1., 1., -1., 1. ); /* nach glLoadIdentity() !! */
-  glBegin ( GL_LINES );
-    glVertex3d(-1, 1., 0. );
-    glVertex3d(1, 1., 0. );
-  glEnd();
-  sprintf(buffer, ":");
-  if(string) strcpy(&buffer[strlen(buffer)], string);
-  text( -.99, -.5, 0., buffer, glut_font[menu_font] );
-  // cursor position in pixel
-  for(i=0; i<=curpos; i++) pix+=glutBitmapWidth(glut_font[menu_font],buffer[i]);
-  //printf("pix:%d %f %f\n",pix, -1.+pix*2./width_w0, -1.+(pix+8.)*2./width_w0); 
-  glBegin ( GL_LINES );
-    glVertex3d(-.99+pix*2./width_w0, -.7, 0. );
-    glVertex3d(-.99+(pix+glutBitmapWidth(glut_font[menu_font],buffer[curpos]))*2./width_w0, -.7, 0. );
-  glEnd();
-  glutSwapBuffers();
-}
+//   for (j=0; j<anzGeo->psets; j++ )
+//   {
+//     //printf("draw pset:%d set:%d type:%s width:%d\n",j,pset[j].nr,pset[j].type,pset[j].width);
+//     /* don't draw the transparent faces */
+//     if(pset[j].type[0]=='f')
+//     {
+//       if(mode) drawFaceNodes_plot( set[pset[j].nr].anz_f, set[pset[j].nr].face, node, face, 2, 0 );
+//       if(elemEdgeFlag) drawFaces_edge( set[pset[j].nr].anz_f, set[pset[j].nr].face, node, face, basCol[0], pset[j].type[1] );
+//       if((pset[j].type[1]!='b')&&(pset[j].type[2]!='b'))
+//       {
+//         drawFaces_plot( set[pset[j].nr].anz_f, set[pset[j].nr].face, node, colNr, face, pset[j].col, pset[j].type[1], pset[j].width, mode );
+//       }
+//     }
+//     else if (pset[j].type[0]=='n')
+//     {
+//       drawNodes_plot( set[pset[j].nr].anz_n, set[pset[j].nr].node, node, pset[j].col, pset[j].type[1], pset[j].width );
+//       if ((vectorFlag)&&(v_dim>1))
+//       {
+//         /* vectors keep their length:*/
+//         // drawNodes_vector( dsSequence.ds[0], v_dim, entity_v, v_factor*ds*0.1*v_scale, set[pset[j].nr].anz_n, set[pset[j].nr].node, node);
+//         /* scale vector length with zoom. */
+//         drawNodes_vector( dsSequence.ds[0], v_dim, entity_v, v_factor*0.025*v_scale, set[pset[j].nr].anz_n, set[pset[j].nr].node, node);
+//       }
+//     }
+//     /* don't draw the transparent elements */
+//     else if (pset[j].type[0]=='e')
+//     {
+//       if(mode) drawElemNodes_plot( set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, e_enqire, 2, 0 );
+//       if(elemEdgeFlag) drawElem_edge( set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, e_enqire, basCol[0], pset[j].type[1] );
+//       if((pset[j].type[1]!='b')&&(pset[j].type[2]!='b'))
+//       {
+//         drawElements_plot( set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, colNr, e_enqire, pset[j].col, pset[j].type[1], pset[j].width, mode );
+//       }
+//     }
+//     else if (pset[j].type[0]=='p')
+//     {
+//       drawPoints_plot( set[pset[j].nr].anz_p, set[pset[j].nr].pnt, point, pset[j].col, pset[j].type[1], pset[j].width );
+//     }
+//     else if (pset[j].type[0]=='l')
+//     {
+//       drawLines_plot( set[pset[j].nr].anz_l, set[pset[j].nr].line, line, point, pset[j].col, pset[j].type[1], pset[j].width );
+//     }
+//     else if (pset[j].type[0]=='s')
+//     {
+//       if(pset[j].type[1]=='h') drawShapes_plot( set[pset[j].nr].anz_sh, set[pset[j].nr].shp, shape, point, pset[j].col, pset[j].type[1]);
+//       else
+//       {
+//         drawSurfs_plot( set[pset[j].nr].anz_s, set[pset[j].nr].surf, surf, lcmb, line, point, pset[j].col, pset[j].type[1] );
+//       }
+//     }
+//     else if (pset[j].type[0]=='b')
+//     {
+//       drawBodys_plot( set[pset[j].nr].anz_b, set[pset[j].nr].body, body, surf, lcmb, line, point, pset[j].col, pset[j].type[1] );
+//     }
+//     else if (pset[j].type[0]=='L')
+//     {
+//       drawNurl_plot( set[pset[j].nr].anz_nurl, set[pset[j].nr].nurl, pset[j].col, pset[j].type[1], pset[j].width, mode );
+//     }
+//     else if (pset[j].type[0]=='S')
+//     {
+//       drawNurs_plot( set[pset[j].nr].anz_nurs, set[pset[j].nr].nurs, pset[j].col, pset[j].type[1], mode );
+//     }
+//   }
+//   /* draw the transparent objects */
+//   for (j=0; j<anzGeo->psets; j++ )
+//   {
+//     if(((pset[j].type[0]=='f')||(pset[j].type[0]=='e'))&&((pset[j].type[1]=='b')||(pset[j].type[2]=='b')))
+//     {
+//       if(pset[j].type[2]=='b') typ='x'; else typ=pset[j].type[1];
+//       glGetIntegerv( GL_CULL_FACE_MODE, ipuf );
+//       glDepthFunc(GL_LESS);
+//       glEnable (GL_BLEND);
+//       glDepthMask(GL_FALSE);
+//       glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//       glCullFace ( GL_FRONT );
+//       if(pset[j].type[0]=='f') drawFaces_plot( set[pset[j].nr].anz_f, set[pset[j].nr].face, node, colNr, face, pset[j].col, typ, pset[j].width, mode );
+//       else  drawElements_plot( set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, colNr, e_enqire, pset[j].col, typ, pset[j].width, mode );
+//       glCullFace ( GL_BACK );
+//       if(pset[j].type[0]=='f') drawFaces_plot( set[pset[j].nr].anz_f, set[pset[j].nr].face, node, colNr, face, pset[j].col, typ, pset[j].width, mode );
+//       else  drawElements_plot( set[pset[j].nr].anz_e, set[pset[j].nr].elem, node, colNr, e_enqire, pset[j].col, typ, pset[j].width, mode );
+//       glDepthMask(GL_TRUE);
+//       glDisable (GL_BLEND);
+//       glDepthFunc(GL_LEQUAL);
+//       if ( ipuf[0] == GL_FRONT ) glCullFace ( GL_FRONT );
+//       else if ( ipuf[0] == GL_BACK ) glCullFace ( GL_BACK );
+//     }
+//   }
+// }
+
+
+
+// void DrawAxes()
+// {
+//   static char buffer[MAX_LINE_LENGTH];
+// #if TEST
+//   printf(" in DrawAxes\n");
+// #endif
+
+//   glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
+//   glClear(GL_COLOR_BUFFER_BIT );
+
+//   glLoadIdentity();
+//   glOrtho( -1., 1., -1., 1., -1., 1. ); /* nach glLoadIdentity() !! */
+
+//     v[0]= centerPnt[0] ;            /* nodes sind scaliert, sonst scalieren mit scalNodes() */
+//     v[1]= centerPnt[1] ;
+//     v[2]= centerPnt[2] ;
+//     v[3]=1.;
+//     m_sub( &dR[0][0], &R[0][0], &Rmem[0][0] );
+//     v_matmult( v, &dR[0][0] );
+//     glMultMatrixd( &R[0][0] );
+
+//     glColor3dv( foregrndcol_rgb );
+//     glBegin ( GL_LINE_STRIP );
+//      glVertex3d(0.,.5,0.);
+//      glVertex3d(0.,0.,0.);
+//      glVertex3d(.5,0.,0.);
+//     glEnd();
+//     glBegin ( GL_LINES );
+//      glVertex3d(0.,0.,0.);
+//      glVertex3d(0.,0.,.5);
+//     glEnd();
+
+//     text( .5, 0., 0., "X ", glut_font[legend_font] );
+//     text( 0., .5, 0., "Y ", glut_font[legend_font] );
+//     text( 0., 0., .5, "Z ", glut_font[legend_font] );
+
+//   if(drawMode!=4)
+//   {
+//     glLoadIdentity();
+//     if(surfFlag) sprintf (buffer,"s");
+//     else         sprintf (buffer,"v");
+//     glColor3dv( foregrndcol_rgb );
+//     text( -1, -1, 0.,buffer, glut_font[legend_font] );
+//   }
+//   if (movezFlag)
+//   {
+//     glLoadIdentity();
+//     sprintf (buffer,"%.2f",(dtz-2.)*scale->w);
+//     glColor3dv( foregrndcol_rgb );
+//     text( -0.5, -1, 0.,buffer, glut_font[legend_font] );
+//   }
+//   glutSwapBuffers();
+// }
+
+
+// void updCommandLine()
+// {
+//   DrawCommandLine(0,0);
+// }
+
+
+// void DrawCommandLine(char *string, int curpos)
+// {
+//   int i,pix=0;
+// #if TEST
+//   printf(" in DrawCommandLine\n");
+// #endif
+//   if(!commandLineFlag) return;
+//   glutSetWindow( w3);
+
+//   glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
+//   glClear(GL_COLOR_BUFFER_BIT );
+
+//   glLoadIdentity();
+//   glColor3dv( foregrndcol_rgb );
+//   glOrtho( -1., 1., -1., 1., -1., 1. ); /* nach glLoadIdentity() !! */
+//   glBegin ( GL_LINES );
+//     glVertex3d(-1, 1., 0. );
+//     glVertex3d(1, 1., 0. );
+//   glEnd();
+//   sprintf(buffer, ":");
+//   if(string) strcpy(&buffer[strlen(buffer)], string);
+//   text( -.99, -.5, 0., buffer, glut_font[menu_font] );
+//   // cursor position in pixel
+//   for(i=0; i<=curpos; i++) pix+=glutBitmapWidth(glut_font[menu_font],buffer[i]);
+//   //printf("pix:%d %f %f\n",pix, -1.+pix*2./width_w0, -1.+(pix+8.)*2./width_w0);
+//   glBegin ( GL_LINES );
+//     glVertex3d(-.99+pix*2./width_w0, -.7, 0. );
+//     glVertex3d(-.99+(pix+glutBitmapWidth(glut_font[menu_font],buffer[curpos]))*2./width_w0, -.7, 0. );
+//   glEnd();
+//   glutSwapBuffers();
+// }
 
 
 
@@ -6464,29 +6464,31 @@ void idleFunction(void)
     sprintf(buffer,"%s/%s", homepath, initfile);
     inihandle = fopen (buffer, "r");
     if ( inihandle!= NULL )
-    { 
+    {
       fclose(inihandle);
       readfbd(buffer, 0);
     }
     if(backgrndcol) sprintf(buffer,"bg w"); else sprintf(buffer,"bg k");
-    pre_view(buffer); 
+    pre_view(buffer);
     if (cullFlag) sprintf(buffer,"back"); else sprintf(buffer,"front");
     pre_view(buffer);
     anzGeo->psets=0;
   }
-  if(loop<2) { glutPostRedisplay(); loop++; return; }
+  if(loop<2) {
+    // glutPostRedisplay(); loop++; return;
+  }
 
   if(iniActionsFlag)
   {
-    glutSetWindow( w0);
-    glutDisplayFunc ( DrawMenuSet );
-    DrawMenuSet();
-    glutSetWindow( w1);
-    glutDisplayFunc ( DrawPickedItems );
-    DrawPickedItems();
-    glutSetWindow( w2);
-    DrawAxes();
-    DrawCommandLine(0,0);
+    // glutSetWindow( w0);
+    // glutDisplayFunc ( DrawMenuSet );
+    // DrawMenuSet();
+    // glutSetWindow( w1);
+    // glutDisplayFunc ( DrawPickedItems );
+    // DrawPickedItems();
+    // glutSetWindow( w2);
+    // DrawAxes();
+    // DrawCommandLine(0,0);
 
     /* read the geometry of the model */
     gtol_buf=gtol;
@@ -6524,7 +6526,7 @@ void idleFunction(void)
         sprintf( buffer,"p %s %lf nolock", specialset->uori, gtol*GTOL_EDGES);
         pre_merge( buffer);
       }
-	
+
       delSet(specialset->uori );
       k=pre_seta(specialset->uori, "i", 0 );
       for (i=0; i<anzGeo->l; i++) seta(k,"l",i);
@@ -6542,7 +6544,7 @@ void idleFunction(void)
         {
 	  if(line[set[k].line[i]].name!=NULL)
             calcLineDiv(line, set[k].line[i], GTOL_COS_A, gtol*GTOL_NODE_DIST/scale->w, gtol*GTOL_NODE_DIST/scale->w*ELEM_LENGTH_RATIO);
-        } 
+        }
         printf(" Optionally modify the line divisions with the 'div' command or with the interactive 'qdiv' command\n");
       }
       delSet(specialset->uori );
@@ -6550,7 +6552,7 @@ void idleFunction(void)
       /* delete unmeshable surfaces */
       printf("delete unmeshable surfaces\n");
       k=pre_seta(specialset->uori, "i", 0 );
-      for (i=0; i<anzGeo->s; i++) if( surf[i].name != (char *)NULL ) 
+      for (i=0; i<anzGeo->s; i++) if( surf[i].name != (char *)NULL )
       {
         if(surf[i].nl==1)
 	{
@@ -6571,7 +6573,7 @@ void idleFunction(void)
       printf("orientSet\n");
       orientSet( "all" );  /* set "all" to avoid substitute surfs */
       for (i=0; i<set[setall].anz_l; i++) repLine(set[setall].line[i]);
-      plot("lp all\n"); 
+      plot("lp all\n");
       printf("\n Optionally create separate bodies (body ! setname (ie. all)) but better start with surface meshing.\n");
       printf(" Change the element-type with 'elty' if needed, default is 'tr6u' for the surface mesh.\n");
       printf(" mesh with 'mesh all' and plot the elements with 'plot e all'.\n\n");
@@ -6601,8 +6603,8 @@ void idleFunction(void)
     if(anzGeo->psets==0)
     {
       plot("p all    \n");
-      plus("l all    \n"); 
-      plus("s all    \n"); 
+      plus("l all    \n");
+      plus("s all    \n");
       plus("b all    \n");
     }
   }
@@ -6652,363 +6654,363 @@ void idleFunction(void)
 
 
 
-void iniDrawMenu()
-{
-  char buffer[MAX_LINE_LENGTH];
-  int i, maxchars;
-  double x,y;
-#if TEST
-  printf(" in iniDrawMenu\n");
-#endif 
+// void iniDrawMenu()
+// {
+//   char buffer[MAX_LINE_LENGTH];
+//   int i, maxchars;
+//   double x,y;
+// #if TEST
+//   printf(" in iniDrawMenu\n");
+// #endif
 
-  glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] ); 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//   glClearColor ( backgrndcol_rgb[0], backgrndcol_rgb[1], backgrndcol_rgb[2], backgrndcol_rgb[3] );
+//   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glLoadIdentity();
-  glOrtho( -1., 1., -1., 1., -1., 1. ); /* nach glLoadIdentity() !! */
+//   glLoadIdentity();
+//   glOrtho( -1., 1., -1., 1., -1., 1. ); /* nach glLoadIdentity() !! */
 
-  glColor3dv( foregrndcol_rgb );
-  if (frameFlag)
-  {
-    glBegin ( GL_LINE_LOOP );
-     glVertex3d(-1+(width_menu*19/20-1)*2./width_w0, 1-(height_menu/10-1)*2./height_w0, 0. );
-     glVertex3d(-1+(width_menu*19/20-1)*2./width_w0, 1-(height_menu/10+height_w1+1)*2./height_w0, 0. );
-     glVertex3d(-1+(width_menu*19/20+width_w1+1)*2./width_w0,1-(height_menu/10+height_w1+1)*2./height_w0,0.);
-     glVertex3d(-1+(width_menu*19/20+width_w1+1)*2./width_w0, 1-(height_menu/10-1)*2./height_w0, 0. );
-    glEnd();
-  }
-  maxchars=(width_w0 /pixPerCharx[legend_font]);
-  if (captionFlag)
-  {
-    i=strlen(picture_caption)-maxchars;
-    if (i>0) strcpy(buffer, &picture_caption[i]);
-    else strcpy(buffer, picture_caption);
-    x=  -(double)(strlen( buffer )*pixPerCharx[legend_font]) / (double)(width_w0);
-    y= 1-(height_menu/10+height_w1+4+pixPerChary[legend_font])*2./height_w0;
-    text( x, y, 0., buffer, glut_font[legend_font] );
-  }
-  if (textFlag)
-  {
-    i=strlen(picture_text)-maxchars;
-    if (i>0) strcpy(buffer, &picture_text[i]);
-    else strcpy(buffer, picture_text);
-    x=  -(double)(strlen( buffer )*pixPerCharx[legend_font]) / (double)(width_w0);
-    y= 1-(height_menu/10+height_w1+6+pixPerChary[legend_font]*2)*2./height_w0;
-    text( x, y, 0., buffer, glut_font[legend_font] );
-  }
-}
-
-
-
-void DrawMenuLoad( void )
-{
-  char buffer[MAX_LINE_LENGTH];
-  double y;
-  int flipflop=0;
-  char strvalue[MAX_LINE_LENGTH];
-
-  defineColTextur_load(1.);
- redraw:;
-  flipflop=!flipflop;
-
-  iniDrawMenu();
-  if (scalaFlag)
-  {
-    stringValue(&lcase[cur_lc].value, strvalue);
-
-    sprintf (buffer,"%d/%d:%s", lcase[cur_lc].step_number,cur_lc+1,lcase[cur_lc].name);
-    text( -0.99, 0.95, 0.,buffer, glut_font[legend_font]);
-    if(lcase[cur_lc].analysis_type==2) sprintf (buffer,"Freq:%s", strvalue);
-    else sprintf (buffer,"Time:%s", strvalue);
-    text( -0.99, 0.9, 0.,buffer, glut_font[legend_font]);
-    sprintf (buffer,"Entity:%s", lcase[cur_lc].compName[cur_entity]);
-    text( -0.99, 0.85, 0., buffer, glut_font[legend_font] );
-    if(addDispFlag)
-    {
-      sprintf (buffer,"+Dispf:%lf", anim_faktor);
-      text( -0.99, 0.80, 0., buffer, glut_font[legend_font] );
-    }
-    if(scale->format=='f')
-    {
-      sprintf (buffer,"max: %-10f  ", lcase[cur_lc].max[cur_entity]);
-      text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
-      sprintf (buffer,"min: %-10f  ", lcase[cur_lc].min[cur_entity]);
-      text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
-    }
-    else if(scale->format=='i')
-    {
-      sprintf (buffer,"max: %-10f  ", lcase[cur_lc].max[cur_entity]);
-      text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
-      sprintf (buffer,"min: %-10f  ", lcase[cur_lc].min[cur_entity]);
-      text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
-    }
-    else
-    {
-      sprintf (buffer,"max: %5.2e  ", lcase[cur_lc].max[cur_entity]);
-      text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
-      sprintf (buffer,"min: %5.2e  ", lcase[cur_lc].min[cur_entity]);
-      text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
-    }
-    y= 1-(height_menu/10+height_w1+1)*2./height_w0;
-    //printf("halfperiod:%d smin:%f smax:%f   %f %f\n",halfperiod,scale->smin, scale->smax, scale->sminr, scale->smaxr); 
-    if ((animFlag==0)||(halfperiod)||((lcase[cur_lc].ictype[0]==12)&&(cur_entity==6))||((lcase[cur_lc].ictype[cur_entity]==2)&&(cur_entity==3))
-	||  ((lcase[cur_lc].ictype[0]==4)&&((cur_entity==6)||(cur_entity==23))) 
-	||  ((lcase[cur_lc].ictype[0]==14)&&((cur_entity==12)||(cur_entity==29)))  )
-    {
-      scala_tex((1-y)/2, -0.93, y, steps, scale->smin, scale->smax, (double)steps/(double)TEX_PIXELS, foregrndcol_rgb, glut_font[legend_font], scale->format, scale->sminr, scale->smaxr);
-    }
-    else if((!halfperiod)
-        && (((lcase[cur_lc].ictype[0]==14)&&((cur_entity==16)||(cur_entity==20)||(cur_entity==24)||(cur_entity==28)||(cur_entity==30)||(cur_entity==31)))
-	|| ((lcase[cur_lc].ictype[0]==4)&&((cur_entity<6)||(cur_entity==22)||(cur_entity==24)||(cur_entity==25)))
-	|| ((lcase[cur_lc].ictype[0]==2)&&(cur_entity<3)) 
-	|| (lcase[cur_lc].ictype[0]==1) )
-    )
-    {
-      if(abs(scale->smax)>abs(scale->smin))
-        scala_tex((1-y)/2, -0.93, y, steps, -scale->smax, scale->smax, (double)steps/(double)TEX_PIXELS, foregrndcol_rgb, glut_font[legend_font], scale->format, scale->sminr, scale->smaxr);
-      else
-        scala_tex((1-y)/2, -0.93, y, steps, scale->smin, -scale->smin, (double)steps/(double)TEX_PIXELS, foregrndcol_rgb, glut_font[legend_font], scale->format, scale->sminr, scale->smaxr);
-    }
-  }
-  glutSwapBuffers();
-  if((cur_commandFile>-1)&&(flipflop)) goto redraw;
-}
+//   glColor3dv( foregrndcol_rgb );
+//   if (frameFlag)
+//   {
+//     glBegin ( GL_LINE_LOOP );
+//      glVertex3d(-1+(width_menu*19/20-1)*2./width_w0, 1-(height_menu/10-1)*2./height_w0, 0. );
+//      glVertex3d(-1+(width_menu*19/20-1)*2./width_w0, 1-(height_menu/10+height_w1+1)*2./height_w0, 0. );
+//      glVertex3d(-1+(width_menu*19/20+width_w1+1)*2./width_w0,1-(height_menu/10+height_w1+1)*2./height_w0,0.);
+//      glVertex3d(-1+(width_menu*19/20+width_w1+1)*2./width_w0, 1-(height_menu/10-1)*2./height_w0, 0. );
+//     glEnd();
+//   }
+//   maxchars=(width_w0 /pixPerCharx[legend_font]);
+//   if (captionFlag)
+//   {
+//     i=strlen(picture_caption)-maxchars;
+//     if (i>0) strcpy(buffer, &picture_caption[i]);
+//     else strcpy(buffer, picture_caption);
+//     x=  -(double)(strlen( buffer )*pixPerCharx[legend_font]) / (double)(width_w0);
+//     y= 1-(height_menu/10+height_w1+4+pixPerChary[legend_font])*2./height_w0;
+//     text( x, y, 0., buffer, glut_font[legend_font] );
+//   }
+//   if (textFlag)
+//   {
+//     i=strlen(picture_text)-maxchars;
+//     if (i>0) strcpy(buffer, &picture_text[i]);
+//     else strcpy(buffer, picture_text);
+//     x=  -(double)(strlen( buffer )*pixPerCharx[legend_font]) / (double)(width_w0);
+//     y= 1-(height_menu/10+height_w1+6+pixPerChary[legend_font]*2)*2./height_w0;
+//     text( x, y, 0., buffer, glut_font[legend_font] );
+//   }
+// }
 
 
 
-void DrawMenuSequence( void )
-{
-  char buffer[MAX_LINE_LENGTH];
-  double y;
-  int flipflop=0;
+// void DrawMenuLoad( void )
+// {
+//   char buffer[MAX_LINE_LENGTH];
+//   double y;
+//   int flipflop=0;
+//   char strvalue[MAX_LINE_LENGTH];
 
-  defineColTextur_load(1.);
- redraw:;
-  flipflop=!flipflop;
+//   defineColTextur_load(1.);
+//  redraw:;
+//   flipflop=!flipflop;
 
-  iniDrawMenu();
-  if (scalaFlag)
-  {
-    sprintf (buffer,"%d/%d:%s", lcase[lcase_animList].step_number, lcase_animList+1,lcase[lcase_animList].name);
-    text( -0.99, 0.95, 0.,buffer, glut_font[legend_font]);
-    sprintf (buffer,"Entity:%s", lcase[lcase_animList].compName[0]);
-    text( -0.99, 0.85, 0., buffer, glut_font[legend_font] );
-    if(addDispFlag)
-    {
-      sprintf (buffer,"+Dispf:%lf", anim_faktor);
-      text( -0.99, 0.80, 0., buffer, glut_font[legend_font] );
-    }
-    if(scale->format=='f')
-    {
-      sprintf (buffer,"max: %-10f  ", lcase[cur_lc].max[0]);
-      text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
-      sprintf (buffer,"min: %-10f  ", lcase[cur_lc].min[0]);
-      text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
-    }
-    else if(scale->format=='i')
-    {
-      sprintf (buffer,"max: %-10f  ", lcase[cur_lc].max[0]);
-      text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
-      sprintf (buffer,"min: %-10f  ", lcase[cur_lc].min[0]);
-      text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
-    }
-    else
-    {
-      sprintf (buffer,"max: %5.2e  ", lcase[cur_lc].max[0]);
-      text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
-      sprintf (buffer,"min: %5.2e  ", lcase[cur_lc].min[0]);
-      text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
-    }
-    y= 1-(height_menu/10+height_w1+1)*2./height_w0;
-    scala_tex( (1-y)/2,-0.93, y, steps, scale->smin, scale->smax, (double)steps/(double)TEX_PIXELS, foregrndcol_rgb, glut_font[legend_font], scale->format, scale->sminr, scale->smaxr);
-  }
-  glutSwapBuffers();
-  if((cur_commandFile>-1)&&(flipflop)) goto redraw;
-}
+//   iniDrawMenu();
+//   if (scalaFlag)
+//   {
+//     stringValue(&lcase[cur_lc].value, strvalue);
 
-
-
-void DrawMenuLight( void )
-{
-  int flipflop=0;
- redraw:;
-  flipflop=!flipflop;
-  iniDrawMenu();
-    if(addDispFlag)
-    {
-      sprintf (buffer,"+Dispf:%lf", anim_faktor);
-      text( -0.99, 0.80, 0., buffer, glut_font[legend_font] );
-    }
-  glutSwapBuffers();
-  if((cur_commandFile>-1)&&(flipflop)) goto redraw;
-}
-
-
-
-void DrawMenuAnimate( void )
-{
-  char buffer[MAX_LINE_LENGTH];
-  int flipflop=0;
-  char strvalue[MAX_LINE_LENGTH];
-
- redraw:;
-  flipflop=!flipflop;
-  iniDrawMenu();
-  if ((!sequenceFlag)&&(cur_lc > -1))
-  {
-    stringValue(&lcase[cur_lc].value, strvalue);
-    
-    sprintf (buffer,"%d/%d:%s", lcase[cur_lc].step_number, cur_lc+1,lcase[cur_lc].name);
-    text( -0.99, 0.95, 0.,buffer, glut_font[legend_font]);
-    if(lcase[cur_lc].analysis_type==2) sprintf (buffer,"Freq:%s", strvalue);
-    else sprintf (buffer,"Time:%s", strvalue);
-    text( -0.99, 0.9, 0.,buffer, glut_font[legend_font]);
-  }
-  text( -0.99, 0.85, 0., "Animated", glut_font[legend_font] );
-  if (halfperiod)
-  {
-    text( -0.99, 0.8, 0., "Tune-value:", glut_font[legend_font] );
-    sprintf (buffer,"%3.1f", anim_faktor);
-    text( -0.99, 0.76, 0., buffer, glut_font[legend_font] );
-  }
-  glutSwapBuffers();
-  if((cur_commandFile>-1)&&(flipflop)) goto redraw;
-}
+//     sprintf (buffer,"%d/%d:%s", lcase[cur_lc].step_number,cur_lc+1,lcase[cur_lc].name);
+//     text( -0.99, 0.95, 0.,buffer, glut_font[legend_font]);
+//     if(lcase[cur_lc].analysis_type==2) sprintf (buffer,"Freq:%s", strvalue);
+//     else sprintf (buffer,"Time:%s", strvalue);
+//     text( -0.99, 0.9, 0.,buffer, glut_font[legend_font]);
+//     sprintf (buffer,"Entity:%s", lcase[cur_lc].compName[cur_entity]);
+//     text( -0.99, 0.85, 0., buffer, glut_font[legend_font] );
+//     if(addDispFlag)
+//     {
+//       sprintf (buffer,"+Dispf:%lf", anim_faktor);
+//       text( -0.99, 0.80, 0., buffer, glut_font[legend_font] );
+//     }
+//     if(scale->format=='f')
+//     {
+//       sprintf (buffer,"max: %-10f  ", lcase[cur_lc].max[cur_entity]);
+//       text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
+//       sprintf (buffer,"min: %-10f  ", lcase[cur_lc].min[cur_entity]);
+//       text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
+//     }
+//     else if(scale->format=='i')
+//     {
+//       sprintf (buffer,"max: %-10f  ", lcase[cur_lc].max[cur_entity]);
+//       text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
+//       sprintf (buffer,"min: %-10f  ", lcase[cur_lc].min[cur_entity]);
+//       text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
+//     }
+//     else
+//     {
+//       sprintf (buffer,"max: %5.2e  ", lcase[cur_lc].max[cur_entity]);
+//       text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
+//       sprintf (buffer,"min: %5.2e  ", lcase[cur_lc].min[cur_entity]);
+//       text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
+//     }
+//     y= 1-(height_menu/10+height_w1+1)*2./height_w0;
+//     //printf("halfperiod:%d smin:%f smax:%f   %f %f\n",halfperiod,scale->smin, scale->smax, scale->sminr, scale->smaxr);
+//     if ((animFlag==0)||(halfperiod)||((lcase[cur_lc].ictype[0]==12)&&(cur_entity==6))||((lcase[cur_lc].ictype[cur_entity]==2)&&(cur_entity==3))
+// 	||  ((lcase[cur_lc].ictype[0]==4)&&((cur_entity==6)||(cur_entity==23)))
+// 	||  ((lcase[cur_lc].ictype[0]==14)&&((cur_entity==12)||(cur_entity==29)))  )
+//     {
+//       scala_tex((1-y)/2, -0.93, y, steps, scale->smin, scale->smax, (double)steps/(double)TEX_PIXELS, foregrndcol_rgb, glut_font[legend_font], scale->format, scale->sminr, scale->smaxr);
+//     }
+//     else if((!halfperiod)
+//         && (((lcase[cur_lc].ictype[0]==14)&&((cur_entity==16)||(cur_entity==20)||(cur_entity==24)||(cur_entity==28)||(cur_entity==30)||(cur_entity==31)))
+// 	|| ((lcase[cur_lc].ictype[0]==4)&&((cur_entity<6)||(cur_entity==22)||(cur_entity==24)||(cur_entity==25)))
+// 	|| ((lcase[cur_lc].ictype[0]==2)&&(cur_entity<3))
+// 	|| (lcase[cur_lc].ictype[0]==1) )
+//     )
+//     {
+//       if(abs(scale->smax)>abs(scale->smin))
+//         scala_tex((1-y)/2, -0.93, y, steps, -scale->smax, scale->smax, (double)steps/(double)TEX_PIXELS, foregrndcol_rgb, glut_font[legend_font], scale->format, scale->sminr, scale->smaxr);
+//       else
+//         scala_tex((1-y)/2, -0.93, y, steps, scale->smin, -scale->smin, (double)steps/(double)TEX_PIXELS, foregrndcol_rgb, glut_font[legend_font], scale->format, scale->sminr, scale->smaxr);
+//     }
+//   }
+//   glutSwapBuffers();
+//   if((cur_commandFile>-1)&&(flipflop)) goto redraw;
+// }
 
 
 
-void DrawMenuSet( void )
-{
-  int flipflop=0;
- redraw:;
-  flipflop=!flipflop;
-  iniDrawMenu();
-  glutSwapBuffers();
-  if((cur_commandFile>-1)&&(flipflop)) goto redraw;
-}
+// void DrawMenuSequence( void )
+// {
+//   char buffer[MAX_LINE_LENGTH];
+//   double y;
+//   int flipflop=0;
 
+//   defineColTextur_load(1.);
+//  redraw:;
+//   flipflop=!flipflop;
 
-void updDrawingCube( void )
-{
-  int i;
-  
-  /* fit everything in the drawing cube and repaint the entities */
-  if((!animFlag)&&(!sequenceFlag))
-  {
-    descalAll();
-    getScaleValues( setall, set, point, node, scale);
-    scalNodes ( anz->n, node, scale );
-    scalPoints ( anzGeo->p, point, scale );
-    scalSurfs( anzGeo->s, surf, scale);
-    // recalculate the line-shapes
-    for (i=0; i<anzGeo->l; i++) repLine(i);
-    // recalculate the nurbl-controll-points
-    for (i=0; i<anzGeo->nurl; i++) repNurl(i);
-    // recalculate the nurbs-controll-points
-    for (i=0; i<anzGeo->nurs; i++) repNurs(i);
-    // correct the orientation of all entities
-    orientSet( "all" );
-    //setWindowSize("wsize u");
-  }
-}
-
-
-
-void setWindowSize(char *string)
-{
-  int length,i,j;
-  char format[MAX_LINE_LENGTH];
-  if(!inpformat) return;
-    length=sscanf( string, "%*s %s %d",format,&j);
-    glutSetWindow( w0);
-    if(format[0]=='f') { i=glutGet(GLUT_SCREEN_WIDTH); j=glutGet(GLUT_SCREEN_HEIGHT); }
-    else if(format[0]=='u') { i=glutGet(GLUT_WINDOW_WIDTH); j=glutGet(GLUT_WINDOW_HEIGHT); }
-    else if(length<1) { i=glutGet(GLUT_INIT_WINDOW_WIDTH); j=glutGet(GLUT_INIT_WINDOW_HEIGHT); }
-    else i=atoi(format);
-    if(i<width_menu) i=width_menu+1;
-    if(j<height_menu) j=height_menu+1;
-    glutReshapeWindow(i, j);
-    reshape(i, j);               // call to reshape()
-    glutSetWindow( activWindow);
-    redraw();
-}
+//   iniDrawMenu();
+//   if (scalaFlag)
+//   {
+//     sprintf (buffer,"%d/%d:%s", lcase[lcase_animList].step_number, lcase_animList+1,lcase[lcase_animList].name);
+//     text( -0.99, 0.95, 0.,buffer, glut_font[legend_font]);
+//     sprintf (buffer,"Entity:%s", lcase[lcase_animList].compName[0]);
+//     text( -0.99, 0.85, 0., buffer, glut_font[legend_font] );
+//     if(addDispFlag)
+//     {
+//       sprintf (buffer,"+Dispf:%lf", anim_faktor);
+//       text( -0.99, 0.80, 0., buffer, glut_font[legend_font] );
+//     }
+//     if(scale->format=='f')
+//     {
+//       sprintf (buffer,"max: %-10f  ", lcase[cur_lc].max[0]);
+//       text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
+//       sprintf (buffer,"min: %-10f  ", lcase[cur_lc].min[0]);
+//       text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
+//     }
+//     else if(scale->format=='i')
+//     {
+//       sprintf (buffer,"max: %-10f  ", lcase[cur_lc].max[0]);
+//       text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
+//       sprintf (buffer,"min: %-10f  ", lcase[cur_lc].min[0]);
+//       text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
+//     }
+//     else
+//     {
+//       sprintf (buffer,"max: %5.2e  ", lcase[cur_lc].max[0]);
+//       text( -0.99, 0.75, 0., buffer, glut_font[legend_font] );
+//       sprintf (buffer,"min: %5.2e  ", lcase[cur_lc].min[0]);
+//       text( -0.99, 0.71, 0., buffer, glut_font[legend_font] );
+//     }
+//     y= 1-(height_menu/10+height_w1+1)*2./height_w0;
+//     scala_tex( (1-y)/2,-0.93, y, steps, scale->smin, scale->smax, (double)steps/(double)TEX_PIXELS, foregrndcol_rgb, glut_font[legend_font], scale->format, scale->sminr, scale->smaxr);
+//   }
+//   glutSwapBuffers();
+//   if((cur_commandFile>-1)&&(flipflop)) goto redraw;
+// }
 
 
 
-void setWindowPos(char *string)
-{
-  int i,j;
-  if(!inpformat) return;
-    sscanf( string, "%*s %d %d",&i,&j);
-    glutSetWindow( w0);
-    glutPositionWindow(i, j);
-    glutSetWindow( activWindow);
-    redraw();
-}
+// void DrawMenuLight( void )
+// {
+//   int flipflop=0;
+//  redraw:;
+//   flipflop=!flipflop;
+//   iniDrawMenu();
+//     if(addDispFlag)
+//     {
+//       sprintf (buffer,"+Dispf:%lf", anim_faktor);
+//       text( -0.99, 0.80, 0., buffer, glut_font[legend_font] );
+//     }
+//   glutSwapBuffers();
+//   if((cur_commandFile>-1)&&(flipflop)) goto redraw;
+// }
 
 
 
-void reshape( int width, int height )
-{
-  width_w0=width; 
-  height_w0=height; 
-  width_w1=width - width_menu; 
-  height_w1=height - height_menu; 
-  aspectRatio_w1=(double)width_w1/(double)height_w1;
+// void DrawMenuAnimate( void )
+// {
+//   char buffer[MAX_LINE_LENGTH];
+//   int flipflop=0;
+//   char strvalue[MAX_LINE_LENGTH];
 
-  /* MAIN WINDOW */
-  glutSetWindow( w0 );
-  //glutReshapeWindow(width,height );
-    glViewport(0, 0, (GLint)width, (GLint)height ); 
-  /* Drawing window */
-  glutSetWindow( w1 ); 
-    glutPositionWindow( width_menu*19/20, height_menu/10); 
-    glutReshapeWindow( width_w1, height_w1); 
-    glViewport( 0, 0, (GLint)width_w1, (GLint)height_w1); 
-  /* axis window */
-  glutSetWindow( w2 ); 
-    glutPositionWindow( 0, height_w1*0.9); 
-    glutReshapeWindow( height_w1/10, height_w1/10); 
-    glViewport( 0, 0, (GLint)height_w1/10, (GLint)height_w1/10);
-  /* Command line window */
-  if (commandLineFlag)
-  {
-    glutSetWindow( w3 ); 
-       glutPositionWindow( 0, height_w0-pixPerChary[menu_font]); 
-       glutReshapeWindow( width_w0, pixPerChary[menu_font]); 
-      glViewport( 0, 0, (GLint)width_w0, (GLint)(pixPerChary[menu_font]));
-    glutPostRedisplay();
-  }
-}
+//  redraw:;
+//   flipflop=!flipflop;
+//   iniDrawMenu();
+//   if ((!sequenceFlag)&&(cur_lc > -1))
+//   {
+//     stringValue(&lcase[cur_lc].value, strvalue);
+
+//     sprintf (buffer,"%d/%d:%s", lcase[cur_lc].step_number, cur_lc+1,lcase[cur_lc].name);
+//     text( -0.99, 0.95, 0.,buffer, glut_font[legend_font]);
+//     if(lcase[cur_lc].analysis_type==2) sprintf (buffer,"Freq:%s", strvalue);
+//     else sprintf (buffer,"Time:%s", strvalue);
+//     text( -0.99, 0.9, 0.,buffer, glut_font[legend_font]);
+//   }
+//   text( -0.99, 0.85, 0., "Animated", glut_font[legend_font] );
+//   if (halfperiod)
+//   {
+//     text( -0.99, 0.8, 0., "Tune-value:", glut_font[legend_font] );
+//     sprintf (buffer,"%3.1f", anim_faktor);
+//     text( -0.99, 0.76, 0., buffer, glut_font[legend_font] );
+//   }
+//   glutSwapBuffers();
+//   if((cur_commandFile>-1)&&(flipflop)) goto redraw;
+// }
 
 
 
-void initLight_rgb( void )
-{
-    static GLfloat lmodel_ambient[] = { GAMB, GAMB, GAMB, 1.0 };
+// void DrawMenuSet( void )
+// {
+//   int flipflop=0;
+//  redraw:;
+//   flipflop=!flipflop;
+//   iniDrawMenu();
+//   glutSwapBuffers();
+//   if((cur_commandFile>-1)&&(flipflop)) goto redraw;
+// }
 
-  /* lichtanteile rgba definieren  */
-    static GLfloat ambient0[] = { AMB, AMB, AMB, 1.0 }; /* ungerichtet */
-    static GLfloat diffuse0[] = { DIFF, DIFF, DIFF, 1.0 }; /* gerichtetes licht*/
 
-  /* Position der Lichtquellen xyzw, mit w=0.0 entfernung unendlich def.*/
-    static GLfloat position0[] = { 0., 0., -1., 0.0 };
+// void updDrawingCube( void )
+// {
+//   int i;
 
-    /*    glMatrixMode(GL_PROJECTION); fuert hier zu bildfehlern (Z-Buffer) */
-    /* Definieren und Positionieren der Lampen */
-    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0);          /* allseitiges Licht */
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0);          /* gerichtetes Licht, ungerichtete reflexion */
-    glLightfv(GL_LIGHT0, GL_SPECULAR, diffuse0);         /* gerichtetes Licht, gerichtete reflexion */
-    glLightfv(GL_LIGHT0, GL_POSITION, position0);
+//   /* fit everything in the drawing cube and repaint the entities */
+//   if((!animFlag)&&(!sequenceFlag))
+//   {
+//     descalAll();
+//     getScaleValues( setall, set, point, node, scale);
+//     scalNodes ( anz->n, node, scale );
+//     scalPoints ( anzGeo->p, point, scale );
+//     scalSurfs( anzGeo->s, surf, scale);
+//     // recalculate the line-shapes
+//     for (i=0; i<anzGeo->l; i++) repLine(i);
+//     // recalculate the nurbl-controll-points
+//     for (i=0; i<anzGeo->nurl; i++) repNurl(i);
+//     // recalculate the nurbs-controll-points
+//     for (i=0; i<anzGeo->nurs; i++) repNurs(i);
+//     // correct the orientation of all entities
+//     orientSet( "all" );
+//     //setWindowSize("wsize u");
+//   }
+// }
 
-    /* Beschreibung des Beleuchtungsmodells */
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient); /* globales licht ohne quelle */
-    glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, lmodel_oneside);
-    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE); /* GL_FALSE: infinite distance */
 
-    glEnable(GL_LIGHT0);
-    glDisable (GL_COLOR_MATERIAL);      /* improves performance (~2%) */
-}
+
+// void setWindowSize(char *string)
+// {
+//   int length,i,j;
+//   char format[MAX_LINE_LENGTH];
+//   if(!inpformat) return;
+//     length=sscanf( string, "%*s %s %d",format,&j);
+//     glutSetWindow( w0);
+//     if(format[0]=='f') { i=glutGet(GLUT_SCREEN_WIDTH); j=glutGet(GLUT_SCREEN_HEIGHT); }
+//     else if(format[0]=='u') { i=glutGet(GLUT_WINDOW_WIDTH); j=glutGet(GLUT_WINDOW_HEIGHT); }
+//     else if(length<1) { i=glutGet(GLUT_INIT_WINDOW_WIDTH); j=glutGet(GLUT_INIT_WINDOW_HEIGHT); }
+//     else i=atoi(format);
+//     if(i<width_menu) i=width_menu+1;
+//     if(j<height_menu) j=height_menu+1;
+//     glutReshapeWindow(i, j);
+//     reshape(i, j);               // call to reshape()
+//     glutSetWindow( activWindow);
+//     redraw();
+// }
+
+
+
+// void setWindowPos(char *string)
+// {
+//   int i,j;
+//   if(!inpformat) return;
+//     sscanf( string, "%*s %d %d",&i,&j);
+//     glutSetWindow( w0);
+//     glutPositionWindow(i, j);
+//     glutSetWindow( activWindow);
+//     redraw();
+// }
+
+
+
+// void reshape( int width, int height )
+// {
+//   width_w0=width;
+//   height_w0=height;
+//   width_w1=width - width_menu;
+//   height_w1=height - height_menu;
+//   aspectRatio_w1=(double)width_w1/(double)height_w1;
+
+//   /* MAIN WINDOW */
+//   glutSetWindow( w0 );
+//   //glutReshapeWindow(width,height );
+//     glViewport(0, 0, (GLint)width, (GLint)height );
+//   /* Drawing window */
+//   glutSetWindow( w1 );
+//     glutPositionWindow( width_menu*19/20, height_menu/10);
+//     glutReshapeWindow( width_w1, height_w1);
+//     glViewport( 0, 0, (GLint)width_w1, (GLint)height_w1);
+//   /* axis window */
+//   glutSetWindow( w2 );
+//     glutPositionWindow( 0, height_w1*0.9);
+//     glutReshapeWindow( height_w1/10, height_w1/10);
+//     glViewport( 0, 0, (GLint)height_w1/10, (GLint)height_w1/10);
+//   /* Command line window */
+//   if (commandLineFlag)
+//   {
+//     glutSetWindow( w3 );
+//        glutPositionWindow( 0, height_w0-pixPerChary[menu_font]);
+//        glutReshapeWindow( width_w0, pixPerChary[menu_font]);
+//       glViewport( 0, 0, (GLint)width_w0, (GLint)(pixPerChary[menu_font]));
+//     glutPostRedisplay();
+//   }
+// }
+
+
+
+// void initLight_rgb( void )
+// {
+//     static GLfloat lmodel_ambient[] = { GAMB, GAMB, GAMB, 1.0 };
+
+//   /* lichtanteile rgba definieren  */
+//     static GLfloat ambient0[] = { AMB, AMB, AMB, 1.0 }; /* ungerichtet */
+//     static GLfloat diffuse0[] = { DIFF, DIFF, DIFF, 1.0 }; /* gerichtetes licht*/
+
+//   /* Position der Lichtquellen xyzw, mit w=0.0 entfernung unendlich def.*/
+//     static GLfloat position0[] = { 0., 0., -1., 0.0 };
+
+//     /*    glMatrixMode(GL_PROJECTION); fuert hier zu bildfehlern (Z-Buffer) */
+//     /* Definieren und Positionieren der Lampen */
+//     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0);          /* allseitiges Licht */
+//     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0);          /* gerichtetes Licht, ungerichtete reflexion */
+//     glLightfv(GL_LIGHT0, GL_SPECULAR, diffuse0);         /* gerichtetes Licht, gerichtete reflexion */
+//     glLightfv(GL_LIGHT0, GL_POSITION, position0);
+
+//     /* Beschreibung des Beleuchtungsmodells */
+//     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient); /* globales licht ohne quelle */
+//     glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, lmodel_oneside);
+//     glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE); /* GL_FALSE: infinite distance */
+
+//     glEnable(GL_LIGHT0);
+//     glDisable (GL_COLOR_MATERIAL);      /* improves performance (~2%) */
+// }
 
 
 
@@ -7238,7 +7240,7 @@ int main( int argc, char **argv )
   sprintf(buffer,"%s/%s", homepath, initfile);
   inihandle = fopen (buffer, "r");
   if ( inihandle!= NULL )
-  { 
+  {
     do
     {
       i=getCommandLine(inihandle, &string);
@@ -7271,18 +7273,18 @@ int main( int argc, char **argv )
     printf("parameters:%d arguments:%d\n", argc, i);
     for (j=1; j<i; j++)
     {
-      if( compare( argv[j], "-ansl", 4 ) == 4 ) 
-      { 
+      if( compare( argv[j], "-ansl", 4 ) == 4 )
+      {
         inpformat='a';
-        if(argc==i) { printf("ERROR: no ansysList file specified\n"); exit(-1); } 
-        else strcpy( datin, argv[i]); 
-      } 
+        if(argc==i) { printf("ERROR: no ansysList file specified\n"); exit(-1); }
+        else strcpy( datin, argv[i]);
+      }
       else if( compare( argv[j], "-a", 2 ) == 2 )
-      { 
+      {
         inpformat='b';
         automode=1;
         anz->threads=NTHREADS_MAX;
-        if(argc==i) strcpy( datin, "dummy.fbd"); 
+        if(argc==i) strcpy( datin, "dummy.fbd");
         else strcpy( datin, argv[i]);
         if ( (lcase = (Datasets *)malloc( (anz->l+1) * sizeof(Datasets))) == NULL )
           printf("\n\n ERROR: malloc failed lcase\n\n") ;
@@ -7292,9 +7294,9 @@ int main( int argc, char **argv )
           printf("\n\n ERROR: malloc failed elem\n\n") ;
       }
       else if( compare( argv[j], "-bg", 3 ) == 3 )
-      { 
+      {
         inpformat=0;
-        if(argc==i) strcpy( datin, "dummy.fbd"); 
+        if(argc==i) strcpy( datin, "dummy.fbd");
         else strcpy( datin, argv[i]);
         if ( (lcase = (Datasets *)malloc( (anz->l+1) * sizeof(Datasets))) == NULL )
           printf("\n\n ERROR: malloc failed lcase\n\n") ;
@@ -7307,7 +7309,7 @@ int main( int argc, char **argv )
       }
       else if( compare( argv[j], "-b", 2 ) == 2 )
       {
-        if(argc==i) strcpy( datin, "dummy.fbd"); 
+        if(argc==i) strcpy( datin, "dummy.fbd");
         else strcpy( datin, argv[i]);
         if ( (lcase = (Datasets *)malloc( (anz->l+1) * sizeof(Datasets))) == NULL )
           printf("\n\n ERROR: malloc failed lcase\n\n") ;
@@ -7325,7 +7327,7 @@ int main( int argc, char **argv )
             inihandle = fopen (buffer, "r"); }
           if(i==1) inihandle = fopen (datin, "r");
           if ( inihandle!= NULL )
-          { 
+          {
             frecord( inihandle, buffer);
             sscanf(buffer,"%s ", command);
             if(strcasecmp(command, "WSIZE")==0)
@@ -7360,78 +7362,78 @@ int main( int argc, char **argv )
   	    }
             fclose(inihandle);
           }
-	} 
+	}
        inpformat='b';
       }
-      else if( compare( argv[j], "-c", 2 ) == 2 ) 
-      { 
+      else if( compare( argv[j], "-c", 2 ) == 2 )
+      {
         inpformat='c';
-        if(argc==i) { printf("ERROR: no file specified\n"); exit(-1); } 
-        else strcpy( datin, argv[i]); 
-      } 
-      else if( compare( argv[j], "-duns2d", 7 ) == 7 ) 
-      { 
+        if(argc==i) { printf("ERROR: no file specified\n"); exit(-1); }
+        else strcpy( datin, argv[i]);
+      }
+      else if( compare( argv[j], "-duns2d", 7 ) == 7 )
+      {
         inpformat='d';
         if( compare( argv[j], "-duns2dl", 8 ) == 8 ) inpformat='D';
-        if(argc==i) { printf("ERROR: no duns-file specified\n"); exit(-1); } 
-        else strcpy( datin, argv[i]); 
-      } 
-      else if( compare( argv[j], "-duns3d", 7 ) == 7 ) 
-      { 
+        if(argc==i) { printf("ERROR: no duns-file specified\n"); exit(-1); }
+        else strcpy( datin, argv[i]);
+      }
+      else if( compare( argv[j], "-duns3d", 7 ) == 7 )
+      {
         inpformat='e';
         if( compare( argv[j], "-duns3dl", 8 ) == 8 ) inpformat='E';
-        if(argc==i) { printf("ERROR: no duns-file specified\n"); exit(-1); } 
-        else strcpy( datin, argv[i]); 
-      } 
-      else if( compare( argv[j], "-dynl", 5 ) == 5 ) 
-      { 
+        if(argc==i) { printf("ERROR: no duns-file specified\n"); exit(-1); }
+        else strcpy( datin, argv[i]);
+      }
+      else if( compare( argv[j], "-dynl", 5 ) == 5 )
+      {
         inpformat='y';
-        if(argc==i) { printf("ERROR: no dyna3d-list file specified\n"); exit(-1); } 
-        else strcpy( datin, argv[i]); 
-      } 
-      else if( compare( argv[j], "-foam", 5 ) == 5 ) 
-      { 
+        if(argc==i) { printf("ERROR: no dyna3d-list file specified\n"); exit(-1); }
+        else strcpy( datin, argv[i]);
+      }
+      else if( compare( argv[j], "-foam", 5 ) == 5 )
+      {
         inpformat='f';
-        if(argc==i) { printf("ERROR: no foam-file specified\n"); exit(-1); } 
-        else strcpy( datin, argv[i]); 
-      } 
-      else if( compare( argv[j], "-isaac2d", 8 ) == 8 ) 
-      { 
+        if(argc==i) { printf("ERROR: no foam-file specified\n"); exit(-1); }
+        else strcpy( datin, argv[i]);
+      }
+      else if( compare( argv[j], "-isaac2d", 8 ) == 8 )
+      {
         inpformat='i';
         strcpy( datin, argv[argc-1]);
-      } 
-      else if( compare( argv[j], "-isaac3d", 8 ) == 8 ) 
-      { 
+      }
+      else if( compare( argv[j], "-isaac3d", 8 ) == 8 )
+      {
         inpformat='j';
         strcpy( datin, argv[argc-1]);
-      } 
-      else if( compare( argv[j], "-f06", 4 ) == 4 ) 
-      { 
+      }
+      else if( compare( argv[j], "-f06", 4 ) == 4 )
+      {
         inpformat='m';
-        if(argc==i) { printf("ERROR: no f06-file specified\n"); exit(-1); } 
-        else strcpy( datin, argv[i]); 
-      } 
-      else if( compare( argv[j], "-ng", 3 ) == 3 ) 
-      { 
+        if(argc==i) { printf("ERROR: no f06-file specified\n"); exit(-1); }
+        else strcpy( datin, argv[i]);
+      }
+      else if( compare( argv[j], "-ng", 3 ) == 3 )
+      {
         inpformat='n';
-        if(argc==i) { printf("ERROR: no ng-file specified\n"); exit(-1); } 
-        else strcpy( datin, argv[i]); 
-      } 
-      else if( compare( argv[j], "-tg", 3 ) == 3 ) 
-      { 
+        if(argc==i) { printf("ERROR: no ng-file specified\n"); exit(-1); }
+        else strcpy( datin, argv[i]);
+      }
+      else if( compare( argv[j], "-tg", 3 ) == 3 )
+      {
         inpformat='t';
-        if(argc==i) { printf("ERROR: no Tetgen-file specified\n"); exit(-1); } 
-        else strcpy( datin, argv[i]); 
-      } 
+        if(argc==i) { printf("ERROR: no Tetgen-file specified\n"); exit(-1); }
+        else strcpy( datin, argv[i]);
+      }
       else if( compare( argv[j], "-oldbias", 7 ) == 7 )  { OLD_BIAS_DEF=1; }
-      else if( compare( argv[j], "-read", 5 ) == 5 ) 
-      { 
+      else if( compare( argv[j], "-read", 5 ) == 5 )
+      {
         read_mode=1;
-      } 
-      else if( compare( argv[j], "-step", 5 ) == 5 ) 
-      { 
+      }
+      else if( compare( argv[j], "-step", 5 ) == 5 )
+      {
         inpformat='x';
-        if(argc==i) { printf("ERROR: no step-file specified\n"); exit(-1); } 
+        if(argc==i) { printf("ERROR: no step-file specified\n"); exit(-1); }
         else strcpy( datin, argv[i]);
 
         if( compare( argv[j], "-stepsplit", 10 ) == 10 ) step_mode=1;
@@ -7442,28 +7444,28 @@ int main( int argc, char **argv )
           printf("\n\n ERROR: malloc failed node\n\n") ;
         if ( (e_enqire = (Elements *)malloc( (anz->e+1) * sizeof(Elements))) == NULL )
           printf("\n\n ERROR: malloc failed elem\n\n") ;
-      } 
-      else if( compare( argv[j], "-stl", 4 ) == 4 ) 
-      { 
+      }
+      else if( compare( argv[j], "-stl", 4 ) == 4 )
+      {
         inpformat='s';
-        if(argc==i) { printf("ERROR: no stl-file specified\n"); exit(-1); } 
-        else strcpy( datin, argv[i]); 
-      } 
-      else if( compare( argv[j], "-vtk", 4 ) == 4 ) 
-      { 
+        if(argc==i) { printf("ERROR: no stl-file specified\n"); exit(-1); }
+        else strcpy( datin, argv[i]);
+      }
+      else if( compare( argv[j], "-vtk", 4 ) == 4 )
+      {
         inpformat='k';
-        if(argc==i) { printf("ERROR: no vtk-file specified\n"); exit(-1); } 
-        else strcpy( datin, argv[i]); 
-      } 
+        if(argc==i) { printf("ERROR: no vtk-file specified\n"); exit(-1); }
+        else strcpy( datin, argv[i]);
+      }
 
-      if( compare( argv[j], "--v", 3 ) == 3 ) { printf("Version %s\n", VERSION);  exit (0); } 
+      if( compare( argv[j], "--v", 3 ) == 3 ) { printf("Version %s\n", VERSION);  exit (0); }
     }
     if (inpformat==0)
     {
       inpformat='v';
       if(argc==i) { printf("ERROR: no file specified\n"); exit(1); }
-      else if(argc==i+2) strcpy( ccxfile, argv[i+1]); 
-      strcpy( datin, argv[i]); 
+      else if(argc==i+2) strcpy( ccxfile, argv[i+1]);
+      strcpy( datin, argv[i]);
     }
   }
   strcpy(picture_caption, datin);
@@ -7473,172 +7475,172 @@ int main( int argc, char **argv )
   build_rotmatrix( R, lastquat );
 
   width_w1=width_w0 - width_menu;
-  height_w1=height_w0 - height_menu; 
+  height_w1=height_w0 - height_menu;
 
 
-  /* Mutter-Fenster */
-  glutInitWindowSize ( width_w0, height_w0 );
-  /* problems with xwd on sgi without GLUT_DEPTH */
-  glutInitDisplayMode ( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
-  glutInit ( &argc, argv );
-  sprintf (buffer, "CalculiX GraphiX");
-  activWindow= w0 = glutCreateWindow ( buffer );
-  glutDisplayFunc ( DrawMenuSet );
-  glShadeModel ( GL_FLAT );
-  glDisable ( GL_DEPTH_TEST );
-  glMatrixMode ( GL_MODELVIEW );
-  glutReshapeFunc ( reshape );
-  glutMouseFunc ( MouseState );
-  glutKeyboardFunc ( Keyboard );
-  glutSpecialFunc ( specialKeyboard );
-  glutVisibilityFunc ( WindowState );
-  /* kein DITHERing (speed, Hoehenlinien)  */
-  glDisable(GL_DITHER);
+//   /* Mutter-Fenster */
+//   glutInitWindowSize ( width_w0, height_w0 );
+//   /* problems with xwd on sgi without GLUT_DEPTH */
+//   glutInitDisplayMode ( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
+//   glutInit ( &argc, argv );
+//   sprintf (buffer, "CalculiX GraphiX");
+//   activWindow= w0 = glutCreateWindow ( buffer );
+//   glutDisplayFunc ( DrawMenuSet );
+//   glShadeModel ( GL_FLAT );
+//   glDisable ( GL_DEPTH_TEST );
+//   glMatrixMode ( GL_MODELVIEW );
+//   glutReshapeFunc ( reshape );
+//   glutMouseFunc ( MouseState );
+//   glutKeyboardFunc ( Keyboard );
+//   glutSpecialFunc ( specialKeyboard );
+//   glutVisibilityFunc ( WindowState );
+//   /* kein DITHERing (speed, Hoehenlinien)  */
+//   glDisable(GL_DITHER);
 
-  subsubmenu_animTune = glutCreateMenu( tuneAnimation );
-  glutAddMenuEntry(" RESET TO 1.", 0);
-  glutAddMenuEntry(" tune * 10", 1);
-  glutAddMenuEntry(" tune *  5", 2);
-  glutAddMenuEntry(" tune *  2", 3);
-  glutAddMenuEntry(" tune /  2", 4);
-  glutAddMenuEntry(" tune /  5", 5);
-  glutAddMenuEntry(" tune / 10", 6);
+//   subsubmenu_animTune = glutCreateMenu( tuneAnimation );
+//   glutAddMenuEntry(" RESET TO 1.", 0);
+//   glutAddMenuEntry(" tune * 10", 1);
+//   glutAddMenuEntry(" tune *  5", 2);
+//   glutAddMenuEntry(" tune *  2", 3);
+//   glutAddMenuEntry(" tune /  2", 4);
+//   glutAddMenuEntry(" tune /  5", 5);
+//   glutAddMenuEntry(" tune / 10", 6);
 
-  subsubmenu_animSteps = glutCreateMenu( stepsAnimation );
-  glutAddMenuEntry("  4 Steps", 4);
-  glutAddMenuEntry("  8 Steps", 8);
-  glutAddMenuEntry(" 12 Steps", 12);
-  glutAddMenuEntry(" 24 Steps", 24);
-  glutAddMenuEntry(" 36 Steps", 36);
-  glutAddMenuEntry(" 72 Steps", 72);
+//   subsubmenu_animSteps = glutCreateMenu( stepsAnimation );
+//   glutAddMenuEntry("  4 Steps", 4);
+//   glutAddMenuEntry("  8 Steps", 8);
+//   glutAddMenuEntry(" 12 Steps", 12);
+//   glutAddMenuEntry(" 24 Steps", 24);
+//   glutAddMenuEntry(" 36 Steps", 36);
+//   glutAddMenuEntry(" 72 Steps", 72);
 
-  subsubmenu_animPeriod = glutCreateMenu( newTimePerPeriod );
-  glutAddMenuEntry(" Fastest     ", 1);
-  glutAddMenuEntry(" 1,0 seconds ", 2);
-  glutAddMenuEntry(" 1,2 seconds ", 3);
-  glutAddMenuEntry(" 1,5 seconds ", 4);
-  glutAddMenuEntry(" 2,0 seconds ", 5);
-  glutAddMenuEntry(" 5,0 seconds ", 6);
+//   subsubmenu_animPeriod = glutCreateMenu( newTimePerPeriod );
+//   glutAddMenuEntry(" Fastest     ", 1);
+//   glutAddMenuEntry(" 1,0 seconds ", 2);
+//   glutAddMenuEntry(" 1,2 seconds ", 3);
+//   glutAddMenuEntry(" 1,5 seconds ", 4);
+//   glutAddMenuEntry(" 2,0 seconds ", 5);
+//   glutAddMenuEntry(" 5,0 seconds ", 6);
 
-  subsubmenu_colormap = glutCreateMenu( changeColormap );
-  for(i=0; i<cmaps; i++) glutAddMenuEntry(cmap_names[i], i+1);
-  
-  submenu_view = glutCreateMenu( selectView );
-  glutAddMenuEntry("Show All Elements With Light", 1);
-  glutAddMenuEntry("Show Bad Elements", 2);
-  glutAddMenuEntry(" FILL  ", 3);
-  glutAddMenuEntry(" LINES ", 4);
-  glutAddMenuEntry(" DOTS ", 5);
-  glutAddMenuEntry("Flip shell elements", 18);
-  glutAddMenuEntry("Toggle Culling Back/Front", 6);
-  glutAddMenuEntry("Toggle Illuminate Backface", 15);
-  glutAddMenuEntry("Toggle Model Edges", 7);
-  glutAddMenuEntry("Toggle Element Edges", 8);
-  glutAddMenuEntry("Toggle Surfaces/Volumes", 9);
-  glutAddMenuEntry("Toggle Move-Z/Zoom", 10);
-  glutAddMenuEntry("Toggle Background Color", 11);
-  glutAddMenuEntry("Toggle Vector-Plot", 12);
-  glutAddMenuEntry("Toggle Add-Displacement", 13);
-  glutAddMenuEntry("Toggle Shaded Results", 14);
-  glutAddMenuEntry("Toggle Transparency", 16);
-  glutAddMenuEntry("Toggle Ruler", 17);
-  glutAddSubMenu  ("Colormap", subsubmenu_colormap );
+//   subsubmenu_colormap = glutCreateMenu( changeColormap );
+//   for(i=0; i<cmaps; i++) glutAddMenuEntry(cmap_names[i], i+1);
 
-  submenu_animate = glutCreateMenu( changeAnimation );
-  glutAddMenuEntry("Start", 1);
-  glutAddSubMenu  ("Tune-Value ", subsubmenu_animTune );
-  glutAddSubMenu  ("Steps per Period", subsubmenu_animSteps );
-  glutAddSubMenu  ("Time per Period ", subsubmenu_animPeriod );
-  glutAddMenuEntry("Toggle Real Displacements", 2);
-  glutAddMenuEntry("Toggle Static Model Edges", 3);
-  glutAddMenuEntry("Toggle Static Element Edges", 4);
-  glutAddMenuEntry("Toggle Dataset Sequence", 5);
+//   submenu_view = glutCreateMenu( selectView );
+//   glutAddMenuEntry("Show All Elements With Light", 1);
+//   glutAddMenuEntry("Show Bad Elements", 2);
+//   glutAddMenuEntry(" FILL  ", 3);
+//   glutAddMenuEntry(" LINES ", 4);
+//   glutAddMenuEntry(" DOTS ", 5);
+//   glutAddMenuEntry("Flip shell elements", 18);
+//   glutAddMenuEntry("Toggle Culling Back/Front", 6);
+//   glutAddMenuEntry("Toggle Illuminate Backface", 15);
+//   glutAddMenuEntry("Toggle Model Edges", 7);
+//   glutAddMenuEntry("Toggle Element Edges", 8);
+//   glutAddMenuEntry("Toggle Surfaces/Volumes", 9);
+//   glutAddMenuEntry("Toggle Move-Z/Zoom", 10);
+//   glutAddMenuEntry("Toggle Background Color", 11);
+//   glutAddMenuEntry("Toggle Vector-Plot", 12);
+//   glutAddMenuEntry("Toggle Add-Displacement", 13);
+//   glutAddMenuEntry("Toggle Shaded Results", 14);
+//   glutAddMenuEntry("Toggle Transparency", 16);
+//   glutAddMenuEntry("Toggle Ruler", 17);
+//   glutAddSubMenu  ("Colormap", subsubmenu_colormap );
 
-  submenu_orientation = glutCreateMenu( orientModel );
-  glutAddMenuEntry( "+x View     ", 1);
-  glutAddMenuEntry( "-x View     ", 2);
-  glutAddMenuEntry( "+y View     ", 3);
-  glutAddMenuEntry( "-y View     ", 4);
-  glutAddMenuEntry( "+z View     ", 5);
-  glutAddMenuEntry( "-z View     ", 6);
+//   submenu_animate = glutCreateMenu( changeAnimation );
+//   glutAddMenuEntry("Start", 1);
+//   glutAddSubMenu  ("Tune-Value ", subsubmenu_animTune );
+//   glutAddSubMenu  ("Steps per Period", subsubmenu_animSteps );
+//   glutAddSubMenu  ("Time per Period ", subsubmenu_animPeriod );
+//   glutAddMenuEntry("Toggle Real Displacements", 2);
+//   glutAddMenuEntry("Toggle Static Model Edges", 3);
+//   glutAddMenuEntry("Toggle Static Element Edges", 4);
+//   glutAddMenuEntry("Toggle Dataset Sequence", 5);
 
-  submenu_hardcopy = glutCreateMenu( markHardcopy );
-  glutAddMenuEntry( "Tga-Hardcopy", 2);
-  glutAddMenuEntry( "Ps-Hardcopy ", 1);
-  glutAddMenuEntry( "Gif-Hardcopy", 4);
-  glutAddMenuEntry( "Png-Hardcopy", 5);
-  glutAddMenuEntry( "Start Recording Gif-Movie", 3);
+//   submenu_orientation = glutCreateMenu( orientModel );
+//   glutAddMenuEntry( "+x View     ", 1);
+//   glutAddMenuEntry( "-x View     ", 2);
+//   glutAddMenuEntry( "+y View     ", 3);
+//   glutAddMenuEntry( "-y View     ", 4);
+//   glutAddMenuEntry( "+z View     ", 5);
+//   glutAddMenuEntry( "-z View     ", 6);
 
-  submenu_cut   = glutCreateMenu( selectCutNode   );
-  glutAddMenuEntry( "switch plot", 9);
-  glutAddMenuEntry( "Node 1 ", 1);
-  glutAddMenuEntry( "Node 2 ", 2);
-  glutAddMenuEntry( "Node 3 ", 3);
-  glutAddMenuEntry( "Vector ", 5);
-  glutAddMenuEntry( "X plane ", 6);
-  glutAddMenuEntry( "Y plane ", 7);
-  glutAddMenuEntry( "Z plane ", 8);
-  glutAddMenuEntry( "Uncut   ", 4);
+//   submenu_hardcopy = glutCreateMenu( markHardcopy );
+//   glutAddMenuEntry( "Tga-Hardcopy", 2);
+//   glutAddMenuEntry( "Ps-Hardcopy ", 1);
+//   glutAddMenuEntry( "Gif-Hardcopy", 4);
+//   glutAddMenuEntry( "Png-Hardcopy", 5);
+//   glutAddMenuEntry( "Start Recording Gif-Movie", 3);
 
-  submenu_graph = glutCreateMenu( selectGraphMode );
-  glutAddMenuEntry( "Length ", 1);
-  glutAddMenuEntry( "Datasets ", 2);
-  glutAddMenuEntry( "Time ", 3);
+//   submenu_cut   = glutCreateMenu( selectCutNode   );
+//   glutAddMenuEntry( "switch plot", 9);
+//   glutAddMenuEntry( "Node 1 ", 1);
+//   glutAddMenuEntry( "Node 2 ", 2);
+//   glutAddMenuEntry( "Node 3 ", 3);
+//   glutAddMenuEntry( "Vector ", 5);
+//   glutAddMenuEntry( "X plane ", 6);
+//   glutAddMenuEntry( "Y plane ", 7);
+//   glutAddMenuEntry( "Z plane ", 8);
+//   glutAddMenuEntry( "Uncut   ", 4);
 
-  submenu_help = glutCreateMenu( showHelp );
-  glutAddMenuEntry( "cgx Quick Reference", 1);
-  glutAddMenuEntry( "cgx Manual", 2);
-  glutAddMenuEntry( "ccx Manual", 3);
-#ifdef AFLIB
-  glutAddMenuEntry( "aflib Manual", 4);
-#endif
+//   submenu_graph = glutCreateMenu( selectGraphMode );
+//   glutAddMenuEntry( "Length ", 1);
+//   glutAddMenuEntry( "Datasets ", 2);
+//   glutAddMenuEntry( "Time ", 3);
 
-  subsubmenu_parameter = glutCreateMenu( selectParameter );
-  subsubmenu_entity = glutCreateMenu( selectEntityMenu );
-  submenu_load = glutCreateMenu( selectDatasetMenu );
+//   submenu_help = glutCreateMenu( showHelp );
+//   glutAddMenuEntry( "cgx Quick Reference", 1);
+//   glutAddMenuEntry( "cgx Manual", 2);
+//   glutAddMenuEntry( "ccx Manual", 3);
+// #ifdef AFLIB
+//   glutAddMenuEntry( "aflib Manual", 4);
+// #endif
 
-  /* Grafik-Fenster */
-  glutInitDisplayMode ( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
-  activWindow= w1 = glutCreateSubWindow ( w0, width_menu*19/20, height_menu/10, width_ini, height_ini );
-  glutDisplayFunc ( DrawPickedItems );
-  glEnable ( GL_DEPTH_TEST );
-  glDepthFunc(GL_LEQUAL);
-  glFrontFace ( GL_CCW );
-  glShadeModel (GL_FLAT);
-  /* Eventhandling Grafikfenster */
-  glutMouseFunc ( MouseState );
-  glutMotionFunc ( Mouse );
-  glutKeyboardFunc ( Keyboard );
-  glutSpecialFunc ( specialKeyboard );
-  glutEntryFunc ( entryfunktion );
-  glutPassiveMotionFunc ( Mouse );
-  glDisable(GL_DITHER);
-  glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, lmodel_oneside);
-  glCullFace ( GL_BACK );
-  initLight_rgb();
+//   subsubmenu_parameter = glutCreateMenu( selectParameter );
+//   subsubmenu_entity = glutCreateMenu( selectEntityMenu );
+//   submenu_load = glutCreateMenu( selectDatasetMenu );
 
-  /* Axenkreuz-Fenster-index im w1 fenster  */
-  //glutInitDisplayMode ( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH  );
-  glutInitDisplayMode ( GLUT_RGBA | GLUT_DOUBLE  );
-  activWindow= w2 = glutCreateSubWindow ( w1, 0, height_ini*0.9, width_ini/10, height_ini/10 );
-  glutDisplayFunc ( DrawAxes );
-  glutIdleFunc ( idleFunction );
-  glDisable(GL_DITHER);
-  glShadeModel ( GL_FLAT );
+//   /* Grafik-Fenster */
+//   glutInitDisplayMode ( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
+//   activWindow= w1 = glutCreateSubWindow ( w0, width_menu*19/20, height_menu/10, width_ini, height_ini );
+//   glutDisplayFunc ( DrawPickedItems );
+//   glEnable ( GL_DEPTH_TEST );
+//   glDepthFunc(GL_LEQUAL);
+//   glFrontFace ( GL_CCW );
+//   glShadeModel (GL_FLAT);
+//   /* Eventhandling Grafikfenster */
+//   glutMouseFunc ( MouseState );
+//   glutMotionFunc ( Mouse );
+//   glutKeyboardFunc ( Keyboard );
+//   glutSpecialFunc ( specialKeyboard );
+//   glutEntryFunc ( entryfunktion );
+//   glutPassiveMotionFunc ( Mouse );
+//   glDisable(GL_DITHER);
+//   glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, lmodel_oneside);
+//   glCullFace ( GL_BACK );
+//   initLight_rgb();
 
-  glGetIntegerv (GL_MAX_EVAL_ORDER, &gl_max_eval_order);
-  printf("GL_MAX_EVAL_ORDER:%d, mesh threads:%d\n", gl_max_eval_order, anz->threads);
+//   /* Axenkreuz-Fenster-index im w1 fenster  */
+//   //glutInitDisplayMode ( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH  );
+//   glutInitDisplayMode ( GLUT_RGBA | GLUT_DOUBLE  );
+//   activWindow= w2 = glutCreateSubWindow ( w1, 0, height_ini*0.9, width_ini/10, height_ini/10 );
+//   glutDisplayFunc ( DrawAxes );
+//   glutIdleFunc ( idleFunction );
+//   glDisable(GL_DITHER);
+//   glShadeModel ( GL_FLAT );
 
-  /* Display listen */
-  glutSetWindow(w1);
-  list_elem_light = glGenLists((GLint)1);
-  list_surf_light = glGenLists((GLint)1);
-  list_elem_load = glGenLists((GLint)1);
-  list_elem_elstress = glGenLists((GLint)1);
-  list_surf_load = glGenLists((GLint)1);
-  list_model_edges = glGenLists((GLint)1);
-  list_surf_edges = glGenLists((GLint)1);
-  list_elem_edges = glGenLists((GLint)1);
+//   glGetIntegerv (GL_MAX_EVAL_ORDER, &gl_max_eval_order);
+//   printf("GL_MAX_EVAL_ORDER:%d, mesh threads:%d\n", gl_max_eval_order, anz->threads);
+
+//   /* Display listen */
+//   glutSetWindow(w1);
+//   list_elem_light = glGenLists((GLint)1);
+//   list_surf_light = glGenLists((GLint)1);
+//   list_elem_load = glGenLists((GLint)1);
+//   list_elem_elstress = glGenLists((GLint)1);
+//   list_surf_load = glGenLists((GLint)1);
+//   list_model_edges = glGenLists((GLint)1);
+//   list_surf_edges = glGenLists((GLint)1);
+//   list_elem_edges = glGenLists((GLint)1);
 
   if(inpformat=='b')
   {
@@ -7657,7 +7659,7 @@ int main( int argc, char **argv )
   printHash();
 #endif
 
-  glutMainLoop ();
+  // glutMainLoop ();
   return(1);
 }
 
@@ -7671,71 +7673,71 @@ void printHash()
   handle[0] = fopen ("hash.p", "w");
   if ( handle[0]== NULL )
   {
-    printf ("\nThe file could not be opened.\n\n"); 
+    printf ("\nThe file could not be opened.\n\n");
     return;
   }
   for (i=0; i<sumAsci->max_sump; i++)
   {
     fprintf(handle[0], " sumASCI: %d indexes: %d\n", i, sumAsci->anzp[i]);
-  }  
+  }
   handle[1] = fopen ("hash.l", "w");
   if ( handle[1]== NULL )
   {
-    printf ("\nThe file could not be opened.\n\n"); 
+    printf ("\nThe file could not be opened.\n\n");
     return;
   }
   for (i=0; i<sumAsci->max_suml; i++)
   {
     fprintf(handle[1], " sumASCI: %d indexes: %d\n", i, sumAsci->anzl[i]);
-  }  
+  }
   handle[2] = fopen ("hash.c", "w");
   if ( handle[2]== NULL )
   {
-    printf ("\nThe file could not be opened.\n\n"); 
+    printf ("\nThe file could not be opened.\n\n");
     return;
   }
   for (i=0; i<sumAsci->max_sumc; i++)
   {
     fprintf(handle[2], " sumASCI: %d indexes: %d\n", i, sumAsci->anzc[i]);
-  }  
+  }
   handle[3] = fopen ("hash.s", "w");
   if ( handle[3]== NULL )
   {
-    printf ("\nThe file could not be opened.\n\n"); 
+    printf ("\nThe file could not be opened.\n\n");
     return;
   }
   for (i=0; i<sumAsci->max_sums; i++)
   {
     fprintf(handle[3], " sumASCI: %d indexes: %d\n", i, sumAsci->anzs[i]);
-  }  
+  }
   handle[4] = fopen ("hash.b", "w");
   if ( handle[4]== NULL )
   {
-    printf ("\nThe file could not be opened.\n\n"); 
+    printf ("\nThe file could not be opened.\n\n");
     return;
   }
   for (i=0; i<sumAsci->max_sumb; i++)
   {
     fprintf(handle[4], " sumASCI: %d indexes: %d\n", i, sumAsci->anzb[i]);
-  }  
+  }
   handle[5] = fopen ("hash.a", "w");
   if ( handle[5]== NULL )
   {
-    printf ("\nThe file could not be opened.\n\n"); 
+    printf ("\nThe file could not be opened.\n\n");
     return;
   }
   for (i=0; i<sumAsci->max_suma; i++)
   {
     fprintf(handle[5], " sumASCI: %d indexes: %d\n", i, sumAsci->anza[i]);
-  }  
+  }
   handle[6] = fopen ("hash.S", "w");
   if ( handle[6]== NULL )
   {
-    printf ("\nThe file could not be opened.\n\n"); 
+    printf ("\nThe file could not be opened.\n\n");
     return;
   }
   for (i=0; i<sumAsci->max_sumS; i++)
   {
     fprintf(handle[6], " sumASCI: %d indexes: %d\n", i, sumAsci->anzS[i]);
-  }  
+  }
 }

@@ -415,9 +415,9 @@ void rotateBSpline(double *p1, double *p2, BSplineCurve * myCurve ,BSplineSurfac
     length = scalProd/(length*length);
     vl_scal(&length,zAxis,tmpVec);
     vl_add(p1,tmpVec,origin);//origin of local coordinate system
-    //cout<<"cPointTmp: "<<cPointTmp[0]<<" "<<cPointTmp[1]<<" "<<cPointTmp[2]<<endl;
-    //cout<<"go:"<<vl_betrag(p1cPoint)<<endl;
-    //cout<<"Origin: "<<origin[0]<<" "<<origin[1]<<" "<<origin[2]<<endl;
+    //std::cout<<"cPointTmp: "<<cPointTmp[0]<<" "<<cPointTmp[1]<<" "<<cPointTmp[2]<< std::endl;
+    //std::cout<<"go:"<<vl_betrag(p1cPoint)<< std::endl;
+    //std::cout<<"Origin: "<<origin[0]<<" "<<origin[1]<<" "<<origin[2]<< std::endl;
     vl_result(origin,p2,zAxis);//z-Axis of local coordinate system
     if(vl_betrag(zAxis) == 0)  vl_result(p2,p1,zAxis);
     vl_norm(zAxis,zAxis);//scale to length 1
@@ -431,7 +431,7 @@ void rotateBSpline(double *p1, double *p2, BSplineCurve * myCurve ,BSplineSurfac
     M[i][0]=xAxis[i];//wirte x-Axis to fisrt column
     M[i][1]=yAxis[i];//wirte y-Axis to second column
     M[i][2]=zAxis[i];//wirte z-Axis to third column
-    //cout<<"( "<<xAxis[i]<<" "<<yAxis[i]<<" "<<zAxis[i]<<" )"<<endl;
+    //std::cout<<"( "<<xAxis[i]<<" "<<yAxis[i]<<" "<<zAxis[i]<<" )"<< std::endl;
   }
 
   for(i=0;i<(myCurve->nPol);i++)
@@ -540,7 +540,7 @@ inline void calculateBSpline(double * pnt, BSplineCurve * myCurve,double u)
 /**************************************************/
 void piaFitting(double pCloud [][3],int nPnt,BSplineCurve * fitCurve, int deg, double tolerance)
 {
-  if(nPnt<2) cout<<"WARNING: too few Points"<<endl;
+  if(nPnt<2) std::cout<<"WARNING: too few Points"<< std::endl;
   fitCurve->k = NULL;fitCurve->cX = NULL;fitCurve->cY = NULL;fitCurve->cZ = NULL;fitCurve->w = NULL;
   int nCPnt = nPnt + 2, i;
   if((fitCurve->k = (double *)realloc((double *)fitCurve->k,(nPnt+2*deg)*sizeof(double))) == NULL )
@@ -633,12 +633,12 @@ void piaFitting(double pCloud [][3],int nPnt,BSplineCurve * fitCurve, int deg, d
       c++;
     }
     #if PLOT == 1
-    cout<<"Error: "<<error<<" after "<<iter<<"-iterations"<<endl;
+    std::cout<<"Error: "<<error<<" after "<<iter<<"-iterations"<< std::endl;
     #endif
     iter++;
   }while(sqrt((error-errorOld)*(error-errorOld))>dist*tolerance);
-  cout<<"BSpline fitting ... done"<<endl;
-  cout<<"Error: "<<error<<" after "<<iter<<"-iterations"<<endl;
+  std::cout<<"BSpline fitting ... done"<< std::endl;
+  std::cout<<"Error: "<<error<<" after "<<iter<<"-iterations"<< std::endl;
 }
 
 

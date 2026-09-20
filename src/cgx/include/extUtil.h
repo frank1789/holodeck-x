@@ -148,7 +148,7 @@ typedef struct {
 typedef struct {
   int nr;                /* element-face-nr in Abaqus Format  (-1 for shell elements) */
   int indx[6];           /* face[elemnr].indx[side]==index of the face of that element of that side-nr   */
-  int elem_nr;           /* reference to element number  */ 
+  int elem_nr;           /* reference to element number  */
   int type;
   int group;
   int mat;
@@ -164,7 +164,7 @@ typedef struct {
 
 
 typedef struct {
-  int node_nr;           /* reference to node number  */ 
+  int node_nr;           /* reference to node number  */
   int nFlag;             /* 0: no node-nr */
   int vFlag;             /* 0: no value */
   int tFlag;             /* 0: no text */
@@ -189,9 +189,9 @@ typedef struct {
   int bcface[6];          /* edge index (line/face) of the related surf/body */
   int neighbor[6];        /* adjacent surface/body index related to v:v<surf[j].nl */
   int map[6][3];          /* relative orientation of the neighbor 1:i==i_neigh, 4:i==-i_neigh */
-  int strt1[6][3]; 
-  int end_1[6][3]; 
-  int strt2[6][3]; 
+  int strt1[6][3];
+  int end_1[6][3];
+  int strt2[6][3];
   int end_2[6][3];
   char bctype[6][MAX_LINE_LENGTH];          /* boundary condition type */
 } NodeBlocks;
@@ -291,8 +291,8 @@ typedef struct {
 typedef struct {
   char *name;
   char flag;                  /* if the set is open: 'o' else: 'c' */
-  char type;                  /* ordered entities:1 (seq) or not: 0 (set) */ 
-  char lock;                  /* if 1 seta and setr are locked for that set */ 
+  char type;                  /* ordered entities:1 (seq) or not: 0 (set) */
+  char lock;                  /* if 1 seta and setr are locked for that set */
   int material;
   int index;           /* index of type-0 sets, assigned and updated in prnt(), eval. in getSetNr() */
   int anz_v;
@@ -397,7 +397,7 @@ typedef struct {
   int   sh;                              /* shapes  */
   int   nurl;                            /* nurbs lines     */
   int   nurs;                            /* nurbs surfaces  */
-  int   psets;                           /* actal displayed sets */ 
+  int   psets;                           /* actal displayed sets */
 } SumGeo;
 
 
@@ -415,7 +415,7 @@ typedef struct {
   int ns;                /* nr of related surfs */
   int *s;                /* related surfs */
   GLint   npgn;          /* size of feed-back-Buffer pgn */
-  GLdouble *pgn;         /* stores poligons which defines the interiour */  
+  GLdouble *pgn;         /* stores poligons which defines the interiour */
 } Shapes;
 
 
@@ -453,7 +453,7 @@ typedef struct {
   int   *elem;
   int  etyp;
   int  eattr;       /* -1:unstructured mesh, 0:default, 1:reduced integration, 2:incompatible modes */
-  int   elock;      /* 1: no element props can be changed */ 
+  int   elock;      /* 1: no element props can be changed */
 } Lines;
 
 typedef struct {
@@ -493,7 +493,7 @@ typedef struct {
   int   etyp;
   int   eattr;       /* -1:unstructured mesh, 0:default, 1:reduced integration, 2:incompatible modes */
   char  *eparm;      /* parameter, so far used to store the mesh-density requirement for the mesher */
-  int   elock;      /* 1: no element props can be changed */ 
+  int   elock;      /* 1: no element props can be changed */
   int   patch;            /* number of trimming patch in the related nurbs */
   GLint   npgn;           /* size of feed-back-Buffer pgn */
   GLdouble *pgn;           /* stores poligons of the trimmed nurbs which defines the interiour */
@@ -516,7 +516,7 @@ typedef struct {
   int   etyp;
   int  eattr;       /* -1:unstructured mesh, 0:default, 1:reduced integration, 2:incompatible modes */
   char  *eparm;
-  int   elock;      /* 1: no element props can be changed */ 
+  int   elock;      /* 1: no element props can be changed */
   // mesher data
   int   fail;             /* if 1 then the meshing failed */
   int   unbalance[7];     /* nr of unbalanced edges */
@@ -733,8 +733,8 @@ int write2duns( char *datout, Summen *anz, Nodes *node, Elements *elem, Datasets
 
 
 
-void readStdCmap( Display **ptr_dpy, int *ptr_dpycells, Colormap *ptr_cmap, XColor **ptr_c,
-                 unsigned long **ptr_pix, unsigned int *ptr_npixels, int anzCells );
+// void readStdCmap( Display **ptr_dpy, int *ptr_dpycells, Colormap *ptr_cmap, XColor **ptr_c,
+//                  unsigned long **ptr_pix, unsigned int *ptr_npixels, int anzCells );
 
 /*selectFaces.c */
 int selectDisplayFacesHe8 (Elements *elems, int numElems, int **pfaces, int *);

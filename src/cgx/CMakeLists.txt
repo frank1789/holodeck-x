@@ -4,6 +4,7 @@ add_library(${LIBRARY_TARGET_NAME} SHARED)
 add_library(${PROJECT_NAME}::${LIBRARY_TARGET_NAME} ALIAS ${LIBRARY_TARGET_NAME})
 target_sources(${LIBRARY_TARGET_NAME}
     PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cgx.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/adjustMidsideNode.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/AsplitA.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/AsplitL.c

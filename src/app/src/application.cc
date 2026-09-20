@@ -264,6 +264,10 @@ auto Application::run() -> void {
       SDL_RenderClear(renderer_);
 
       ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer_);
+      if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+      }
       SDL_RenderPresent(renderer_);
     }
     delta_time();

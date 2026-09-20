@@ -11,7 +11,7 @@
 /*     the License.                                                      */
 /*                                                                       */
 /*     This program is distributed in the hope that it will be useful,   */
-/*     but WITHOUT ANY WARRANTY; without even the implied warranty of    */ 
+/*     but WITHOUT ANY WARRANTY; without even the implied warranty of    */
 /*     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the      */
 /*     GNU General Public License for more details.                      */
 /*                                                                       */
@@ -26,7 +26,7 @@
 #define TEST  0
 
 /* temporary conversion from old to new bias definition */
-extern int OLD_BIAS_DEF;
+int OLD_BIAS_DEF;
 int        old_bias_def;
 
 #include <cgx.h>
@@ -81,12 +81,12 @@ extern char **parameter;
 /* define node                                                      */
 /*------------------------------------------------------------------*/
 
-void delNod( int anzn, int *index ) 
+void delNod( int anzn, int *index )
 {
   int j,k;
   int *buf;  /* must be, else error because *index could be from a set (which is manipul.) */
 
-  if( (buf=(int *)malloc((anzn+1)*sizeof(int) ) )==NULL) 
+  if( (buf=(int *)malloc((anzn+1)*sizeof(int) ) )==NULL)
   { printf(" ERROR: malloc failure\n"); return; }
   for (j=0; j<anzn; j++) buf[j]=index[j];
 
@@ -108,12 +108,12 @@ void delNod( int anzn, int *index )
 
   /* search the last valid node */
   while((anz->nmax>0)&&(node[anz->nmax].pflag==-1)) { anz->nmax--; anz->n--; }
-  if(anz->nnext>anz->nmax) anz->nnext=anz->nmax+1;  
+  if(anz->nnext>anz->nmax) anz->nnext=anz->nmax+1;
 
   // saver but slower, try to avoid
   /*
   while(node[anz->nmax].pflag==-1) { anz->nmax--; }
-  
+
   // update the node array
   anz->nmax=0; anz->nmin=MAX_INTEGER;
   k=0;
@@ -153,12 +153,12 @@ int nod( Summen *anz, Nodes **nptr, int setFlag, int nodnr, double x, double y, 
     {
 #if TEST
       printf(" create nod:%d %x\n", nodnr, node);
-#endif	  
+#endif
       if ((node = (Nodes *)realloc( (Nodes *)node, (nodnr+1)*sizeof(Nodes)) ) == NULL )
       { errMsg("ERROR: realloc failure in nod, node:%d not installed\n", nodnr); return(-1); }
 #if TEST
 	  printf(" create nod:%d %x\n", nodnr, node);
-#endif	  
+#endif
       *nptr=node;
       for(i=anz->nmax+1; i<=nodnr; i++) node[i].indx=-1;
       anz->nmax=nodnr;
@@ -218,7 +218,7 @@ int nod( Summen *anz, Nodes **nptr, int setFlag, int nodnr, double x, double y, 
     node[nodnr].nz=z;
   }
   node[nodnr].nv[0]=node[nodnr].nv[1]=node[nodnr].nv[2]=0.;
-  
+
   return(nr);
 }
 
@@ -249,7 +249,7 @@ int pre_nod( char *record)
   if(updFlag)
   {
     adjustDrawNodes(1);
-    makeSurfaces();        // includes getFaceNormalen 
+    makeSurfaces();        // includes getFaceNormalen
     getElemNormalen( e_enqire, node, anz->e );
     realloc_colNr();
     updateDispLists();
@@ -269,14 +269,14 @@ int pre_nod( char *record)
 
 /* delElem() if introduced must provide that e_enquire[].nr is defined without holes */
 /* *index might store the element numbers in unsorted order! If this field will be ordered speed improvements can be realized. */
-void delElem( int anze, int *index ) 
+void delElem( int anze, int *index )
 {
   int j,k,e,n,anz_e,anz_emax,ipuf;
   int *buf;  /* index must be buffered, because *index could be from a set (which is manipul.) */
   int *ebuf;
   Elements  *elem=NULL;
 
-  if( (buf=(int *)malloc((anze+1)*sizeof(int) ) )==NULL) 
+  if( (buf=(int *)malloc((anze+1)*sizeof(int) ) )==NULL)
   { printf(" ERROR: malloc failure\n"); return; }
   for (j=0; j<anze; j++) buf[j]=index[j];
 
@@ -303,7 +303,7 @@ void delElem( int anze, int *index )
       {
 	if(surf[k].ne<1) continue;
 	if(buf[j]<surf[k].elem[0]) continue;
-	if(buf[j]>surf[k].elem[surf[k].ne-1]) continue; 
+	if(buf[j]>surf[k].elem[surf[k].ne-1]) continue;
         for (n=0; n<surf[k].ne; n++)
         {
           if(surf[k].elem[n]==buf[j]) { surf[k].elem[n]=0; break; }
@@ -311,12 +311,12 @@ void delElem( int anze, int *index )
       }
     }
     else
-    {  
+    {
       for (k=0; k<anzGeo->b; k++)
-      {  
+      {
 	if(body[k].ne<1) continue;
 	if(buf[j]<body[k].elem[0]) continue;
-	if(buf[j]>body[k].elem[body[k].ne-1]) continue; 
+	if(buf[j]>body[k].elem[body[k].ne-1]) continue;
         for (n=0; n<body[k].ne; n++)
         {
           if(body[k].elem[n]==buf[j]) { body[k].elem[n]=0; break; }
@@ -353,13 +353,13 @@ void delElem( int anze, int *index )
       body[k].ne=e;
     }
   }
-  
+
   for (k=0; k<anz->sets; k++)
   {
     if( set[k].name != (char *)NULL )
     {
       if(set[k].anz_e<1) continue;
-      if( (ebuf=(int *)calloc((anz->emax+1), sizeof(int) ) )==NULL) 
+      if( (ebuf=(int *)calloc((anz->emax+1), sizeof(int) ) )==NULL)
       { printf(" ERROR: calloc failure\n"); return; }
       for(j=0; j<set[k].anz_e; j++) ebuf[set[k].elem[j]]=1;
       for(j=0; j<anze; j++) ebuf[buf[j]]=0;
@@ -419,7 +419,7 @@ void delElem( int anze, int *index )
   /* initialize the new element data structure */
   /* and update faces in sets */
   iniElements(anz, elem, anz_e);
-  if(anz->enext>anz->emax) anz->enext=anz->emax+1;    
+  if(anz->enext>anz->emax) anz->enext=anz->emax+1;
   free(elem); elem=NULL;
   updateDispLists();
 }
@@ -630,7 +630,7 @@ int hashAlias( SumAsci *sumAsci, char *name, int nr)
   int sum=0;
 
   while(name[i]!='\0') { sum+=name[i]*(++j); i++;}
-  
+
   /* check if sum is higher as the allocated value */
   if(sum>sumAsci->max_suma)
   {
@@ -643,7 +643,7 @@ int hashAlias( SumAsci *sumAsci, char *name, int nr)
   }
 
   /* alloc of a new entry in the hash table */
-  if ((sumAsci->aindx[sum] 
+  if ((sumAsci->aindx[sum]
   =(int *)realloc( (int *)sumAsci->aindx[sum], (sumAsci->anza[sum]+1)*sizeof(int)) ) == NULL )
   { printf("\n\nERROR: realloc failure in hashAlias(), alias:%s not included\n\n", name); return(-1); }
 
@@ -696,7 +696,7 @@ void operateAlias( char *name, char *type )
   {
     /* Alias found, generate new entity-name  */
     length= strlen( name );
-    if (length==1) 
+    if (length==1)
     {
       if ( getNewName( name, type ) == -1 )
       { printf(" ERROR: operateAlias: Type %s not known\n", type); }
@@ -754,7 +754,7 @@ void delVal( int anzv, int *number )
 
   for (j=0; j<anzv; j++) if( value[nrbuffer[j]].name != (char *)NULL )
   {
-    /* remove the values from all sets */ 
+    /* remove the values from all sets */
     for (k=0; k<anz->sets; k++)
     {
      if( set[k].name != (char *)NULL )
@@ -767,8 +767,8 @@ void delVal( int anzv, int *number )
     }
     if(printFlag) printf (" delete value:%s \n",  value[nrbuffer[j]].name );
     free(value[nrbuffer[j]].name);
-    value[nrbuffer[j]].name = (char *)NULL ; 
-    value[nrbuffer[j]].flag = 0 ; 
+    value[nrbuffer[j]].name = (char *)NULL ;
+    value[nrbuffer[j]].flag = 0 ;
   }
   free(nrbuffer);
 }
@@ -793,10 +793,10 @@ int hashValue( SumAsci *sumAsci, char *name, int nr)
   }
   else
   {
-    for (i=0; i<sumAsci->anzv[sum]; i++) 
+    for (i=0; i<sumAsci->anzv[sum]; i++)
     {
       n=sumAsci->vindx[sum][i];
-      if( value[n].name == (char *)NULL ) 
+      if( value[n].name == (char *)NULL )
       {
         /* already existing space to fill */
         sumAsci->vindx[sum][i]=nr;
@@ -806,7 +806,7 @@ int hashValue( SumAsci *sumAsci, char *name, int nr)
   }
 
   /* alloc of a new entry in the hash table */
-  if ((sumAsci->vindx[sum] 
+  if ((sumAsci->vindx[sum]
   =(int *)realloc( (int *)sumAsci->vindx[sum], (sumAsci->anzv[sum]+1)*sizeof(int)) ) == NULL )
   { printf("\n\nERROR: realloc failure in hashValue(), value:%s not included\n\n", name); return(-1); }
 
@@ -861,7 +861,7 @@ int value_i( char *name, char *string )
   for (i=0; i<anz->sets; i++)
   {
     if(( set[i].name!=(char *)NULL)&&( set[i].flag=='o')) seta( i, "v", nr );
-  } 
+  }
   return(nr);
 }
 
@@ -883,7 +883,7 @@ int pre_value( char *record)
   length=sscanf (record,"%s%s%s%s", name, string, arg1, arg2 );
 
   if(length<2) return(-1);
-  else if(compareStrings(string, "push")>0) 
+  else if(compareStrings(string, "push")>0)
   {
     if(length>2) splitkey[0]=arg1[0];
     else splitkey[0]=' ';
@@ -903,8 +903,8 @@ int pre_value( char *record)
       return(vnr);
     }
     else return(-1);
-  } 
-  else if(compareStrings(string, "pop")>0) 
+  }
+  else if(compareStrings(string, "pop")>0)
   {
     if(length>2) n=atoi(arg1); else n=1;
     for(i=0; i<n; i++)
@@ -950,7 +950,7 @@ int pre_value( char *record)
       string[i]=getchar(); i++;
     }while(string[i-1]!='\n');
     string[i-1]=0;
-  } 
+  }
   else if (length>2)
   {
     vnr1=getValuNr(arg1);
@@ -963,7 +963,7 @@ int pre_value( char *record)
     {
       // it might be a constant string or a float. Try a float.
       val1=atof(arg1);
-    } 
+    }
     vnr2=getValuNr(arg2);
     if (vnr2>-1)
     {
@@ -974,7 +974,7 @@ int pre_value( char *record)
     {
       // it might be a constant string or a float. Try a float.
       val2=atof(arg2);
-    } 
+    }
     if(compareStrings(string, "&")>0)
     {
       if((vnr1<0)&&(vnr2<0)) sprintf(string,"%s%s",arg1,arg2);
@@ -1044,7 +1044,7 @@ void delPnt( int anzp, int *number )
 
   for (j=0; j<anzp; j++) if( point[nrbuffer[j]].name != (char *)NULL )
   {
-    /* remove the points from all sets */ 
+    /* remove the points from all sets */
     for (k=0; k<anz->sets; k++)
     {
      if( set[k].name != (char *)NULL )
@@ -1057,7 +1057,7 @@ void delPnt( int anzp, int *number )
     }
     if(printFlag) printf (" delete pnt:%s \n",  point[nrbuffer[j]].name );
     free(point[nrbuffer[j]].name);
-    point[nrbuffer[j]].name = (char *)NULL ; 
+    point[nrbuffer[j]].name = (char *)NULL ;
     point[nrbuffer[j]].nn= 0;
     free(point[nrbuffer[j]].nod);
     point[nrbuffer[j]].nod = NULL;
@@ -1086,10 +1086,10 @@ int hashPoint( SumAsci *sumAsci, char *name, int nr)
   else
   {
     if (delPntFlag)
-    for (i=0; i<sumAsci->anzp[sum]; i++) 
+    for (i=0; i<sumAsci->anzp[sum]; i++)
     {
       n=sumAsci->pindx[sum][i];
-      if( point[n].name == (char *)NULL ) 
+      if( point[n].name == (char *)NULL )
       {
         /* already existing space to fill */
         sumAsci->pindx[sum][i]=nr;
@@ -1099,7 +1099,7 @@ int hashPoint( SumAsci *sumAsci, char *name, int nr)
   }
 
   /* alloc of a new entry in the hash table */
-  if ((sumAsci->pindx[sum] 
+  if ((sumAsci->pindx[sum]
   =(int *)realloc( (int *)sumAsci->pindx[sum], (sumAsci->anzp[sum]+1)*sizeof(int)) ) == NULL )
   { printf("\n\nERROR: realloc failure in hashPoint(), pnt:%s not included\n\n", name); return(-1); }
 
@@ -1160,7 +1160,7 @@ int pnt( char *name, double x, double y, double z, int scalFlag )
   for (i=0; i<anz->sets; i++)
   {
     if(( set[i].name!=(char *)NULL)&&( set[i].flag=='o')) seta( i, "p", nr );
-  } 
+  }
   return(nr);
 }
 
@@ -1178,7 +1178,7 @@ int pre_pnt( char *record, int addFlag)
   xbuf[0]=ybuf[0]=0;
 
   if (!addFlag) length=sscanf (record,"%s%s%s%lg%lg", name, xbuf, ybuf, &z, &t );
-  else { name[0]='!'; length=sscanf (record,"%s%s%s%lg%lg", &name[1], xbuf, ybuf, &z, &t ); } 
+  else { name[0]='!'; length=sscanf (record,"%s%s%s%lg%lg", &name[1], xbuf, ybuf, &z, &t ); }
 
   /* check if no name is specified */
   if((strlen(name)==1)&&(name[0]=='!')) noName=1;
@@ -1294,9 +1294,9 @@ void delShape( int anzs, int *number )
   int j, k, *nrbuffer;
 
   delShapeFlag=1;
-  
+
   // printf ("sum:%d num:%d shape:%s\n", anzs, number[0], shape[number[0]].name );
-  
+
   if ((nrbuffer = (int *)malloc((anzs+1)*sizeof(int)) ) == NULL )
      { printf("\n\nERROR: realloc failure in delShape\n\n"); return; }
 
@@ -1355,7 +1355,7 @@ int hashShape( SumAsci *sumAsci, char *name, int nr)
   else
   {
     if (delShapeFlag)
-    for (i=0; i<sumAsci->anzsh[sum]; i++) 
+    for (i=0; i<sumAsci->anzsh[sum]; i++)
     {
       n=sumAsci->shindx[sum][i];
       if( shape[n].name == (char *)NULL )
@@ -1417,7 +1417,7 @@ int shape_i( char *name, int type, int ip1, int ip2, int ip3, int ip4, int ip5, 
     free(shape[nr].s);
     shape[nr].s= NULL;
   }
-  shape[nr].type=type;     
+  shape[nr].type=type;
   shape[nr].p[0]=ip1;
   shape[nr].p[1]=ip2;
   shape[nr].p[2]=ip3;
@@ -1453,7 +1453,7 @@ void pre_shape( char *record, int addFlag)
   {
     typi=0;
     if (!addFlag) sscanf( record, "%s%*s%s%s%s", name, datum[0], datum[1], datum[2] );
-    else 
+    else
     {
       name[0]='!';
       datum[0][0]=datum[1][0]=datum[2][0]='%';
@@ -1487,7 +1487,7 @@ void pre_shape( char *record, int addFlag)
   {
     typi=1;
     if (!addFlag) sscanf( record, "%s%*s%s%s%lf", name, datum[0], datum[1], &r1 );
-    else 
+    else
     {
       name[0]='!';
       datum[0][0]=datum[1][0]='%';
@@ -1526,14 +1526,14 @@ void pre_shape( char *record, int addFlag)
     v_scal( &r1, v, v);
     v_add(&point[p1].px, v, v);
     getNewName( buffer, "p" );
-    p3= pnt( buffer, v[0], v[1], v[2], 0 ); 
+    p3= pnt( buffer, v[0], v[1], v[2], 0 );
     seta( nsave, "p", p3);
   }
   else if (compare(type, "CON",3)==3)
   {
     typi=2;
     if (!addFlag) sscanf( record, "%s%*s%s%s%lf%lf", name, datum[0], datum[1], &r1, &r2 );
-    else 
+    else
     {
       name[0]='!';
       datum[0][0]=datum[1][0]='%';
@@ -1578,7 +1578,7 @@ void pre_shape( char *record, int addFlag)
     v_scal( &r1, v, v);
     v_add(&point[p1].px, v, v);
     getNewName( buffer, "p" );
-    p3= pnt( buffer, v[0], v[1], v[2], 0 ); 
+    p3= pnt( buffer, v[0], v[1], v[2], 0 );
     seta( nsave, "p", p3);
 
     /* generate a fourth point perpendicular to the axis at a distant of r2 */
@@ -1587,14 +1587,14 @@ void pre_shape( char *record, int addFlag)
     v_scal( &r2, v, v);
     v_add(&point[p2].px, v, v);
     getNewName( buffer, "p" );
-    p4= pnt( buffer, v[0], v[1], v[2], 0 ); 
+    p4= pnt( buffer, v[0], v[1], v[2], 0 );
     seta( nsave, "p", p4);
   }
   else if (compare(type, "TOR",3)==3)
   {
     typi=5;
     if (!addFlag) sscanf( record, "%s%*s%s%lf%s%lf", name, datum[0], &r1, datum[1], &r2 );
-    else 
+    else
     {
       name[0]='!';
       datum[0][0]=datum[1][0]='%';
@@ -1639,7 +1639,7 @@ void pre_shape( char *record, int addFlag)
     v_scal( &r1, v, v);
     v_add(&point[p1].px, v, v);
     getNewName( buffer, "p" );
-    p3= pnt( buffer, v[0], v[1], v[2], 0 ); 
+    p3= pnt( buffer, v[0], v[1], v[2], 0 );
     seta( nsave, "p", p3);
 
     /* generate a fourth point perpendicular to the axis at a distant of r1+r2 */
@@ -1649,14 +1649,14 @@ void pre_shape( char *record, int addFlag)
     v_scal( &r12, v, v);
     v_add(&point[p1].px, v, v);
     getNewName( buffer, "p" );
-    p4= pnt( buffer, v[0], v[1], v[2], 0 ); 
+    p4= pnt( buffer, v[0], v[1], v[2], 0 );
     seta( nsave, "p", p4);
   }
   else if (compare(type, "SPH",3)==3)
   {
     typi=3;
     if (!addFlag) sscanf( record, "%s%*s%s%lf", name, datum[0], &r1 );
-    else 
+    else
     {
       name[0]='!';
       datum[0][0]=datum[1][0]='%';
@@ -1684,37 +1684,37 @@ void pre_shape( char *record, int addFlag)
     v[2]=0.;
     v_add(&point[p1].px, v, v);
     getNewName( buffer, "p" );
-    p2= pnt( buffer, v[0], v[1], v[2], 0 ); 
+    p2= pnt( buffer, v[0], v[1], v[2], 0 );
     v[0]=0.;
     v[1]=r1/scale->w;
     v[2]=0.;
     v_add(&point[p1].px, v, v);
     getNewName( buffer, "p" );
-    p3= pnt( buffer, v[0], v[1], v[2], 0 ); 
+    p3= pnt( buffer, v[0], v[1], v[2], 0 );
     v[0]=0.;
     v[1]=0.;
     v[2]=r1/scale->w;
     v_add(&point[p1].px, v, v);
     getNewName( buffer, "p" );
-    p4= pnt( buffer, v[0], v[1], v[2], 0 ); 
+    p4= pnt( buffer, v[0], v[1], v[2], 0 );
     v[0]=-r1/scale->w;
     v[1]=0.;
     v[2]=0.;
     v_add(&point[p1].px, v, v);
     getNewName( buffer, "p" );
-    p5= pnt( buffer, v[0], v[1], v[2], 0 ); 
+    p5= pnt( buffer, v[0], v[1], v[2], 0 );
     v[0]=0.;
     v[1]=-r1/scale->w;
     v[2]=0.;
     v_add(&point[p1].px, v, v);
     getNewName( buffer, "p" );
-    p6= pnt( buffer, v[0], v[1], v[2], 0 ); 
+    p6= pnt( buffer, v[0], v[1], v[2], 0 );
     v[0]=0.;
     v[1]=0.;
     v[2]=-r1/scale->w;
     v_add(&point[p1].px, v, v);
     getNewName( buffer, "p" );
-    p7= pnt( buffer, v[0], v[1], v[2], 0 ); 
+    p7= pnt( buffer, v[0], v[1], v[2], 0 );
     seta( nsave, "p", p2);
     seta( nsave, "p", p3);
     seta( nsave, "p", p4);
@@ -1807,7 +1807,7 @@ int hashLine( SumAsci *sumAsci, char *name, int nr)
   else
   {
     if (delLineFlag)
-    for (i=0; i<sumAsci->anzl[sum]; i++) 
+    for (i=0; i<sumAsci->anzl[sum]; i++)
     {
       n=sumAsci->lindx[sum][i];
       if( line[n].name == (char *)NULL )
@@ -1952,7 +1952,7 @@ int line_( char *name, char *p1, char *p2, char *trk, int div, double bias )
     { printf("ERROR: malloc failed\n\n" ); return(-1); }
     strcpy(line[nr].name, name);
     sum=hashLine( sumAsci, name, nr );
-    line[nr].div = ddiv; 
+    line[nr].div = ddiv;
   }
   else
   {
@@ -2015,7 +2015,7 @@ int line_( char *name, char *p1, char *p2, char *trk, int div, double bias )
   else printf(" asciSum:%d asci-indx:%d sumL in hash-table:%d name:%s index:%d\n"
   , sum, sumAsci->anzl[sum]-1, sumAsci->anzl[sum]
   , line[sumAsci->lindx[sum][sumAsci->anzl[sum]-1]].name
-  , sumAsci->lindx[sum][sumAsci->anzl[sum]-1] );  
+  , sumAsci->lindx[sum][sumAsci->anzl[sum]-1] );
   */
   for (i=0; i<anz->sets; i++)
   {
@@ -2061,7 +2061,7 @@ int getBias_fbd(int l, Lines *line)
 void splitBiasDiv(int *ptrdiv, double *ptrbias)
 {
   char datum[MAX_LINE_LENGTH];
-  int div; 
+  int div;
   double bias;
   int bias_fbd;
   int i;
@@ -2073,7 +2073,7 @@ void splitBiasDiv(int *ptrdiv, double *ptrbias)
   /* determine bias and division */
   sprintf( datum, "%d", div);
   i=strlen( datum );
-  if(i>2) 
+  if(i>2)
   {
     div=atoi( &datum[i-2]);
     datum[i-2]=0;
@@ -2086,14 +2086,14 @@ void splitBiasDiv(int *ptrdiv, double *ptrbias)
       bias_fbd*=10;
     else
       if(abs(bias_fbd)<10) bias_fbd*=10;
-    
+
 
 #if TEST
   printf("div:%d bias_fbd:%d\n", div,bias_fbd);
 #endif
 
     /* in the fbd-format-definition bias is defined as bias(a)=(elem_length(last)/elem_length(first)) */
-    /* therefore a re-calculation is necessary because in cgx the definition is: */ 
+    /* therefore a re-calculation is necessary because in cgx the definition is: */
     /* bias(b) = (elem_length(n+1)/elem_length(n)) => bias(a)= bias(b)**(div-1) */
     if((div>1)&&(abs(bias_fbd)>10))
     {
@@ -2106,7 +2106,7 @@ void splitBiasDiv(int *ptrdiv, double *ptrbias)
   {
     bias=1.;
   }
-  if (div>MAX_LINE_DIV) 
+  if (div>MAX_LINE_DIV)
   {
     printf("WARNING: div:%d to high, reduced to %d\n",div, MAX_LINE_DIV);
     div=MAX_LINE_DIV;
@@ -2130,7 +2130,7 @@ int pre_line( char *record, int addFlag)
   char typ=0;
 
   if (!addFlag) length = sscanf( record, "%s%s%s%s%s%s", name, datum[0], datum[1], datum[2], datum[3], datum[4] );
-  else 
+  else
   {
     name[0]='!';
     datum[0][0]=datum[1][0]='%';
@@ -2187,7 +2187,7 @@ int pre_line( char *record, int addFlag)
     if (addFlag) { for(i=strlen(datum[2]); i>=0; i--) datum[2][i+1]=datum[2][i]; datum[2][0]='%'; }
     operateAlias( datum[2], "p" );
   }
-  else 
+  else
   {
     printf("ERROR: Inkorrect definition");
     return(-1);
@@ -2213,7 +2213,7 @@ int pre_line( char *record, int addFlag)
     i=getSetNr(datum[2]);
     if (i>-1)        /* SEQ */
     {
-      /* if a point of the same name exists then check if the line endpoints are endpoints in the seq. if not use point. */ 
+      /* if a point of the same name exists then check if the line endpoints are endpoints in the seq. if not use point. */
       ii=getPntNr(datum[2]);
       if (ii>-1)
       {
@@ -2390,7 +2390,7 @@ int hashLcmb( SumAsci *sumAsci, char *name, int nr)
   {
     /* look for a free entry */
     if (delLcmbFlag)
-    for (i=0; i<sumAsci->anzc[sum]; i++) 
+    for (i=0; i<sumAsci->anzc[sum]; i++)
     {
       n=sumAsci->cindx[sum][i];
       if( lcmb[n].name == (char *)NULL )
@@ -2403,7 +2403,7 @@ int hashLcmb( SumAsci *sumAsci, char *name, int nr)
   }
 
   /* alloc of a new entry in the hash table */
-  if ((sumAsci->cindx[sum] 
+  if ((sumAsci->cindx[sum]
   =(int *)realloc( (int *)sumAsci->cindx[sum], (sumAsci->anzc[sum]+1)*sizeof(int)) ) == NULL )
   { printf("\n\nERROR: realloc failure in hashLcmb(), lcmb:%s not included\n\n", name); return(-1); }
 
@@ -2475,7 +2475,7 @@ int lcmb_i( char *name, int add, int anz_l, char  *ori, int *lin )
   else printf(" asciSum:%d asci-indx:%d sumC in hash-table:%d name:%s index:%d\n"
   , sum, sumAsci->anzc[sum]-1, sumAsci->anzc[sum]
   , lcmb[sumAsci->cindx[sum][sumAsci->anzc[sum]-1]].name
-  , sumAsci->cindx[sum][sumAsci->anzc[sum]-1] );  
+  , sumAsci->cindx[sum][sumAsci->anzc[sum]-1] );
   */
 
   /* orient the new lcmb */
@@ -2562,7 +2562,7 @@ int lcmb_( char *name, int add, int anz_l, char *ori, char *lin )
   else printf(" asciSum:%d asci-indx:%d sumC in hash-table:%d name:%s index:%d\n"
   , sum, sumAsci->anzc[sum]-1, sumAsci->anzc[sum]
   , lcmb[sumAsci->cindx[sum][sumAsci->anzc[sum]-1]].name
-  , sumAsci->cindx[sum][sumAsci->anzc[sum]-1] );  
+  , sumAsci->cindx[sum][sumAsci->anzc[sum]-1] );
   */
 
   /* orient the new lcmb */
@@ -2612,7 +2612,7 @@ int pre_lcmb( char *record, int addFlag)
   else
   {
     add=0;
-    length = sscanf( record, "%*s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s", 
+    length = sscanf( record, "%*s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
      ori[0], lin[0],ori[1], lin[1],
      ori[2], lin[2],ori[3], lin[3],ori[4], lin[4],ori[5], lin[5],ori[6], lin[6],ori[7], lin[7],
      ori[8], lin[8],ori[9], lin[9],ori[10], lin[10],ori[11], lin[11],ori[12], lin[12],ori[13], lin[13] );
@@ -2724,7 +2724,7 @@ int hashSurf( SumAsci *sumAsci, char *name, int nr)
   else
   {
     if (delSurfFlag)
-    for (i=0; i<sumAsci->anzs[sum]; i++) 
+    for (i=0; i<sumAsci->anzs[sum]; i++)
     {
       n=sumAsci->sindx[sum][i];
       if( surf[n].name == (char *)NULL )
@@ -2737,7 +2737,7 @@ int hashSurf( SumAsci *sumAsci, char *name, int nr)
   }
 
   /* alloc of a new entry in the hash table */
-  if ((sumAsci->sindx[sum] 
+  if ((sumAsci->sindx[sum]
   =(int *)realloc( (int *)sumAsci->sindx[sum], (sumAsci->anzs[sum]+1)*sizeof(int)) ) == NULL )
   { printf("\n\nERROR: realloc failure in hashSurf(), surf:%s not included\n\n", name); return(-1); }
 
@@ -2844,7 +2844,7 @@ int surface_i( char *name, char ori, int blend, int anz_c, char *cori, int *edge
   else printf(" asciSum:%d asci-indx:%d sums in hash-table:%d name:%s index:%d\n"
   , sum, sumAsci->anzs[sum]-1, sumAsci->anzs[sum]
   , surf[sumAsci->sindx[sum][sumAsci->anzs[sum]-1]].name
-  , sumAsci->sindx[sum][sumAsci->anzs[sum]-1] );  
+  , sumAsci->sindx[sum][sumAsci->anzs[sum]-1] );
   */
 
   /* orient the new surf */
@@ -2966,14 +2966,14 @@ int  surface( char *name, char ori, char *blend, int anz_c, char *cori, char *ed
   surf[nr].elock=0;
   surf[nr].patch=0;
   surf[nr].permElem=0;
-  
+
   /* print the values of the hash table */
   if(sum<0) exit(-1);
   /*
   else printf(" asciSum:%d asci-indx:%d sums in hash-table:%d name:%s index:%d\n"
   , sum, sumAsci->anzs[sum]-1, sumAsci->anzs[sum]
   , surf[sumAsci->sindx[sum][sumAsci->anzs[sum]-1]].name
-  , sumAsci->sindx[sum][sumAsci->anzs[sum]-1] );  
+  , sumAsci->sindx[sum][sumAsci->anzs[sum]-1] );
   */
 
   /* orient the new surf */
@@ -3006,7 +3006,7 @@ int getSurfParameters( char *record, char *name, char *ori, char *blend, char **
   cori_=*cori;
   edge_=*edge;
 
-  
+
   /* read the name */
   do
   {
@@ -3020,7 +3020,7 @@ int getSurfParameters( char *record, char *name, char *ori, char *blend, char **
     if(record[i]==' ') break;
   }
   name[j+1]='\0';
- 
+
   /* read either orientation of the surface or 'ADD' */
   do
   {
@@ -3051,7 +3051,7 @@ int getSurfParameters( char *record, char *name, char *ori, char *blend, char **
     }
     blend[j+1]='\0';
   }
-  
+
   /* get the orientation- and the name of the lines */
   j=-1;
   do
@@ -3079,7 +3079,7 @@ int getSurfParameters( char *record, char *name, char *ori, char *blend, char **
     {
       i++;
       if(record[i]!=' ') break;
-    }while(1);     
+    }while(1);
     for(k=offset; k<MAX_LINE_LENGTH; k++)
     {
       edge_=(char *)realloc((char *)edge_, (int)((j+2)*MAX_LINE_LENGTH)*sizeof(char));
@@ -3101,8 +3101,8 @@ int getSurfParameters( char *record, char *name, char *ori, char *blend, char **
   *edge=edge_;
   return(j+1);
 }
-   
-  
+
+
 
 void pre_gsur( char *record, int addFlag)
 {
@@ -3120,7 +3120,7 @@ void pre_gsur( char *record, int addFlag)
   }
   else
     anz_c = getSurfParameters(record, name, ori, blend, &cori, &edge, (int)0);
- 
+
   operateAlias( name, "s " );
   if(printFlag) printf("Gsur:%s ", name );
 
@@ -3331,7 +3331,7 @@ void delBody( int anzb, int *number )
     body[nrbuffer[j]].nod= NULL;
     body[nrbuffer[j]].ne=0;
     free(body[nrbuffer[j]].elem);
-    body[nrbuffer[j]].elem= NULL;      
+    body[nrbuffer[j]].elem= NULL;
     body[nrbuffer[j]].etyp= 0;
   }
   free(nrbuffer);
@@ -3360,7 +3360,7 @@ int hashBody( SumAsci *sumAsci, char *name, int nr)
   else
   {
     if (delBodyFlag)
-    for (i=0; i<sumAsci->anzb[sum]; i++) 
+    for (i=0; i<sumAsci->anzb[sum]; i++)
     {
       n=sumAsci->bindx[sum][i];
       if( body[n].name == (char *)NULL )
@@ -3373,7 +3373,7 @@ int hashBody( SumAsci *sumAsci, char *name, int nr)
   }
 
   /* alloc of a new entry in the hash table */
-  if ((sumAsci->bindx[sum] 
+  if ((sumAsci->bindx[sum]
   =(int *)realloc( (int *)sumAsci->bindx[sum], (sumAsci->anzb[sum]+1)*sizeof(int)) ) == NULL )
   { printf("\n\nERROR: realloc failure in hashBody(), body:%s not included\n\n", name); return(-1); }
 
@@ -3544,7 +3544,7 @@ int  body_( char *name, char *edge )
       if(cnr[0][j]==lcmb[surl[j][0]].p1) cnr[1][j]=lcmb[surl[j][0]].p2;
       else cnr[1][j]=lcmb[surl[j][0]].p1;
     }
-    if(printFlag) printf(" point %s matches %s \n", point[cnr[0][j]].name,point[cnr[1][j]].name); 
+    if(printFlag) printf(" point %s matches %s \n", point[cnr[0][j]].name,point[cnr[1][j]].name);
   }
 
   /* suche linien zw. den cnr einer surf */
@@ -3600,8 +3600,8 @@ int  body_( char *name, char *edge )
     printf(" sur:%d ", i);
     for( j=0; j<surnr[i]; j++)
     {
-      if(surt[i][j]=='l') printf("%s ", line[surl[i][j]].name); 
-      if(surt[i][j]=='c') printf("%s ", lcmb[surl[i][j]].name); 
+      if(surt[i][j]=='l') printf("%s ", line[surl[i][j]].name);
+      if(surt[i][j]=='c') printf("%s ", lcmb[surl[i][j]].name);
     }
     printf("\n");
   }
@@ -3646,11 +3646,11 @@ int  body_( char *name, char *edge )
     if ( n <0)
     { printf(" ERROR: surf could not be created\n"); }
     bsur[anz_s]=n; anz_s++;
-    if(printFlag) printf(" surf:%s created\n", surfname);    
+    if(printFlag) printf(" surf:%s created\n", surfname);
   next_edge:;
   }
 
-  /* erzeuge body */ 
+  /* erzeuge body */
   if ((lori = (char *)realloc((char *)lori, (anz_s)*sizeof(char)) ) == NULL )
   { printf("ERROR: realloc failure in pre_swep()\n"); goto errorBody_; }
   for (k=0; k<anz_s; k++) lori[k]= '+';
@@ -3658,7 +3658,7 @@ int  body_( char *name, char *edge )
   n=gbod_i( name, -1, anz_s, lori, bsur );
   if( n <0)
         { printf("body_: could not create new body\n"); goto errorBody_; }
-  if(printFlag) printf(" body:%s created\n", name ); 
+  if(printFlag) printf(" body:%s created\n", name );
 
   for(i=0; i<anz_c; i++) { free(surl[i]); free(surt[i]); }
   free(bsur);
@@ -3760,7 +3760,7 @@ int  gbod( char *name, char *blend, int anz_c, char *cori, char *edge )
   else printf(" asciSum:%d asci-indx:%d sums in hash-table:%d name:%s index:%d\n"
   , sum, sumAsci->anzb[sum]-1, sumAsci->anzb[sum]
   , body[sumAsci->bindx[sum][sumAsci->anzb[sum]-1]].name
-  , sumAsci->bindx[sum][sumAsci->anzb[sum]-1] );  
+  , sumAsci->bindx[sum][sumAsci->anzb[sum]-1] );
   */
 
   /* orient the new body */
@@ -3809,7 +3809,7 @@ int  gbod_i( char *name, int blend, int anz_c, char *cori, int *edge )
     body[nr].ne=0;
     body[nr].nod= NULL;
     body[nr].elem= NULL;
-    
+
     body[nr].etyp=0;
     body[nr].eattr=0;
     body[nr].elock=0;
@@ -3827,7 +3827,7 @@ int  gbod_i( char *name, int blend, int anz_c, char *cori, int *edge )
     { printf("ERROR: malloc failed\n\n" ); return(-1); }
     strcpy(body[nr].name, name);
     sum=hashBody( sumAsci, name, nr );
-    
+
     body[nr].etyp=0;
     body[nr].eattr=0;
     body[nr].elock=0;
@@ -3863,7 +3863,7 @@ int  gbod_i( char *name, int blend, int anz_c, char *cori, int *edge )
   else printf(" asciSum:%d asci-indx:%d sums in hash-table:%d name:%s index:%d\n"
   , sum, sumAsci->anzb[sum]-1, sumAsci->anzb[sum]
   , body[sumAsci->bindx[sum][sumAsci->anzb[sum]-1]].name
-  , sumAsci->bindx[sum][sumAsci->anzb[sum]-1] );  
+  , sumAsci->bindx[sum][sumAsci->anzb[sum]-1] );
   */
   /* orient the new body */
   i=orientBody( nr );
@@ -3916,7 +3916,7 @@ int getBodyParameters( char *record, char *name, char *ori, char ***cori,  char 
     if(record[i]==' ') break;
   }
   name[j+1]='\0';
- 
+
   /* read either orientation or 'ADD' */
   do
   {
@@ -3987,7 +3987,7 @@ int getBodyParameters( char *record, char *name, char *ori, char ***cori,  char 
     {
       i++;
       if(record[i]!=' ') break;
-    }while(1);     
+    }while(1);
 
     edge_=(char **)realloc((char **)edge_, (int)((j+1))*sizeof(char *));
     if(edge_==NULL) { printf("ERROR: realloc failed in getBodyParameters()\n"); return(0); }
@@ -4003,7 +4003,7 @@ int getBodyParameters( char *record, char *name, char *ori, char ***cori,  char 
       if( (record[i]=='\n') || (record[i]=='\r') ) break;
       if(record[i]=='\0') break;
       if(record[i]==' ') break;
-    }while(1);     
+    }while(1);
     edge_[j][k]='\0';
 
     /* next surf j */
@@ -4073,7 +4073,7 @@ int pre_gbod( char *record, int addFlag)
   i=gbod( name, ori, anz_c, coris, edges );
   free(coris);
   free(edges);
-  
+
   if( i <0)
     printf("ERROR: body could not be created\n");
   return(i);
@@ -4098,9 +4098,9 @@ int pre_body( char *record)
 
   anz_c=length-1;
 
-  if((anz_c>4)&&(anz_c<8)) 
+  if((anz_c>4)&&(anz_c<8))
   {
-    strcpy( ori, "NORM"); 
+    strcpy( ori, "NORM");
     for (i=0; i<anz_c; i++)
     {
       operateAlias( edge[i], "s " );
@@ -4110,7 +4110,7 @@ int pre_body( char *record)
     if( i <0)
       printf("ERROR: body could not be created\n");
   }
-  else if(anz_c==2) 
+  else if(anz_c==2)
   {
     operateAlias( edge[0], "s " );
     operateAlias( edge[1], "s " );
@@ -4118,7 +4118,7 @@ int pre_body( char *record)
     if( i <0)
       printf("ERROR: body could not be created\n");
   }
-  else if(anz_c==1) 
+  else if(anz_c==1)
   {
     se=getSetNr( edge[0]);
     if(se>-1)
@@ -4172,7 +4172,7 @@ int nurl( char *string, int addFlag )
   static int compactFlag;
   static int    div=0;
   double bias=1.;
-  
+
   Rsort *rsort=NULL;
 
   if (!addFlag) sscanf (string,"%s%s%s", name, action, dummy);
@@ -4349,7 +4349,7 @@ int nurl( char *string, int addFlag )
       pnr= pnt( buffer, x, y, z, 1);
       i--;
       if((i<0)&&(i>nurbl[nr].u_nknt)) { printf("ERROR in nurl\n"); exit(1); }
-      nurbl[nr].ctlpnt[i] = pnr; 
+      nurbl[nr].ctlpnt[i] = pnr;
       if(length==5) nurbl[nr].weight[i] =(GLfloat)weight;
       else nurbl[nr].weight[i]=1.;
     }
@@ -4381,7 +4381,7 @@ int nurl( char *string, int addFlag )
       return(-1);
     }
     nurbl[nr].endFlag=1;       /* define NURBL as complete */
-    nurbl[nr].type=GL_MAP1_VERTEX_4;       
+    nurbl[nr].type=GL_MAP1_VERTEX_4;
     nurbl[nr].u_stride=4;
     nurbl[nr].ctlarray=NULL;
 
@@ -4401,9 +4401,9 @@ int nurl( char *string, int addFlag )
     pnr= nurbl2seq(nr, nurbl);
 
     /* search close points in set pnr to p1 and p2 and replace them by p1 and p2 */
-    /* calculate all dr between p1 and pnt and sort the indexes according to dr */ 
+    /* calculate all dr between p1 and pnt and sort the indexes according to dr */
     if ( (rsort = (Rsort *)malloc( (set[pnr].anz_p+1) * sizeof(Rsort))) == NULL )
-      printf("ERROR: realloc failed: Rsort\n\n" ); 
+      printf("ERROR: realloc failed: Rsort\n\n" );
     for (i=0; i<set[pnr].anz_p; i++)
     {
       x=point[pnr1].px-point[set[pnr].pnt[i]].px;
@@ -4415,7 +4415,7 @@ int nurl( char *string, int addFlag )
     qsort( rsort, set[pnr].anz_p, sizeof(Rsort), (void *)compareRsort );
 #if TEST
     for (i=0; i<set[pnr].anz_p; i++)
-      printf("%d p:%d r:%lf\n", i, rsort[i].i, rsort[i].r); 
+      printf("%d p:%d r:%lf\n", i, rsort[i].i, rsort[i].r);
 #endif
     // printf("type:%d name:%s p1[%d]:%s p2[%d]:%s p[%d]:%s\n", set[pnr].type, set[pnr].name, pnr2, point[pnr2].name, pnr1, point[pnr1].name, set[pnr].pnt[rsort[0].i], point[set[pnr].pnt[rsort[0].i]].name);
     if(pnr1!=set[pnr].pnt[rsort[0].i])
@@ -4424,7 +4424,7 @@ int nurl( char *string, int addFlag )
       //delPnt( 1, ptr );  /* do not delete. endpoints from set pnt might be the same as the nurl-endpoints */
     }
 
-    /* calculate all dr between p2 and pnt and sort the indexes according to dr */ 
+    /* calculate all dr between p2 and pnt and sort the indexes according to dr */
     for (i=0; i<set[pnr].anz_p; i++)
     {
       x=point[pnr2].px-point[set[pnr].pnt[i]].px;
@@ -4586,7 +4586,7 @@ int hashNurs( SumAsci *sumAsci, char *name, int nr)
   else
   {
     if (delNursFlag)
-    for (i=0; i<sumAsci->anzS[sum]; i++) 
+    for (i=0; i<sumAsci->anzS[sum]; i++)
     {
       n=sumAsci->Sindx[sum][i];
       if( nurbs[n].name == (char *)NULL )
@@ -4599,7 +4599,7 @@ int hashNurs( SumAsci *sumAsci, char *name, int nr)
   }
 
   /* alloc of a new entry in the hash table */
-  if ((sumAsci->Sindx[sum] 
+  if ((sumAsci->Sindx[sum]
   =(int *)realloc( (int *)sumAsci->Sindx[sum], (sumAsci->anzS[sum]+1)*sizeof(int)) ) == NULL )
   { printf("\n\nERROR: realloc failure in hashNurs(), nurs:%s not included\n\n", name); return(-1); }
 
@@ -4857,7 +4857,7 @@ int nurs( char *string, int addFlag )
    if(!compactFlag)
     {
       if (!addFlag) length=sscanf (string,"%*s%*s%d%d%s%f", &i, &j, buffer, &weight);
-      else 
+      else
       {
         buffer[0]='%';
         length=sscanf (string,"%*s%*s%d%d%s%f", &i, &j, &buffer[1], &weight);
@@ -4950,7 +4950,7 @@ int nurs( char *string, int addFlag )
       nurbs[nr].name = (char *)NULL;
       return(-2);
     }
-    nurbs[nr].type=GL_MAP2_VERTEX_4;       
+    nurbs[nr].type=GL_MAP2_VERTEX_4;
     nurbs[nr].u_stride=4* nurbs[nr].v_npnt;
     nurbs[nr].v_stride=4;
     nurbs[nr].ctlarray=(GLfloat *)NULL;
@@ -4976,7 +4976,7 @@ int nurs( char *string, int addFlag )
     /* for the moment delete the nurs and the controll-points */
     nurbs[nr].name = (char *)NULL;
 #else
-    
+
     /* first uexp+1 vexp+1 knot-vals must be the same */
     for (i=1; i<=nurbs[nr].u_exp; i++)  if(nurbs[nr].uknt[i]!=nurbs[nr].uknt[0])
     {
@@ -5021,9 +5021,9 @@ int nurs( char *string, int addFlag )
     for (i=0; i<nurbs[nr].u_nknt; i++) printf("ku:%lf\n", nurbs[nr].uknt[i]);
     for (i=0; i<nurbs[nr].v_nknt; i++) printf("kv:%lf\n", nurbs[nr].vknt[i]);
     */
-    
+
     nurbs[nr].Nurb = (GLUnurbsObj *)gluNewNurbsRenderer();
-    nurbs[nr].endFlag=1;       
+    nurbs[nr].endFlag=1;
     repNurs(nr);
 
     /* create a shape of the same name for reference in surfaces */
