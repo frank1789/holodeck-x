@@ -1,65 +1,46 @@
 // $antlr-format alignTrailingComments true, columnLimit 150, minEmptyLines 1, maxEmptyLinesToKeep 1, reflowComments false, useTab false
 // $antlr-format allowShortRulesOnASingleLine false, allowShortBlocksOnASingleLine true, alignSemicolons hanging, alignColons hanging
 
-lexer grammar resultfileLexer;
+lexer grammar cgxLexer;
 
-USER_DATA
-    : DIGIT 'U'
+POINT
+    : 'PNT'
     ;
 
-MODEL_NAME
-    : USER_DATA
+LINE
+    : 'LINE'
     ;
 
-USER
-    : USER_DATA 'USER'
+SPHERE
+    : 'SPHERE'
     ;
 
-DATE
-    : USER_DATA 'DATE'
+MESH
+    : 'MESH'
     ;
 
-TIME
-    : USER_DATA 'TIME'
+ALL
+    : 'all'
     ;
 
-HOST
-    : USER_DATA 'HOST'
+ELEMENT_TYPE
+    : 'ELTY'
+    | 'elty'
     ;
 
-PROGRAM
-    : USER_DATA 'PGM'
+ELEMENT
+    : 'QU4'
+    | 'HE20'
+    | 'tr6u'
+    | 'HE20R'
     ;
 
-VERSION
-    : USER_DATA 'VERSION'
+PLUS
+    : '+'
     ;
 
-DIRECTORY
-    : USER_DATA 'DIR'
-    ;
-
-DBNAME
-    : USER_DATA 'DBN'
-    ;
-
-MATERIAL
-    : USER_DATA 'MAT'
-    ;
-
-START_NODE_BLOCK
-    : '2C'
-    ;
-
-START_ELEMENT_BLOCK
-    : '3C'
-    ;
-
-END_CURRENT_BLOCK : '-3'
-    ;
-
-END
-    : '9999'
+MINUS
+    : '-'
     ;
 
 FLOAT

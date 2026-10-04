@@ -3,21 +3,17 @@
 
 #include <cstdint>
 
+namespace holodeck::parser {
 
-namespace holodeck_x {
-
-
-    enum class ParseError : std::uint8_t{
-      kInvalidInput,
-      kFileNotFound,
-      kParseError,
-    };
-
+enum class ParseError : std::uint8_t {
+  kInvalidInput,
+  kFileNotFound,
+  kParseError,
+};
 
 template <typename Derived>
 class Parser {
  public:
-
  protected:
   constexpr auto Self() noexcept -> Derived& {
     return static_cast<Derived&>(*this);
@@ -32,6 +28,6 @@ class Parser {
   constexpr Parser() noexcept = default;
 };
 
-}  // namespace holodeck_x
+}  // namespace holodeck::parser
 
 #endif  // HOLODECK_X_NEW_CGX_PARSER_HH_

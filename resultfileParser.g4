@@ -1,18 +1,19 @@
 // $antlr-format alignTrailingComments true, columnLimit 150, minEmptyLines 1, maxEmptyLinesToKeep 1, reflowComments false, useTab false
 // $antlr-format allowShortRulesOnASingleLine false, allowShortBlocksOnASingleLine true, alignSemicolons hanging, alignColons hanging
 
-parser grammar resultfileGrammar;
+parser grammar resultfileParser;
 
 options {
     tokenVocab = resultfileLexer;
 }
 
 file
-    : (line | comment)* EOF
+    : (line)* EOF
     ;
 
 line
     : (TAB | WHITESPACE)* NEWLINE
+    | comment
     | node
     | user
     | model
@@ -28,7 +29,20 @@ line
     ;
 
 comment
-    : COMMENT .*? NEWLINE
+    : '!'*? NEWLINE
+    ;
+
+start_node_block
+    : (TAB | WHITESPACE)* END_CURRENT_BLOCK NEWLINE
+    ;
+
+start_element_block
+    : (TAB | WHITESPACE)* START_ELEMENT_BLOCK NEWLINE
+    ;
+
+element
+    : LINE_ID (TAB | WHITESPACE)*? ID (TAB | WHITESPACE)*? ELEMENT_TYPE
+    | LINE_ID (TAB | WHITESPACE) DIGIT+
     ;
 
 node
@@ -75,11 +89,14 @@ material
     : (TAB | WHITESPACE)* MATERIAL WHITESPACE? NAME NEWLINE
     ;
 
+end_current_block
+    : (TAB | WHITESPACE)* END_CURRENT_BLOCK NEWLINE
+    ;
+
 end
     : (TAB | WHITESPACE)* END NEWLINE
     ;
 
 number
-    : FLOAT
-    | INT
+    : SIGN? (FLOAT | INT)
     ;

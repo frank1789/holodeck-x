@@ -2,11 +2,11 @@
 #include <print>
 #include <format>
 
-#include "read_result_file.hh"
+#include "parser/read_result_file.hh"
 
 int main(int argc, char **argv)
 {
-    holodeck_x::ParseResultFile parser("/Users/francesco/Downloads/cgx_2.23.all 2/CalculiX/cgx_2.23/examples/result.frd");
+    holodeck::parser::ResultFileParser parser("/Users/francesco/Downloads/cgx_2.23.all 2/CalculiX/cgx_2.23/examples/result.frd");
     auto result = parser.Parse();
     if (!result) {
         std::printf("Error parsing file: %d\n", static_cast<int>(result.error()));
