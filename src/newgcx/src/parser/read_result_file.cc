@@ -47,6 +47,10 @@ std::expected<void, ParseError> ResultFileParser::Parse() {
                 return std::unexpected(error);
               });
 
+  if (!file_result) {
+    return std::unexpected(ParseError::kFileNotFound);
+  }
+
   const auto& content = file_result.value();
   std::string_view file_contents(static_cast<const char*>(content.addr),
                                  content.length);
