@@ -1,0 +1,33 @@
+module(
+    name = "holodeck",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "rules_cc", version = "0.2.27")
+bazel_dep(name = "rules_rust", version = "0.75.0")
+
+# setup the rust toolchain
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2024",
+    extra_target_triples = ["x86_64-apple-darwin"],
+    versions = ["1.86.0"],
+)
+use_repo(rust, "rust_toolchains")
+
+register_toolchains("@rust_toolchains//:all")
+
+# configure crate universe to read the workspace
+crate = use_extension("@rules_rust//crate_universe:extensions.bzl", "crate")
+crate.spec(
+    features = ["derive"],
+    package = "clap",
+    version = "4.6",
+)
+crate.from_specs(
+    name = "crates",
+    supported_platform_triples = [
+        "x86_64-apple-darwin",
+    ],
+)
+use_repo(crate, "crates")
