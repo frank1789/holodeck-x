@@ -22,21 +22,19 @@
 
 
 
-    #include <iostream>
-    #include <cmath>
-    
+
 
 
 #ifndef M_PI
 
     #define M_PI 3.1415926535897932384626433832795
-        
+
 #endif
 
 #ifdef WIN32
 
     #define isnan _isnan
-        
+
 #endif
 
 const int MAX_BINOMIAL = 64;  // Maximum binomial array dimension.

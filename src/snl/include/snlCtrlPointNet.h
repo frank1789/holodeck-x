@@ -24,9 +24,6 @@
 #include "snlTransform.h"
 
 
-    #include <iostream>
-    #include <cmath>
-    
 
 class snlCtrlPointNet
 {
@@ -36,11 +33,11 @@ class snlCtrlPointNet
 
         snlCtrlPointNet();
         virtual ~snlCtrlPointNet();
-        
+
         snlCtrlPointNet ( const snlCtrlPointNet& );  // Copy constructor.
-    
+
         virtual void transform ( unsigned ptIndex, snlTransform& transform );  // Transform a control point.
-        
+
         virtual void transform ( snlTransform& transform );  // Transform all points.
 
         virtual void transformSelected ( snlTransform& transform );
@@ -50,7 +47,7 @@ class snlCtrlPointNet
 
         // Get pointer to array of control points.
         virtual const snlCtrlPoint* getCtrlPts() const;
-        
+
         // Get pointer to array of control points. Non constant return.
         virtual snlCtrlPoint* getCtrlPtsPtr();
 
@@ -72,34 +69,34 @@ class snlCtrlPointNet
         virtual unsigned numPointsSelected();
 
         virtual unsigned* getSelectedIndexes();
-        
-        virtual void selectAllPoints ( bool yesNo = true ); 
+
+        virtual void selectAllPoints ( bool yesNo = true );
 
         void selectPoint ( unsigned index, bool yesNo = true );
 
         virtual bool isSelected ( unsigned index );
 
         virtual void clearSelected();
-        
+
         static double calcFlatness ( snlPoint** points, unsigned size );
         double calcDeg1Flatness ( snlPoint** points ) const;
-        
+
         double calcCurvature ( snlPoint** points );
 
         bool isConvex ( snlPoint** points, int numPts, double sensitivity = 0.0 );
-        
+
         virtual void replacePoints ( snlCtrlPoint* newPoints );  // Replace control points with new ones.
         virtual void replacePoints ( const snlCtrlPoint* newPoints, unsigned numNewPoints, unsigned replaceIndex,
                                      unsigned numToReplace );
-        
+
         virtual void appendPointSpace ( unsigned numPoints );  // Add space to end of array.
         virtual void truncatePointSpace ( unsigned numPoints );  // Remove space from end of array.
-        
+
         virtual void appendPoints ( const snlCtrlPoint* points, unsigned numPoints );
-        
+
         void print();
         void print ( unsigned fromIndex, unsigned toIndex );
-        
+
         bool hasConcurrentPoints() const;
 
         // Operators
@@ -113,12 +110,12 @@ class snlCtrlPointNet
         virtual int getCnctPts ( unsigned index, snlCtrlPoint* retPts ) = 0;
 
         // Return maximum number of connections a single control point can have.
-        virtual int maxConnections() const = 0;        
+        virtual int maxConnections() const = 0;
 
     protected:
 
         virtual bool checkBounds ( unsigned index );  // Check index against array bounds.
-        
+
         snlCtrlPoint*       ctrlPts;
         unsigned            ctrlPtArraySize;
 };

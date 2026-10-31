@@ -24,31 +24,29 @@
 
 
 
-    #include <iostream>
-    #include <cmath>
-    
+
 
 class snlSquareLinear
 {
     public:
-        
+
         snlSquareLinear();
         ~snlSquareLinear();
         snlSquareLinear ( int numUnknowns, int numRightHandSides, double* coefficients, double* rightHandSides );
-        
+
         void solve();
-        
+
         void print();
         void printCoeffs();
         void printRhSides();
-    
+
     private:
-    
+
         int        num_unknowns; // Number of unknowns corresponding to coefficient matrix.
         int        num_rhSides;  // Number of right hand sides.
-        
+
         double*    coeffs;  // Coefficient matrix array.
-        double*    rhSides;  // Array of right hands sides.            
+        double*    rhSides;  // Array of right hands sides.
 };
 
 #endif

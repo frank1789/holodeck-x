@@ -19,16 +19,9 @@
 
 #include "snlTransform.h"
 
-#ifdef SGI_MIPS
 
-    #include <math.h>
-    
-#else
 
     #include <cmath>
-    using namespace std;
-    
-#endif
 
 snlTransform::snlTransform()
     : snlMatrix_4X4()
@@ -77,7 +70,7 @@ void snlTransform::transform ( double* elements )
 {
     // Transform given point elements.
     // -------------------------------
-    
+
     double* ptArray = elements;
 
     double  tmpPt [ 4 ] = { 0.0, 0.0, 0.0, 0.0 };
@@ -95,7 +88,7 @@ void snlTransform::transform ( double* elements )
             tmpPt [ mRow ] += cVal * element [ mIndex ++ ];
         }
     }
-    
+
     for ( int index = 0; index < 4; index ++ )
         elements [ index ] = tmpPt [ index ];
 }
@@ -172,13 +165,13 @@ void snlTransform::rotate ( double angle, snlPoint& axisStart, snlVector& axisDi
 {
     // Rotation wrapper function.
     // --------------------------
-    
+
     snlPoint axisEnd = axisStart + axisDirection;
-    
+
     snlTransform tmpTransform;
-    
+
     tmpTransform.rotate ( angle, axisStart, axisEnd );
-    
+
     multiply ( tmpTransform, pre );
 }
 
@@ -204,7 +197,7 @@ void snlTransform::rotate ( double angle, snlPoint& axisStart, snlPoint& axisEnd
     if ( vect.y() == 0.0 && vect.z() == 0.0 )
     {
         // Just a rotation about the x axis.
-        
+
         if ( vect.x() > 0.0 )
             rotateX ( angle, true );
         else
@@ -213,7 +206,7 @@ void snlTransform::rotate ( double angle, snlPoint& axisStart, snlPoint& axisEnd
     else if ( vect.x() == 0.0 && vect.z() == 0.0 )
     {
         // Just a rotation about the Y axis.
-        
+
         if ( vect.y() > 0.0 )
             rotateY ( angle, true );
         else
@@ -222,7 +215,7 @@ void snlTransform::rotate ( double angle, snlPoint& axisStart, snlPoint& axisEnd
     else if ( vect.x() == 0.0 && vect.y() == 0.0 )
     {
         // Just a rotation about the x axis.
-        
+
         if ( vect.z() > 0.0 )
             rotateZ ( angle, true );
         else
@@ -320,22 +313,22 @@ void snlTransform::align ( snlVector& vector1, snlVector& vector2, bool pre )
     //
     // Notes:       Can be used for transforming coordinate systems.
     //              Rotates vector1 about normal to plane described by vector1 and vector2.
-    
+
     // Get angle to rotate through.
     double rotAngle = vector1.angle ( vector2 );
-    
+
     // Generate normal to both vectors.
-    snlVector normal;    
+    snlVector normal;
     normal.crossProduct ( vector1, vector2 );
-    
+
     snlTransform tmpTransform;
-    
+
     snlPoint origin;
-        
+
     // Rotate about normal.
     if ( ( rotAngle != 0.0 ) && ( ! normal.isNull() ) )
-        tmpTransform.rotate ( rotAngle, origin, normal );    
-    
+        tmpTransform.rotate ( rotAngle, origin, normal );
+
     multiply ( tmpTransform, pre );
 }
 

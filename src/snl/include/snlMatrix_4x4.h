@@ -24,9 +24,8 @@
 
 
 
-    #include <iostream>
-    #include <cmath>
-    
+
+
 
 
 class snlMatrix_4X4
@@ -37,7 +36,7 @@ class snlMatrix_4X4
 
         snlMatrix_4X4();
         virtual ~snlMatrix_4X4();
-        
+
         snlMatrix_4X4 ( snlMatrix_4X4& copyFrom );
 
         void ident();  // Set matrix to identity.
@@ -53,7 +52,7 @@ class snlMatrix_4X4
         void multiply ( snlMatrix_4X4&, bool pre = false );  // Multiply this matrix by given matrix.
 
         void transform ( snlPoint* );  // Transform given point with matrix.
-        
+
         double* elements();
 
     protected:

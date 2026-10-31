@@ -1,6 +1,6 @@
 // libSNL - Simple Nurbs Library
-// Copyright 2003 Scott A.E. Lanham, Australia.
-// --------------------------------------------
+// Copyright Scott A.E. Lanham, Australia.
+// ---------------------------------------
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 2 of the License, or
@@ -15,34 +15,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-// *** Curve Base Class ***
+#ifndef SNLCTRLPOINT_H
+#define SNLCTRLPOINT_H
 
-#ifndef SNL_CURVE_BASE_H
-#define SNL_CURVE_BASE_H
-
-#include "snlKnotVector.h"
 #include "snlPoint.h"
-#include "snlVertexNet.h"
 
-
-
-    #include <iostream>
-    #include <cmath>
-    #include <cfloat>
-    
-
-    
-
-
-class snlCurveBase
+class snlCtrlPoint : public snlPoint
 {
     public:
 
-        virtual ~snlCurveBase(){};
+        snlCtrlPoint();
 
-        virtual snlPoint eval ( knot param ) const = 0;
-    
-        virtual void vertexNet ( snlVertexNet* vNet, double tolerance, bool parametric ) = 0;
+        explicit  snlCtrlPoint( snlPoint& );
+
+        snlCtrlPoint& operator = ( const snlPoint& copyFrom );
+
+        void select ( bool yesNo );
+        [[nodiscard]] bool isSelected() const;
+
+        void weight ( double setTo );
+        double weight();
+
+    private:
+
+        bool    selected;  // Point has been selected.
 };
 
 #endif

@@ -20,9 +20,15 @@
 #ifndef SNLKNOTVECTOR_H
 #define SNLKNOTVECTOR_H
 
+#include <ostream>
 
-    #include <iostream>
-    #include <cmath>
+#if __has_include("<fmt/format.h>")
+#define HAS_FMTLIB 1
+#include <fmt/format.h>
+#endif
+
+
+
 
 
 typedef double knot;
@@ -35,11 +41,11 @@ class snlKnotVector
         virtual ~snlKnotVector ();
 
         snlKnotVector ( const snlKnotVector& );  // Copy constructor.
-    
+
         // Use existing knot array.
         snlKnotVector ( knot* knotArrayToUse, unsigned size, int degree, int knotVectType = 1, bool copy = false );
-        
-        // Generate new knot array.        
+
+        // Generate new knot array.
         snlKnotVector ( knot startVal, knot endVal, unsigned numKnots, int degree );
 
         // Generate knot vector given existing parameters. Used for interpolation.
@@ -53,26 +59,26 @@ class snlKnotVector
         enum knotVectorType
         {
             open = 1,       // Clamped
-            periodic = 2    // Periodic will not be supported for some time yet :-)
+            periodic = 2,    // Periodic will not be supported for some time yet :-)
         };
 
         knot val ( unsigned index ) const;
-        
+
         const knot* getKnotPtr ( unsigned index );
 
         unsigned size() const;
-        
+
         int degree();
         void degree ( int val );
-        
+
         bool equals ( const snlKnotVector& knotVect ) const;
 
         void insertKnot ( knot param, int numTimes = 1 );
-        
+
         void removeKnot ( unsigned spanIndex );
-        
+
         void grow ( unsigned bySize );
-        
+
         void increaseMultiplicity ( unsigned spanIndex, int numKnotsToAdd );
 
         unsigned findSpan ( knot param ) const;
@@ -82,18 +88,18 @@ class snlKnotVector
         unsigned getFirstSpan() const;  // Return knot index of first non-zero span.
 
         unsigned getNextSpan ( unsigned spanIndex ) const;
-        
+
         unsigned getPreviousSpan ( unsigned spanIndex ) const;
 
         int findMultiplicity ( unsigned index ) const;
         int findMultiplicity ( knot param ) const;
-        
+
         void truncate ( knot param, bool keepLast );
-        
+
         void reparameterise ( knot startKnot, knot endKnot );
 
         void reverse();
-        
+
         void join ( snlKnotVector* knotVector );
 
         const knot* array();  // Return pointer to array of knots.
@@ -102,29 +108,49 @@ class snlKnotVector
         knot min() const;  // Min knot val.
 
         int type() const;  // Return value from knotVectorType.
-        
+
         basis* evalBasis ( knot param );
-        
+
         basis* evalBasisDeriv ( knot param, int deriv );
-        
+
         double* calcRemovalAlphas ( unsigned span );
 
         void print();
         void print_cpp();
-        
+
+        friend std::ostream& operator<<(std::ostream& os, const snlKnotVector& knv);
+
     protected:
 
         void copyFrom ( const snlKnotVector& vector );
-    
+
         knot* getKnotArray();
-    
+
         knot*       knots;
         unsigned    vectorSize;
-        
+
         int         deg; // Degree associated with vector.
 
         // Type of knot vector
         int         kvType;
 };
+
+inline std::ostream& operator<<(std::ostream& os, const snlKnotVector& knv)
+{
+    os << "degree: " << knv.deg << " Knots: ";
+    return os;
+}
+
+#if HAS_FMTLIB
+template<>
+struct fmt::formatter()
+{
+    constexpr auto parse() decltype();
+
+    auto format() const -> decltype();
+ };
+
+ #endif
+
 
 #endif

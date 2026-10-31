@@ -19,6 +19,8 @@
 
 // *** Legacy opencdsm routines are included ***
 
+#ifndef SNL_NURBS_COMMON_H_
+#define SNL_NURBS_COMMON_H_
 
 #include "snlPoint.h"
 #include "snlKnotVector.h"
@@ -71,3 +73,4 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
                                 double iterTol, double cosTol, unsigned maxPass );
 
 
+#endif // SNL_NURBS_COMMON_H_

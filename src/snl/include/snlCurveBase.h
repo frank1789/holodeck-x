@@ -1,6 +1,6 @@
 // libSNL - Simple Nurbs Library
-// Copyright Scott A.E. Lanham, Australia.
-// ---------------------------------------
+// Copyright 2003 Scott A.E. Lanham, Australia.
+// --------------------------------------------
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 2 of the License, or
@@ -15,30 +15,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-#ifndef SNLCTRLPOINT_H
-#define SNLCTRLPOINT_H
+// *** Curve Base Class ***
 
+#ifndef SNL_CURVE_BASE_H
+#define SNL_CURVE_BASE_H
+
+#include "snlKnotVector.h"
 #include "snlPoint.h"
+#include "snlVertexNet.h"
 
-class snlCtrlPoint : public snlPoint
-{
-    public:
+class snlCurveBase {
+ public:
+  virtual ~snlCurveBase() noexcept = default;
 
-        snlCtrlPoint();        
-        
-        snlCtrlPoint ( snlPoint& );
-        
-        void operator = ( const snlPoint& copyFrom );
+  snlCurveBase(const snlCurveBase&) = delete;
 
-        void select ( bool yesNo );
-        bool isSelected();
-        
-        void weight ( double setTo );
-        double weight();
+  snlCurveBase& operator=(const snlCurveBase&) = delete;
 
-    private:
+  snlCurveBase(snlCurveBase&&) = delete;
 
-        bool    selected;  // Point has been selected.
+  snlCurveBase& operator=(snlCurveBase&&) = delete;
+
+  virtual snlPoint eval(knot param) const = 0;
+
+  virtual void vertexNet(snlVertexNet* vNet, double tolerance,
+                         bool parametric) = 0;
+
+ protected:
+  constexpr snlCurveBase() noexcept = default;
 };
 
-#endif
+#endif  // SNL_CURVE_BASE_H
