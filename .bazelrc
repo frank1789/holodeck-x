@@ -1,4 +1,19 @@
+# # Expose the Homebrew LLVM paths to the Bazel action environment
+# build:macosx --action_env=CC=/opt/homebrew/opt/llvm/bin/clang
+# build:macosx --action_env=CXX=/opt/homebrew/opt/llvm/bin/clang++
+# build:macosx --action_env=PATH=/opt/homebrew/opt/llvm/bin:/usr/bin:/bin
+
+# # Force linking against Homebrew's libc++ instead of Apple's system libc++
+# build:macosx --action_env=CXXFLAGS="-stdlib=libc++"
+# build:macosx --action_env=LDFLAGS="-L/opt/homebrew/opt/llvm/lib -Wl,-rpath,/opt/homebrew/opt/llvm/lib"
+
+
 
 # enforce C++ standard
-# build --cxxopt=-std=c++23
-# build --host_cxxopt=-std=c++23
+build --cxxopt=-std=c++20
+build --host_cxxopt=-std=c++20
+build --cxxopt=-Wall
+build --cxxopt=-Wextra
+build --cxxopt=-Wpedantic
+
+build --macos_minimum_os=13.0
