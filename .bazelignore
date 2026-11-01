@@ -1,1 +1,5 @@
 vcpkg
+build
+.antlr
+.cache
+.vscode

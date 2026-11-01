@@ -104,3 +104,6 @@ MANIFEST
 
 # Docs
 site/
+
+# ANTLR
+.antlr
