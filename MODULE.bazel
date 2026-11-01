@@ -7,6 +7,17 @@ bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "rules_cc", version = "0.2.27")
 bazel_dep(name = "rules_rust", version = "0.75.0")
 
+# C++ dependencies
+bazel_dep(name = "antlr4-cpp-runtime", version = "4.13.2.bcr.2")
+
+http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+# Declare the corrected 4.13.2 archive setup
+http_file(
+    name = "antlr4_jar",
+    urls = ["https://www.antlr.org/download/antlr-4.13.2-complete.jar"], # Declares 4.13.2
+    integrity = "sha256-6uLfoRmmQydERnKv9j6ew1ogGA3FuAkLemq4USXfTXY=",
+)
+
 # setup the rust toolchain
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
@@ -24,6 +35,10 @@ crate.spec(
     features = ["derive"],
     package = "clap",
     version = "4.6",
+)
+crate.spec(
+    package = "spdlog-rs",
+    version = "0.5",
 )
 crate.from_specs(
     name = "crates",
