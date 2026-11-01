@@ -1,0 +1,9 @@
+load("//tools/antlr:antlr.bzl", "antlr_cc_library")
+
+antlr_cc_library(
+    name = "fbd_grammar_parser",
+    srcs = [
+        "fbdParser.g4",
+        "fbdLexer.g4",
+    ],
+)
