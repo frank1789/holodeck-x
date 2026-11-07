@@ -67,7 +67,7 @@ shapeCommand
     | SHAPE_CMD id = identifierName cylinderShape NEWLINE
     | SHAPE_CMD id = identifierName coneShape NEWLINE
     | SHAPE_CMD id = identifierName torusShape NEWLINE
-    | SHAPE_CMD id = identifierName sphereShape NUMBER NEWLINE
+    | SHAPE_CMD id = identifierName sphereShape NEWLINE
     ;
 
 expression

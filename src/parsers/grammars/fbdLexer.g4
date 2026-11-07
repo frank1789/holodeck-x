@@ -29,19 +29,19 @@ PLANE_SHAPE_OPTION
     ;
 
 CYLINDER_SHAPE_OPTION
-    : 'cyl'
+    : 'cyl' | 'CYL'
     ;
 
 CONE_SHAPE_OPTION
-    : 'con'
+    : 'con' | 'CON'
     ;
 
 TORUS_SHAPE_OPTION
-    : 'tor'
+    : 'tor' | 'TOR'
     ;
 
 SPHERE_SHAPE_OPTION
-    : 'sph'
+    : 'sph' | 'SPH'
     ;
 
 SEQ
