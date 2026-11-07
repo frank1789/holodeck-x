@@ -26,13 +26,13 @@ identifierName
     | BANG
     ;
 
-pointCommand
-    : POINT_CMD id = identifierName x = NUMBER y = NUMBER z = NUMBER NEWLINE
-    ;
-
 value
     : NUMBER
     | NAME
+    ;
+
+pointCommand
+    : POINT_CMD id = identifierName x = value y = value z = value NEWLINE
     ;
 
 lineCommand
