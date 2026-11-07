@@ -6,4 +6,5 @@ antlr_cc_library(
         "fbdParser.g4",
         "fbdLexer.g4",
     ],
+    visibility = ["//visibility:public"],
 )

@@ -3,21 +3,71 @@
 
 lexer grammar fbdLexer;
 
-FLOAT
-    : DIGIT+ '.' DIGIT* EXPONENT?
-    | '.' DIGIT+ EXPONENT?
-    | DIGIT+ EXPONENT
+/* Keywords must be at the top of the lexer */
+
+BANG
+    : '!'
     ;
 
-INT
-    : DIGIT+
+POINT_CMD
+    : 'PNT'
+    | 'pnt'
     ;
 
-SIGN
-    : [+-]
+LINE_CMD
+    : 'LINE'
+    | 'line'
     ;
 
-// Fragments (Internal helper rules)
+SHAPE_CMD
+    : 'SHPE'
+    | 'shpe'
+    ;
+
+PLANE_SHAPE_OPTION
+    : 'pln'
+    ;
+
+CYLINDER_SHAPE_OPTION
+    : 'cyl'
+    ;
+
+CONE_SHAPE_OPTION
+    : 'con'
+    ;
+
+TORUS_SHAPE_OPTION
+    : 'tor'
+    ;
+
+SPHERE_SHAPE_OPTION
+    : 'sph'
+    ;
+
+SEQ
+    : 'SEQ'
+    | 'seq'
+    ;
+
+/* specialized text grabbers */
+COMMENT
+    : '#' ~[\r\n]*
+    ;
+
+NEWLINE
+    : '\n'
+    | '\r\n'
+    ;
+
+WHITESPACE
+    : [ \t]+ -> channel(HIDDEN)
+    ;
+
+NUMBER
+    : [+-]? (DIGIT+ ('.' DIGIT*)? EXPONENT? | '.' DIGIT+ EXPONENT?)
+    ;
+
+// Fragments (Internal helper rules - cannot be matched as standalone tokens)
 fragment EXPONENT
     : [eE] [+-]? DIGIT+
     ;
@@ -30,16 +80,6 @@ NAME
     : [a-zA-Z0-9\-_]+
     ;
 
-COMMENT
-    : '#'
-    ;
-
-NEWLINE
-    : '\n'
-    | '\r'
-    | '\r\n'
-    ;
-
-WHITESPACE
-    : ' ' -> skip
+TEXT
+    : [a-zA-Z]+
     ;
