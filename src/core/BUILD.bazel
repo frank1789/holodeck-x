@@ -1,1 +1,15 @@
-load("@rules_rust//rust:defs.bzl", "rust_library")
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "HolodeckXCore",
+    srcs = ["src/holodeckx_interpreter_command.cc"],
+    hdrs = [
+        "include/holodeckx_interpreter_command.h",
+        "include/holodeckx_types.h",
+    ],
+    includes = ["include"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src/cgx",
+    ],
+)
