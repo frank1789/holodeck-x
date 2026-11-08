@@ -1,27 +1,26 @@
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 cc_library(
     name = "HolodeckXParsers",
     srcs = [
-      #  "src/holodeck_parser_apdl.cc",
         "src/holodeck_parser_fbd.cc",
-       # "src/holodeck_parser_frd.cc",
-       #"src/holodeckx_parser.cc",
-
+        "src/holodeck_parser_result.cc",
     ],
-    hdrs = [
-        "include/holodeck_parser_apdl.h",
-        "include/holodeck_parser_fbd.h",
-        "include/holodeck_parser_frd.h",
-        "include/holodeckx_parser.h",
-    ],
+    hdrs =
+        [
+            "include/holodeck_parser_apdl.h",
+            "include/holodeck_parser_fbd.h",
+            "include/holodeck_parser_frd.h",
+            "include/holodeckx_parser.h",
+        ],
     includes = ["include"],
     visibility = ["//visibility:public"],
-    deps = [
-        "//src/core:HolodeckXCore",
-        "//src/parsers/grammars:fbd_grammar_parser",
-        "@antlr4-cpp-runtime//:antlr4-cpp-runtime",
-    ]
+    deps =
+        [
+            "//src/parsers/grammars:fbd_grammar_parser",
+            "//src/parsers/grammars:result_grammar_parser",
+            "@antlr4-cpp-runtime//:antlr4-cpp-runtime",
+        ],
 )
 
 cc_binary(
@@ -31,6 +30,7 @@ cc_binary(
         ":HolodeckXParsers",
         "//src/core:HolodeckXCore",
         "//src/parsers/grammars:fbd_grammar_parser",
+        "//src/parsers/grammars:result_grammar_parser",
         "@antlr4-cpp-runtime//:antlr4-cpp-runtime",
     ],
 )

@@ -5,9 +5,15 @@
 
 namespace holodeckx {
 
-class  ParserFRD : public Parser<ParserFRD>
-{
+class ParserResult : public Parser<ParserResult> {
+ public:
+  ParserResult() = default;
+  explicit ParserResult(std::string filename);
 
+  auto Parse() -> void;
+
+ private:
+  std::string filename_;
 };
 
 }  // namespace holodeckx

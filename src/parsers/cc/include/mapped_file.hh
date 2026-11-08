@@ -10,24 +10,24 @@ namespace holodeck::parser {
 enum class ErrorStatus : std::uint8_t { kOpenFailed, kStatFailed, kMmapFailed };
 
 struct MmappedFile {
-  void *addr{nullptr};
+  void* addr{nullptr};
   std::size_t length{};
 
   ~MmappedFile() noexcept;
 
-  MmappedFile(const MmappedFile &) = delete;
-  MmappedFile &operator=(const MmappedFile &) = delete;
+  MmappedFile(const MmappedFile&) = delete;
+  MmappedFile& operator=(const MmappedFile&) = delete;
 
-  MmappedFile(MmappedFile &&other) noexcept
+  MmappedFile(MmappedFile&& other) noexcept
       : addr(other.addr), length(other.length) {
     other.addr = nullptr;
   }
 };
 
-std::expected<int, ErrorStatus> OpenFile(const char *filepath);
+std::expected<int, ErrorStatus> OpenFile(const char* filepath);
 
 std::expected<MmappedFile, ErrorStatus> MapDescriptor(int fd);
 
-} // namespace holodeck::parser
+}  // namespace holodeck::parser
 
-#endif // HOLODECK_X_MAPPED_FILE_HH_
+#endif  // HOLODECK_X_MAPPED_FILE_HH_

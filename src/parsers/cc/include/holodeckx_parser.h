@@ -5,13 +5,11 @@
 
 namespace holodeckx {
 
-
-template<typename Derived>
+template <typename Derived>
 class Parser {
-    friend Derived;
+  friend Derived;
 
-    public:
-
+ public:
 };
 
 }  // namespace holodeckx

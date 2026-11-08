@@ -5,11 +5,8 @@
 
 namespace holodeckx {
 
-class  ParserAPDL : public Parser<ParserAPDL>
-{
+class ParserAPDL : public Parser<ParserAPDL> {};
 
-};
-
-}
+}  // namespace holodeckx
 
 #endif  //  HOLODECK_X_CC_PARSERS_PARSER_APDL_H_
