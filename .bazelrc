@@ -1,12 +1,4 @@
-# # Expose the Homebrew LLVM paths to the Bazel action environment
-# build:macosx --action_env=CC=/opt/homebrew/opt/llvm/bin/clang
-# build:macosx --action_env=CXX=/opt/homebrew/opt/llvm/bin/clang++
-# build:macosx --action_env=PATH=/opt/homebrew/opt/llvm/bin:/usr/bin:/bin
-
-# # Force linking against Homebrew's libc++ instead of Apple's system libc++
-# build:macosx --action_env=CXXFLAGS="-stdlib=libc++"
-# build:macosx --action_env=LDFLAGS="-L/opt/homebrew/opt/llvm/lib -Wl,-rpath,/opt/homebrew/opt/llvm/lib"
-
+common --enable_platform_specific_config
 
 
 # enforce C++ standard
@@ -16,4 +8,21 @@ build --cxxopt=-Wall
 build --cxxopt=-Wextra
 build --cxxopt=-Wpedantic
 
-build --macos_minimum_os=13.0
+# --- Specific configuration for macos ---
+build:macos --macos_minimum_os=13.0
+
+# --- Address Sanitizer (ASAN) Configuration ---
+# Detects memory leaks, out-of-bounds access, use-after-free, etc.
+build:asan --copt=-fsanitize=address
+build:asan --copt=-fno-omit-frame-pointer
+build:asan --linkopt=-fsanitize=address
+
+# --- Undefined Behavior Sanitizer (UBSAN) Configuration ---
+# Detects signed integer overflow, misaligned pointers, null pointer dereferences, etc.
+build:ubsan --copt=-fsanitize=undefined
+build:ubsan --copt=-fno-omit-frame-pointer
+build:ubsan --linkopt=-fsanitize=undefined
+
+# Combining ASAN and UBSAN is perfectly safe
+build:asan-ubsan --config=asan
+build:asan-ubsan --config=ubsan
