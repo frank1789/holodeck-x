@@ -56,4 +56,5 @@ cc_library(
         "include/snlVertexNet.h",
     ],
     includes = ["include"],
+    visibility = ["//visibility:public"],
 )
