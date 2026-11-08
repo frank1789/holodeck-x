@@ -25,7 +25,7 @@ SHAPE_CMD
     ;
 
 PLANE_SHAPE_OPTION
-    : 'pln'
+    : 'pln' | 'PLN'
     ;
 
 CYLINDER_SHAPE_OPTION
