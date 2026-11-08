@@ -19,7 +19,9 @@
 /*     along with this program; if not, write to the Free Software       */
 /*     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.         */
 /* --------------------------------------------------------------------  */
-#define GL_SILENCE_DEPRECATION
+
+#ifndef CGX_H_
+
 #define     VERSION         "2.23"
 
 /* function prototypes for the program "CalculiX GraphiX (cgx)" */
@@ -978,3 +980,6 @@ void mergeElem( int setNr, int delFlag );
 void DrawCommandLine(char *string, int curpos);
 void compileTextString(Texts *ntext, int nr);
 int readDynaList(char *datin, Summen *apre, Sets **sptr, Nodes **nptr, Elements **eptr, Datasets **lptr  );
+
+
+#endif /* CGX_H_ */

@@ -1,4 +1,8 @@
 
+#ifndef CGX_EXT_UTIL_H_
+#define CGX_EXT_UTIL_H_
+
+
 #ifdef WIN32
   #include <windows.h>
   #undef near
@@ -30,7 +34,7 @@
 #endif
 #include <pthread.h>
 #include <semaphore.h>
-
+#include <math.h>
 #ifdef WIN32
   #include <GL/glut.h>
   #define printf printf_fflush
@@ -63,8 +67,8 @@ void printf_fflush(const char *fmt,...);
 /* from #include "f2c.h" */
 #undef max
 #undef min
-#define abs(x) ((x) >= 0 ? (x) : -(x))
-#define dabs(x) (double)abs(x)
+// #define abs(x) ((x) >= 0 ? (x) : -(x))
+// #define fabs(x) (double)abs(x)
 #define imin(a,b) ((a) <= (b) ? (a) : (b))
 #define imax(a,b) ((a) >= (b) ? (a) : (b))
 #define smin(a,b) (float)imin(a,b)
@@ -790,3 +794,6 @@ int splitElementsToTets(int anz_e, Nodes *node, Elements  *e_enqire, Tetraeder *
 
 int delaun_( int *numpts, int *maxtri, double *smalld, double *x, double *y, int *list, int *pointr, int *v1, int *v2, int *v3, int *numtri);
 void cartcyl( double *csab, int node, double *node_pos, Datasets *lcase, int lc, char type );
+
+
+#endif /* CGX_EXT_UTIL_H_ */
