@@ -8,3 +8,12 @@ antlr_cc_library(
     ],
     visibility = ["//visibility:public"],
 )
+
+antlr_cc_library(
+    name = "result_grammar_parser",
+    srcs = [
+        "ResultParser.g4",
+        "ResultLexer.g4",
+    ],
+    visibility = ["//visibility:public"],
+)
