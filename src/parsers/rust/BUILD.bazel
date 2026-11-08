@@ -1,0 +1,24 @@
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+rust_library(
+    name = "parsers",
+    srcs = [
+        "src/error.rs",
+        "src/lib.rs",
+        "src/parsers.rs",
+        "src/parsers/apdl.rs",
+        "src/parsers/fbd.rs",
+        "src/parsers/frd.rs",
+        "src/prelude.rs",
+    ],
+    edition = "2024",
+    rustc_flags = select({
+        "@platforms//os:macos": [
+            "-C",
+            "link-arg=-Wl,-install_name,@rpath/libparser.dylib",
+        ],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [],
+)
