@@ -3,10 +3,32 @@ load("@rules_rust//rust:defs.bzl", "rust_binary")
 
 rust_binary(
     name = "HolodeckCLI",
-    srcs = ["src/main.rs"],
+    srcs =
+        [
+            "src/directories.rs",
+            "src/main.rs",
+        ],
     edition = "2024",
+    rustc_flags = select({
+        "@platforms//os:macos": [
+            "-C",
+            "link-arg=-Wl,-rpath,@loader_path",
+            "-C",
+            "link-arg=-Wl,-rpath,@executable_path/HolodeckCLI.runfiles/_main",
+        ],
+        "@platforms//os:linux": [
+            "-C",
+            "link-arg=-Wl,-rpath,$$ORIGIN",
+            #Double $$ escapes the character in Bazel
+        ],
+        "@platforms//os:windows": [
+            #Windows loads DLLs from the application directory automatically.
+            #No runtime paths are required.
+        ],
+        "//conditions:default": [],
+    }),
     deps = [
-        "//src/parsers",
+        "//src/parsers/rust:parsers",
         "@crates//:clap",
         "@crates//:spdlog_rs",
     ],
