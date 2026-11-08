@@ -207,8 +207,8 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
 
     #ifdef PROJ_COMMENT
 
-        std::cout << "\nNew Projection\n";
-        std::cout.precision ( 15 );
+        cout << "\nNew Projection\n";
+        cout.precision ( 15 );
 
     #endif
     
@@ -222,7 +222,7 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
     int stepMultiU = (int) ( surface.maxCurvatureV() * 2.0 ) + ( surface.sizeV() / kntsU.getNumSpans() );    
     
     #ifdef PROJ_COMMENT
-        std::cout << "stepMultiT: " << stepMultiT << "  stepMultiU: " << stepMultiU << "\n";
+        cout << "stepMultiT: " << stepMultiT << "  stepMultiU: " << stepMultiU << "\n";
     #endif
     
     // Evaluate surface points that correspond to beginning and end of knot spans
@@ -233,7 +233,7 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
 
         #ifdef PROJ_COMMENT
 
-            std::cout << "Pass: " << cPass << "\n";
+            cout << "Pass: " << cPass << "\n";
 
         #endif        
 
@@ -376,15 +376,15 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
             double guessDistance = snlVector ( cBest -> pt, toProj [ index ] ).length();
 
             #ifdef PROJ_COMMENT
-                std::cout << "Processing Index: " << index << "\n";
-                std::cout << "Number in bestList: " << bestLists [ index ].count() << "\n";
-                std::cout << "Original Point: "; toProj [ index ].print(); std::cout << "\n";
+                cout << "Processing Index: " << index << "\n";
+                cout << "Number in bestList: " << bestLists [ index ].count() << "\n";
+                cout << "Original Point: "; toProj [ index ].print(); cout << "\n";
             #endif
 
             while ( cBest )
             {
                 #ifdef PROJ_COMMENT                    
-                    std::cout << "Guess: ";cBest -> pt.print(); std::cout << "\n";
+                    cout << "Guess: ";cBest -> pt.print(); cout << "\n";
                 #endif
 
                 for ( int count = 0; count < MAX_PROJ_ITER; count ++ )
@@ -395,7 +395,7 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
 
                     #ifdef PROJ_COMMENT
 
-                        std::cout << "Iteration Number: " << count << "\n";                        
+                        cout << "Iteration Number: " << count << "\n";                        
 
                     #endif
 
@@ -426,9 +426,9 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
 
                     #ifdef PROJ_COMMENT
                         
-                        std::cout << "Iteration: " << count << "  DotT: " << projToSurf.dot ( tVect ) << "  DotU: " << projToSurf.dot ( uVect ) << "\n";
-                        std::cout << "Cosine T: " << cosT << "\n";
-                        std::cout << "Cosine U: " << cosU << "\n";
+                        cout << "Iteration: " << count << "  DotT: " << projToSurf.dot ( tVect ) << "  DotU: " << projToSurf.dot ( uVect ) << "\n";
+                        cout << "Cosine T: " << cosT << "\n";
+                        cout << "Cosine U: " << cosU << "\n";
 
                     #endif
 
@@ -515,12 +515,12 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
                     }
 
                     #ifdef PROJ_COMMENT
-                        std::cout << "OldT: " << cBest -> paramT << "\n";
-                        std::cout << "OldU: " << cBest -> paramU << "\n";
-                        std::cout << "NewT: " << newT << "\n";
-                        std::cout << "NewU: " << newU << "\n";
-                        std::cout << "deltaT: " << deltaT << "\n";
-                        std::cout << "deltaU: " << deltaT << "\n";
+                        cout << "OldT: " << cBest -> paramT << "\n";
+                        cout << "OldU: " << cBest -> paramU << "\n";
+                        cout << "NewT: " << newT << "\n";
+                        cout << "NewU: " << newU << "\n";
+                        cout << "deltaT: " << deltaT << "\n";
+                        cout << "deltaU: " << deltaT << "\n";
                     #endif
 
                     // If parameters haven't changed then break.
@@ -550,9 +550,9 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
                     snlVector chgV = chgT + chgU;
 
                     #ifdef PROJ_COMMENT
-                        std::cout << "Change in T direction: " << chgT.length() << "\n";
-                        std::cout << "Change in U direction: " << chgT.length() << "\n";
-                        std::cout << "Change in point: " << chgV.length() << "\n";
+                        cout << "Change in T direction: " << chgT.length() << "\n";
+                        cout << "Change in U direction: " << chgT.length() << "\n";
+                        cout << "Change in point: " << chgV.length() << "\n";
                     #endif
 
                     if ( chgV.length() <= iterTol )
@@ -669,7 +669,7 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
             }
             
             #ifdef PROJ_COMMENT
-                std::cout << "Best Found: "; best [ index ].pt.print(); std::cout << "\n";
+                cout << "Best Found: "; best [ index ].pt.print(); cout << "\n";
             #endif
         }
 
@@ -691,8 +691,8 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
 
     #ifdef PROJ_COMMENT
 
-        std::cout << "Max Passes: " << maxPasses << "\n";
-        std::cout << "Max Iterations: " << maxIterations << "\n";
+        cout << "Max Passes: " << maxPasses << "\n";
+        cout << "Max Iterations: " << maxIterations << "\n";
 
     #endif
 

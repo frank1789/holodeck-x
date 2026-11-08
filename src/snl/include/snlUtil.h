@@ -20,21 +20,30 @@
 #include "snlVector.h"
 #include "snlVersion.h"
 
+#ifdef SGI_MIPS
 
+    #include <iostream.h>
+    #include <math.h>
+    
+#else
 
-
-
+    #include <iostream>
+    #include <cmath>
+    
+    using namespace std;
+    
+#endif
 
 #ifndef M_PI
 
     #define M_PI 3.1415926535897932384626433832795
-
+        
 #endif
 
 #ifdef WIN32
 
     #define isnan _isnan
-
+        
 #endif
 
 const int MAX_BINOMIAL = 64;  // Maximum binomial array dimension.

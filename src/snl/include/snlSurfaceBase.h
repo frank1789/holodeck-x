@@ -21,26 +21,39 @@
 #include "snlTriangleMesh.h"
 #include "snlVertexNet.h"
 
-class snlSurfaceBase {
- public:
-  virtual ~snlSurfaceBase() noexcept = default;
+#ifdef SGI_MIPS
 
-  [[nodiscard]] virtual snlPoint eval(knot paramU, knot paramV) const = 0;
+    #include <iostream.h>
+    #include <math.h>
+    #include <float.h>
 
-  virtual void vertexNet(snlVertexNet* vNet, double tolerance,
-                         bool parametric) = 0;
+#else
 
-  virtual void triangleMesh(snlTriangleMesh* triMesh, int toleranceType,
-                            double tolerance) = 0;
+    #include <iostream>
+    #include <cmath>
+    #include <cfloat>
 
-  enum meshToleranceType {
-    SNL_TOL_DISTANCE,  // Must be within distance tolerance to surface.
-    SNL_TOL_ANGLE      // Angle between successive sections must be less than
-                       // tolerance.
-  };
+    using namespace std;
 
- protected:
-  constexpr snlSurfaceBase() noexcept = default;
+#endif
+
+class snlSurfaceBase
+{
+    public:
+
+        virtual ~snlSurfaceBase(){};
+
+        virtual snlPoint eval ( knot paramU, knot paramV ) const = 0;
+
+        virtual void vertexNet ( snlVertexNet* vNet, double tolerance, bool parametric ) = 0;
+
+        virtual void triangleMesh ( snlTriangleMesh* triMesh, int toleranceType, double tolerance ) = 0;
+
+        enum meshToleranceType
+        {
+            SNL_TOL_DISTANCE,  // Must be within distance tolerance to surface.
+            SNL_TOL_ANGLE      // Angle between successive sections must be less than tolerance.
+        };
 };
 
-#endif  // SNL_SURFACE_BASE_H
+#endif

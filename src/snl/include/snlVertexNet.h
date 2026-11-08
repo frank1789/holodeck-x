@@ -23,43 +23,52 @@
 #include "snlVertex.h"
 #include "snlCtrlPoint.h"
 
+#ifdef SGI_MIPS
 
+    #include <iostream.h>
+    #include <math.h>
+    
+#else
 
-
-
+    #include <iostream>
+    #include <cmath>
+    
+    using namespace std;
+    
+#endif
 
 class snlVertexNet
 {
-    public:
+    public:        
 
         snlVertexNet();
         virtual ~snlVertexNet();
-
+        
         snlVertexNet ( const snlVertexNet& copyFrom );
-
+        
         void vertexNet ( const snlCtrlPoint* ctrlPts, int sizeU, int sizeV );
         void vertexNet ( const snlCtrlPoint* ctrlPts, int numPts );
-
+        
         void vertexNet ( const snlPoint* pts, int sizeU, int sizeV );
         void vertexNet ( const snlPoint* pts, int numPts );
-
+        
         void appendRow ( const snlCtrlPoint* ctrlPts );
-
+        
         snlVertex* vertex ( int index );
         snlVertex* vertex ( int U, int V );
 
         snlVertex* vertexes();
-
+        
         int size() const;
         int sizeU() const;
         int sizeV() const;
-
+        
         void calcNormals();
-
+        
     private:
-
+    
         snlVertex*      vertex_net;  // 2D Vertex network.
-
+        
         int     size_u;  // Size of network in first dimension.
         int     size_v;  // Size of network in second dimension.
 };

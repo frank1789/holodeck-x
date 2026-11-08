@@ -18,22 +18,23 @@
 #ifndef SNLPOINT_H
 #define SNLPOINT_H
 
+class snlVector;
 
-#include <array>
+#include "snlVector.h"
 
 class snlPoint
 {
     public:
 
-        snlPoint();
-
+        snlPoint();        
+        
         snlPoint ( const snlPoint& copyFrom );
-
+        
         snlPoint ( double x, double y, double z, double w = 1.0 );
-
+        
         void components ( double x, double y, double z, double w );
         void components ( double x, double y, double z );
-
+        
         void components ( double* x, double* y, double* z, double* w );
         void components ( double* x, double* y, double* z );
 
@@ -50,35 +51,35 @@ class snlPoint
         void multiplyWeight ( double multiplier );
 
         void normalise();
-
+        
         void null();  // Set everything to zero.
 
         bool isNull();
-
+        
         void zero();  // Set everything to zero and w to 1.
-
+        
         double lengthSqrd() const;  // Treat point as vector.
         double distSqrd ( const snlPoint& toPoint ) const;
 
-        // snlPoint operator + ( const snlVector& vect ) const;
+        snlPoint operator + ( const snlVector& vect ) const;
         snlPoint operator + ( const snlPoint& point ) const;
-        // snlPoint operator - ( const snlVector& vect ) const;
+        snlPoint operator - ( const snlVector& vect ) const;
         snlPoint operator - ( const snlPoint& point ) const;
         snlPoint operator * ( double scalar ) const;
         snlPoint operator / ( double scalar ) const;
-
+        
         void operator = ( const snlPoint& copyFrom );
         void operator += ( const snlPoint& point );
-        // void operator += ( const snlVector& vect );
-        void operator -= ( const snlPoint& point );
+        void operator += ( const snlVector& vect );
+        void operator -= ( const snlPoint& point );        
         void operator *= ( double scalar );
         void operator /= ( double scalar );
-
+        
         bool operator == ( snlPoint& compare );
-
+        
         void print() const;
 
-        std::array<double, 4> elements;  // x, y, z, w.
+        double elements [ 4 ];  // x, y, z, w.
 };
 
 #endif

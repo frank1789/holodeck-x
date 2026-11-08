@@ -419,6 +419,6 @@ void snlPoint::print() const
     // Print to std out.
     // -----------------
  
-    std::cout << "( " << elements [ 0 ] << ", " <<  elements [ 1 ] << ", " << elements [ 2 ] << ", " << elements [ 3 ] << " )";
+    cout << "( " << elements [ 0 ] << ", " <<  elements [ 1 ] << ", " << elements [ 2 ] << ", " << elements [ 3 ] << " )";
 }
 

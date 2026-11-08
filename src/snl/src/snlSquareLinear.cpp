@@ -141,11 +141,11 @@ void snlSquareLinear::print()
     // Print current coefficients and right hand sides to standard out.
     // ----------------------------------------------------------------
     
-    std::cout << "\n\nCoefficients:\n\n";
+    cout << "\n\nCoefficients:\n\n";
     
     printCoeffs();    
     
-    std::cout << "\n\nRight Hand Sides:\n\n";
+    cout << "\n\nRight Hand Sides:\n\n";
     
     printRhSides();
 }
@@ -160,9 +160,9 @@ void snlSquareLinear::printCoeffs()
     for ( int row = 0; row < num_unknowns; row ++ )
     {
         for ( int col = 0; col < num_unknowns; col ++ )
-            std::cout << coeffs [ index ++ ] << "   ";
+            cout << coeffs [ index ++ ] << "   ";
         
-        std::cout << "\n";
+        cout << "\n";
     }
 }
 
@@ -176,9 +176,9 @@ void snlSquareLinear::printRhSides()
     for ( int row = 0; row < num_unknowns; row ++ )
     {
         for ( int col = 0; col < num_rhSides; col ++ )
-            std::cout << rhSides [ index ++ ] << "   ";
+            cout << rhSides [ index ++ ] << "   ";
         
-        std::cout << "\n";
+        cout << "\n";
     }
 }
 

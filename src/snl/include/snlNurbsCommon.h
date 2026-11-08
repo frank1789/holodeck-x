@@ -19,17 +19,25 @@
 
 // *** Legacy opencdsm routines are included ***
 
-#ifndef SNL_NURBS_COMMON_H_
-#define SNL_NURBS_COMMON_H_
 
 #include "snlPoint.h"
 #include "snlKnotVector.h"
 #include "snlSurface.h"
 #include "ptrList.h"
 
+#ifdef SGI_MIPS
 
+    #include <iostream.h>
+    #include <math.h>
+    
+#else
 
-
+    #include <iostream>
+    #include <cmath>
+    
+    using namespace std;
+    
+#endif
 
 const int MAX_PROJ_ITER = 64;  // Maximum number of newton iterations for projection functions.
 
@@ -73,4 +81,3 @@ ptrList < sLocn >* projPtSurf ( snlSurface& surface, snlPoint* toProj, int toPro
                                 double iterTol, double cosTol, unsigned maxPass );
 
 
-#endif // SNL_NURBS_COMMON_H_

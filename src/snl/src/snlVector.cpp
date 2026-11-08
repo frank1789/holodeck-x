@@ -17,9 +17,6 @@
 
 #include "snlVector.h"
 
-#include <iostream>
-#include <cmath>
-
 snlVector::snlVector()
 {
     homogeneous = false;
@@ -30,38 +27,38 @@ snlVector::snlVector ( const snlPoint& pt1, const snlPoint& pt2, bool hmg )
     // Create vector from two points pt1 -> pt2
     // ----------------------------------------
 
-    homogeneous = hmg;
-
-    calc ( pt1, pt2 );
+    homogeneous = hmg;    
+    
+    calc ( pt1, pt2 );    
 }
 
 snlVector::snlVector ( snlPoint& pt, bool hmg )
 {
     homogeneous = hmg;
-
+    
     snlPoint tmpPt ( pt );
-
+    
     if ( ! hmg )
     {
         tmpPt.normalise();
         elements [ 3 ] = 0.0;
     }
-    else
+    else    
         elements [ 3 ] = tmpPt.w();
-
+        
     elements [ 0 ] = tmpPt.x();
     elements [ 1 ] = tmpPt.y();
-    elements [ 2 ] = tmpPt.z();
+    elements [ 2 ] = tmpPt.z();    
 }
 
 snlVector::snlVector ( double x, double y, double z, double w, bool hmg )
 {
     homogeneous = hmg;
-
+    
     elements [ 0 ] = x;
     elements [ 1 ] = y;
     elements [ 2 ] = z;
-
+    
     if ( hmg )
         elements [ 3 ] = w;
     else
@@ -89,7 +86,7 @@ void snlVector::calc ( const snlPoint& pt1, const snlPoint& pt2 )
             elements [ index ] = pt2.elements [ index ] - pt1.elements [ index ];
     }
     else
-    {
+    {        
         for ( int index = 0; index < 3; index ++ )
             elements [ index ] = ( pt2.elements [ index ] / pt2.elements [ 3 ] ) -
                                  ( pt1.elements [ index ] / pt1.elements [ 3 ] );
@@ -101,7 +98,7 @@ void snlVector::crossProduct ( snlVector& v1, snlVector& v2 )
 {
     // Calculate cross product of v1 X v2.
     // -----------------------------------
-    //
+    // 
     // Notes:   Stores result in this vector.
 
     elements [ 0 ] = ( v1.elements [ 1 ] * v2.elements [ 2 ] ) -
@@ -120,17 +117,17 @@ double snlVector::dot ( snlVector& vect )
 {
     // Calculate dot product between this vector and vect.
     // ---------------------------------------------------
-
+    
     if ( homogeneous )
     {
-        return ( elements [ 0 ] * vect.elements [ 0 ] +
+        return ( elements [ 0 ] * vect.elements [ 0 ] + 
                  elements [ 1 ] * vect.elements [ 1 ] +
                  elements [ 2 ] * vect.elements [ 2 ] +
                  elements [ 3 ] * vect.elements [ 3 ] );
     }
     else
     {
-        return ( elements [ 0 ] * vect.elements [ 0 ] +
+        return ( elements [ 0 ] * vect.elements [ 0 ] + 
                  elements [ 1 ] * vect.elements [ 1 ] +
                  elements [ 2 ] * vect.elements [ 2 ] );
     }
@@ -141,14 +138,14 @@ double snlVector::dot ( snlPoint& pt )
     // Calculate dot product between this vector and pt.
     // -------------------------------------------------
     // Notes:   Treats pt as a vector.
-
-    double dotProd = elements [ 0 ] * pt.elements [ 0 ] +
+    
+    double dotProd = elements [ 0 ] * pt.elements [ 0 ] + 
                      elements [ 1 ] * pt.elements [ 1 ] +
                      elements [ 2 ] * pt.elements [ 2 ];
-
-    if ( homogeneous )
+    
+    if ( homogeneous )       
         dotProd += elements [ 3 ] * pt.elements [ 3 ];
-
+        
     return dotProd;
 }
 
@@ -197,7 +194,7 @@ void snlVector::operator += ( snlVector& vect )
     elements [ 0 ] += vect.elements [ 0 ];
     elements [ 1 ] += vect.elements [ 1 ];
     elements [ 2 ] += vect.elements [ 2 ];
-
+    
     if ( homogeneous )
         elements [ 3 ] += vect.elements [ 3 ];
 }
@@ -207,7 +204,7 @@ void snlVector::operator -= ( snlVector& vect )
     elements [ 0 ] -= vect.elements [ 0 ];
     elements [ 1 ] -= vect.elements [ 1 ];
     elements [ 2 ] -= vect.elements [ 2 ];
-
+    
     if ( homogeneous )
         elements [ 3 ] -= vect.elements [ 3 ];
 }
@@ -225,7 +222,7 @@ bool snlVector::operator == ( snlVector& compare )
 {
     // Return true if compare is eqivalent to this vector.
     // ---------------------------------------------------
-
+    
     bool retVal = true;
 
     if ( homogeneous )
@@ -240,7 +237,7 @@ bool snlVector::operator == ( snlVector& compare )
             if ( elements [ index ] != compare.elements [ index ] )
                 retVal = false;
     }
-
+            
     return retVal;
 }
 
@@ -253,10 +250,10 @@ double snlVector::lengthSqrd()
 
     for ( int index = 0; index < 3; index ++ )
         sum += elements [ index ] * elements [ index ];
-
+        
     if ( homogeneous )
         sum += elements [ 3 ] * elements [ 3 ];
-
+        
     return sum;
 }
 
@@ -265,7 +262,7 @@ double snlVector::length()
     // Return length of this vector
     // ----------------------------
 
-    return std::sqrt ( lengthSqrd() );
+    return sqrt ( lengthSqrd() );
 }
 
 void snlVector::length ( double val )
@@ -273,9 +270,9 @@ void snlVector::length ( double val )
     // Set length of vector.
     // ---------------------
     // val:    Value to set length to.
-
+    
     double multiplier = val / length();
-
+    
     operator *= ( multiplier );
 }
 
@@ -283,7 +280,7 @@ double snlVector::calcAbsCos ( snlVector& vect )
 {
     // Calculate absolute cosine between this vector and vect.
     // -------------------------------------------------------
-
+    
     return fabs ( dot ( vect ) / ( length() * vect.length() ) );
 }
 
@@ -293,8 +290,8 @@ double snlVector::angle ( snlVector& vect )
     // --------------------------------------------
     //
     // Returns:     Value between 0 and PI in radians.
-
-    return acos ( dot ( vect ) / ( length() * vect.length() ) );
+    
+    return acos ( dot ( vect ) / ( length() * vect.length() ) ); 
 }
 
 void snlVector::unitise()
@@ -328,13 +325,13 @@ snlVector snlVector::project ( snlVector& ontoVector )
     // ontoVector:    Vector to project onto.
     //
     // Returns:       Vector that is the result of the projection.
-
+    
     double newLength = dot ( ontoVector ) / ontoVector.length();
-
+    
     snlVector retVector = ontoVector;
-
+    
     retVector.length ( newLength );
-
+    
     return retVector;
 }
 
@@ -342,7 +339,7 @@ void snlVector::projectXZ()
 {
     // Project onto the X-Z plane.
     // ---------------------------
-
+    
     elements [ 1 ] = 0.0;  // y = 0.
 }
 
@@ -350,16 +347,16 @@ void snlVector::projectXY()
 {
     // Project onto the X-Y plane.
     // ---------------------------
-
-    elements [ 2 ] = 0.0;  // z = 0.
+    
+    elements [ 2 ] = 0.0;  // z = 0.    
 }
 
 void snlVector::projectYZ()
 {
     // Project onto the Y-Z plane.
     // ---------------------------
-
-    elements [ 0 ] = 0.0;
+    
+    elements [ 0 ] = 0.0;    
 }
 
 double snlVector::x()
@@ -451,7 +448,7 @@ void snlVector::zero()
 {
     // Zero the vector.
     // ----------------
-
+    
     elements [ 0 ] = 0.0;
     elements [ 1 ] = 0.0;
     elements [ 2 ] = 0.0;
@@ -468,7 +465,7 @@ bool snlVector::isNull()
              ! elements [ 3 ] )
             return true;
     }
-    else
+    else    
     {
         if ( ! elements [ 0 ] &&
              ! elements [ 1 ] &&
@@ -476,14 +473,14 @@ bool snlVector::isNull()
         return true;
     }
 
-    return false;
+    return false;        
 }
 
 void snlVector::print()
 {
-    // Print vector contents to std::cout.
+    // Print vector contents to cout.
     // ------------------------------
 
-    std::cout << "X: " << elements [ 0 ] << " Y: " << elements [ 1 ]
+    cout << "X: " << elements [ 0 ] << " Y: " << elements [ 1 ]
          << " Z: " << elements [ 2 ] << " W: " << elements [ 3 ] << "\n";
 }

@@ -24,25 +24,31 @@
 #include "snlPoint.h"
 #include "snlVertexNet.h"
 
-class snlCurveBase {
- public:
-  virtual ~snlCurveBase() noexcept = default;
+#ifdef SGI_MIPS
 
-  snlCurveBase(const snlCurveBase&) = delete;
+    #include <iostream.h>
+    #include <math.h>
+    #include <float.h>
+    
+#else
 
-  snlCurveBase& operator=(const snlCurveBase&) = delete;
+    #include <iostream>
+    #include <cmath>
+    #include <cfloat>
+    
+    using namespace std;
+    
+#endif
 
-  snlCurveBase(snlCurveBase&&) = delete;
+class snlCurveBase
+{
+    public:
 
-  snlCurveBase& operator=(snlCurveBase&&) = delete;
+        virtual ~snlCurveBase(){};
 
-  virtual snlPoint eval(knot param) const = 0;
-
-  virtual void vertexNet(snlVertexNet* vNet, double tolerance,
-                         bool parametric) = 0;
-
- protected:
-  constexpr snlCurveBase() noexcept = default;
+        virtual snlPoint eval ( knot param ) const = 0;
+    
+        virtual void vertexNet ( snlVertexNet* vNet, double tolerance, bool parametric ) = 0;
 };
 
-#endif  // SNL_CURVE_BASE_H
+#endif

@@ -367,7 +367,7 @@ bool snlSurface::convergeVelocity ( snlPoint* convergToPts, ptrList <snlSurfLocn
     //!                point gets to the surface tangents at the guessed point for convergence to be
     //!                successful.
 
-    std::cout.precision ( 16 );
+    cout.precision ( 16 );
     
     double convTolSqrd = convergTol * convergTol;
     

@@ -24,15 +24,15 @@ class snlCtrlPoint : public snlPoint
 {
     public:
 
-        snlCtrlPoint();
-
-        explicit  snlCtrlPoint( snlPoint& );
-
-        snlCtrlPoint& operator = ( const snlPoint& copyFrom );
+        snlCtrlPoint();        
+        
+        snlCtrlPoint ( snlPoint& );
+        
+        void operator = ( const snlPoint& copyFrom );
 
         void select ( bool yesNo );
-        [[nodiscard]] bool isSelected() const;
-
+        bool isSelected();
+        
         void weight ( double setTo );
         double weight();
 

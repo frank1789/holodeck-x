@@ -736,7 +736,7 @@ int snlCtrlPointNetSurface::getCnctPts ( unsigned index, snlCtrlPoint* retPts )
 
     // !@#$ NOT IMPLEMENTED YET!
 
-    std::cout << "Doh! snlCtrlPointNetSurface::getCnctPts hasn't been finished, and you are calling it!\n";
+    cout << "Doh! snlCtrlPointNetSurface::getCnctPts hasn't been finished, and you are calling it!\n";
 
     return 0;
 }
@@ -776,15 +776,15 @@ void snlCtrlPointNetSurface::print()
     
     for ( int indexU = 0; indexU < sizeU; indexU ++ )
     {
-        std::cout << indexU << ": ";
+        cout << indexU << ": ";
         
         for ( int indexV = 0; indexV < sizeV; indexV ++ )
         {
             ctrlPts [ indexU * sizeV + indexV ].print();
-            std::cout << "\n";
+            cout << "\n";
         }
         
-        std::cout << "\n";
+        cout << "\n";
     }
 }
 
@@ -796,7 +796,7 @@ void snlCtrlPointNetSurface::printCompare ( snlCtrlPointNetSurface& compareTo )
 
     for ( int indexU = 0; indexU < sizeU; indexU ++ )
     {
-        std::cout << indexU << ": ";
+        cout << indexU << ": ";
         
         for ( int indexV = 0; indexV < sizeV; indexV ++ )
         {
@@ -804,14 +804,14 @@ void snlCtrlPointNetSurface::printCompare ( snlCtrlPointNetSurface& compareTo )
             snlPoint pt2 = compareTo.ctrlPts [ indexU * sizeV + indexV ];
             
             if ( pt1 == pt2 )
-                std::cout << "E";
+                cout << "E";
             else
-                std::cout << "NE";
+                cout << "NE";
                 
-            std::cout << "\t";
+            cout << "\t";
         }
         
-        std::cout << "\n";
+        cout << "\n";
     }
 }
 
@@ -821,15 +821,15 @@ void snlCtrlPointNetSurface::print_cpp()
     // --------------------------------
     // Notes:   Prints data that can be directly included in a c++ program.
 
-    std::cout << "snlCtrlPoint* points = new snlCtrlPoint [ " << sizeU * sizeV << " ];\n\n";
+    cout << "snlCtrlPoint* points = new snlCtrlPoint [ " << sizeU * sizeV << " ];\n\n";
 
     int totalSize = sizeU * sizeV;
 
     for ( int index = 0; index < totalSize; index ++ )
     {
-        std::cout << "points [ " << index << " ].components ";
+        cout << "points [ " << index << " ].components ";
         ctrlPts [ index ].print();
-        std::cout << ";\n";
+        cout << ";\n";
     }
 }
 

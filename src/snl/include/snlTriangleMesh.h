@@ -20,9 +20,19 @@
 
 #include "dynamicArray.h"
 
+#ifdef SGI_MIPS
 
+    #include <iostream.h>
+    #include <math.h>
+    
+#else
 
-
+    #include <iostream>
+    #include <cmath>
+    
+    using namespace std;
+    
+#endif
 
 typedef struct
 {
@@ -61,14 +71,14 @@ class snlTriangleMesh
     private:
 
         int         array_page_size;  // Number of array elements per page for "growable" arrays.
-
+        
 
         dynamicArray< snlVertex >*          vertexes;
         int                                 num_vertexes;
 
         dynamicArray< snlTriangleEdge >*    edges;
         int                                 num_edges;
-
+        
         dynamicArray< snlTriangle >*        triangles;
         int                                 num_triangles;
 };

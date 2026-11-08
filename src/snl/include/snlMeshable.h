@@ -22,24 +22,36 @@
 #include "snlTriangleMesh.h"
 #include "snlVertexNet.h"
 
+#ifdef SGI_MIPS
 
+    #include <iostream.h>
+    #include <math.h>
+    #include <float.h>
+    
+#else
 
-
+    #include <iostream>
+    #include <cmath>
+    #include <cfloat>
+    
+    using namespace std;
+    
+#endif
 
 // Notes:   A curve is not strictly meshable but is included anyway.
 
 class snlMeshable
 {
     public:
-
+    
         snlMeshable();
 
         virtual ~snlMeshable();
 
         virtual snlPoint eval ( knot paramU, knot paramV ) const = 0;
-
+    
         virtual void vertexNet ( snlVertexNet* vNet, double tolerance, bool parametric ) = 0;
-
+        
         virtual void triangleMesh ( snlTriangleMesh* triMesh, double tolerance );
 
         enum meshClass
@@ -47,7 +59,7 @@ class snlMeshable
             SNL_CURVE,
             SNL_SURFACE
         };
-
+    
     protected:
 };
 
